@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.8">
+  <diagram name="Page-1" id="qGxAzO6MWqaMB52UzFpw">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-1" value="ACMEat" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="P5h0NaLtq0g7_I9-aCHz-1" value="OrderManagement" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-1">
+          <mxGeometry x="160" y="40" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-2" value="acme_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-1">
+          <mxGeometry x="50" y="40" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-3" value="Bank" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="220" y="200" width="160" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-4" value="PaymentManagment" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-3">
+          <mxGeometry x="20" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-8" value="bank_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-3">
+          <mxGeometry x="50" y="40" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-10" value="Restaurant" style="swimlane;whiteSpace=wrap;html=1;startSize=23;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-11" value="CheckAvailability" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-10">
+          <mxGeometry x="20" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-13" value="Shipping service" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="200" width="320" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="A_x3Jtu8LN7mNgDZE7GU-13" source="A_x3Jtu8LN7mNgDZE7GU-14" target="A_x3Jtu8LN7mNgDZE7GU-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-14" value="VehicleTraker" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-13">
+          <mxGeometry x="20" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-16" value="ShippingManagement" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-13">
+          <mxGeometry x="100" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" edge="1" parent="A_x3Jtu8LN7mNgDZE7GU-13" source="A_x3Jtu8LN7mNgDZE7GU-17" target="A_x3Jtu8LN7mNgDZE7GU-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-17" value="VeicleAssigner" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-13">
+          <mxGeometry x="180" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-18" value="shipping_db" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-13">
+          <mxGeometry x="125" y="40" width="70" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-19" value="GIS" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="A_x3Jtu8LN7mNgDZE7GU-20" value="GIS" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="A_x3Jtu8LN7mNgDZE7GU-19">
+          <mxGeometry x="20" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

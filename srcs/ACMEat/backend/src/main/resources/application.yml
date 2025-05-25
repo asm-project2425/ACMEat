@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: acmeat
+
+  datasource:
+    url: ${ACMEAT_DB_URL:jdbc:postgresql://localhost:5432/acmeatdb}
+    username: acmeuser
+    password: acmepassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # update to "validate" in production
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+camunda:
+  client:
+    mode: self-managed
+    zeebe:
+      enabled: true
+      grpc-address: ${ZEEBE_GATEWAY_ADDRESS:http://localhost:26500}
+
+#rest:
+#  restaurant:
+#    base-url: ${RESTAURANT_BASE_URL:http://localhost:4002}
+#  shipping-service:
+#    base-url: ${SHIPPING_SERVICE_BASE_URL:http://localhost:4003}
+#
+#soap:
+#  bank:
+#    endpoint: ${BANK_SOAP_ENDPOINT:localhost:8000}

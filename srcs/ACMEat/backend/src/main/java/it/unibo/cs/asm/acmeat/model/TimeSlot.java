@@ -1,13 +1,11 @@
 package it.unibo.cs.asm.acmeat.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.OffsetDateTime;
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
@@ -17,10 +15,14 @@ public class TimeSlot {
     @Id
     @GeneratedValue
     private int id;
-    private OffsetDateTime startTime;
-    private OffsetDateTime endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
 
-    public TimeSlot(OffsetDateTime startTime, OffsetDateTime endTime) {
+    public TimeSlot(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }

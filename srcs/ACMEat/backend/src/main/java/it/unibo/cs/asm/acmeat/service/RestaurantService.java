@@ -4,12 +4,14 @@ import it.unibo.cs.asm.acmeat.dto.entities.MenuDTO;
 import it.unibo.cs.asm.acmeat.dto.entities.RestaurantDTO;
 import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
+import it.unibo.cs.asm.acmeat.model.TimeSlot;
 import it.unibo.cs.asm.acmeat.service.abstractions.RestaurantServiceInterface;
 import it.unibo.cs.asm.acmeat.service.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,20 +24,24 @@ public class RestaurantService implements RestaurantServiceInterface {
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found with id: " + id));
     }
 
+    @Override
     public List<RestaurantDTO> getRestaurantsByCityId(int cityId) {
         return restaurantRepository.findByCityId(cityId).stream()
                 .map(RestaurantDTO::new).toList();
     }
 
+    @Override
     public List<MenuDTO> getMenuByRestaurantId(int restaurantId) {
         return restaurantRepository.findById(restaurantId)
                 .map(restaurant -> restaurant.getMenus().stream().map(MenuDTO::new).toList())
                 .orElseGet(ArrayList::new);
     }
 
+    @Override
     public List<TimeSlotDTO> getTimeSlotsByRestaurantId(int restaurantId) {
         return restaurantRepository.findById(restaurantId)
-                .map(restaurant -> restaurant.getTimeSlots().stream().map(TimeSlotDTO::new).toList())
+                .map(restaurant -> restaurant.getTimeSlots().stream()
+                        .sorted(Comparator.comparing(TimeSlot::getStartTime)).map(TimeSlotDTO::new).toList())
                 .orElseGet(ArrayList::new);
     }
 }

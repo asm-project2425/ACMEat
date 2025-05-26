@@ -1,14 +1,7 @@
 package it.unibo.cs.asm.acmeat.dto.request;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
-@RequiredArgsConstructor
-@Getter
-public class CreateOrderRequest {
-    private final int restaurantId;
-    private final int menuId;
-    private final int timeSlotId;
-    private final String address;
-
+public record CreateOrderRequest(int restaurantId, List<OrderedItemRequest> items, int timeSlotId,
+                                 String deliveryAddress) {
 }

@@ -3,17 +3,15 @@ package it.unibo.cs.asm.acmeat.dto.entities;
 import it.unibo.cs.asm.acmeat.model.TimeSlot;
 import lombok.Getter;
 
-import java.time.OffsetDateTime;
-
 @Getter
 public class TimeSlotDTO {
     private final int id;
-    private final OffsetDateTime startTime;
-    private final OffsetDateTime endTime;
+    private final String startTime;
+    private final String endTime;
 
     public TimeSlotDTO(TimeSlot timeSlot) {
         this.id = timeSlot.getId();
-        this.startTime = timeSlot.getStartTime();
-        this.endTime = timeSlot.getEndTime();
+        this.startTime = String.valueOf(timeSlot.getStartTime());
+        this.endTime = String.valueOf(timeSlot.getEndTime());
     }
 }

@@ -668,7 +668,7 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_08a85de" messageRef="Message_3fu0s1q" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_1sf9ba3" sourceRef="Activity_06h71kt" targetRef="Event_0ks7ruo" />
-    <bpmn:sendTask id="Activity_1yttwz1" name="Retrieve menus and time slots">
+    <bpmn:sendTask id="Activity_1yttwz1" name="Retrieve restaurant details">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="retrieve-restaurant-details" />
       </bpmn:extensionElements>

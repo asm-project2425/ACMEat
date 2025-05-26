@@ -1,6 +1,7 @@
 package it.unibo.cs.asm.acmeat.api;
 
 import io.camunda.zeebe.client.ZeebeClient;
+import it.unibo.cs.asm.acmeat.api.utility.ZeebeUtility;
 import it.unibo.cs.asm.acmeat.dto.entities.*;
 import it.unibo.cs.asm.acmeat.dto.request.CreateOrderRequest;
 import it.unibo.cs.asm.acmeat.dto.response.CreateOrderResponse;
@@ -51,7 +52,7 @@ public class OrderManagementController extends ZeebeUtility {
     }
 
     @GetMapping("/restaurants")
-    public ResponseEntity<RequestRestaurantsResponse> requestRestaurants(@RequestParam int cityId) {
+    public ResponseEntity<RequestRestaurantsResponse> retrieveRestaurants(@RequestParam int cityId) {
         sendMessage(MSG_CITY_SELECTED, correlationKey, Map.of());
         if (!completeJob(JOB_RETRIEVE_RESTAURANTS, correlationKey, Map.of())) {
             return ResponseEntity.notFound().build();
@@ -74,13 +75,13 @@ public class OrderManagementController extends ZeebeUtility {
     }
 
     @PostMapping("/orders")
-    public ResponseEntity<CreateOrderResponse> createOrder(CreateOrderRequest request) {
+    public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
         sendMessage(MSG_ORDER_CONFIRMATION, correlationKey, Map.of());
         if (!completeJob(JOB_CREATE_ORDER, correlationKey, Map.of())) {
             return ResponseEntity.notFound().build();
         }
-        OrderDTO order = orderService.createOrder(request.getRestaurantId(), request.getMenuId(),
-                request.getTimeSlotId(), request.getAddress());
+        OrderDTO order = orderService.createOrder(request.restaurantId(), request.items(), request.timeSlotId(),
+                request.deliveryAddress());
 
         return ResponseEntity.ok(new CreateOrderResponse(order));
     }

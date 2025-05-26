@@ -3,9 +3,11 @@ package it.unibo.cs.asm.acmeat.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,28 +18,49 @@ public class Order {
     @GeneratedValue
     private int id;
     @ManyToOne
-    private ShippingCompany shippingCompany;
-    @ManyToOne
     private Restaurant restaurant;
-    @ManyToOne
-    private Menu menu;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderedItem> items;
     @ManyToOne
     private TimeSlot timeSlot;
     private OffsetDateTime creationDateTime;
+    private OffsetDateTime deliveryDateTime;
     private String deliveryAddress;
     @Column(precision = 12, scale = 2)
     private BigDecimal price;
+    @Setter
     private OrderStatus status;
+    @Setter
+    @ManyToOne
+    private ShippingCompany shippingCompany;
 
-    public Order(ShippingCompany shippingCompany, Restaurant restaurant, Menu menu, TimeSlot timeSlot,
-                 String deliveryAddress, BigDecimal price, OrderStatus status) {
-        this.shippingCompany = shippingCompany;
+    public Order(Restaurant restaurant, List<OrderedItem> orderedItems, TimeSlot timeSlot, String deliveryAddress) {
         this.restaurant = restaurant;
-        this.menu = menu;
+        this.items = prepareItems(orderedItems);
         this.timeSlot = timeSlot;
         this.creationDateTime = OffsetDateTime.now();
+        this.deliveryDateTime = calculateDeliveryDateTime(timeSlot);
         this.deliveryAddress = deliveryAddress;
-        this.price = price;
-        this.status = status;
+        this.status = OrderStatus.CREATION;
+    }
+
+    // Calculate the delivery date and time based on the time slot's end time
+    private OffsetDateTime calculateDeliveryDateTime(TimeSlot timeSlot) {
+        return OffsetDateTime.now()
+                .withHour(timeSlot.getEndTime().getHour())
+                .withMinute(timeSlot.getEndTime().getMinute())
+                .withSecond(0)
+                .withNano(0)
+                .withOffsetSameInstant(OffsetDateTime.now().getOffset());
+    }
+
+    // Prepare items for the order, setting the order reference and calculating the total price
+    private List<OrderedItem> prepareItems(List<OrderedItem> orderedItems) {
+        orderedItems.forEach(item -> item.setOrder(this));
+        this.price = orderedItems.stream()
+                .map(oi -> oi.getMenu().getPrice().multiply(BigDecimal.valueOf(oi.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return orderedItems;
     }
 }

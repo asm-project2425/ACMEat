@@ -1,21 +1,34 @@
-# Camunda Workers
-This codebase contains the Camunda 8 external workers that execute the `acmeat.bpmn` process found in 
-`src/main/resources`.
-When the workers are running, each one subscribes to the jobs defined in the diagram and invokes the required REST/SOAP 
-endpoints—bringing every BPMN task to life end-to-end.
+# ACMEat
 
-## Build and Run with Docker
+## API Documentation: acme
 
-Move to the root directory and run the following commands to build and run the Docker container:
-```bash
-docker build -t acmeat-workers .
+### `retrieveCities`
+- **Method**: `GET`
+- **URL**: `http://localhost:8080/api/v1/cities`
+
+### `retrieveRestaurants`
+- **Method**: `GET`
+- **URL**: `http://localhost:8080/api/v1/restaurants?cityId=1`
+- **Query Parameters**:
+    - `cityId`: `1`
+
+### `retrieveRestaurantDetails`
+- **Method**: `GET`
+- **URL**: `http://localhost:8080/api/v1/restaurants/1`
+
+### `createOrder`
+- **Method**: `POST`
+- **URL**: `http://localhost:8080/api/v1/orders`
+- **Request Body**:
+```json
+{
+  "restaurantId": 1,
+    "items": [
+    { "menuId": 1, "quantity": 2 },
+    { "menuId": 2, "quantity": 1 }
+  ],
+  "timeSlotId": 5,
+  "deliveryAddress": "Via Roma 42, Bologna"
+}
 ```
-```bash
-docker run --rm -p 8080:8080 \
-  --network camunda-platform \
-  -e ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500 \
-  acmeat-workers
-```
 
-> **Note:** make sure a Camunda 8 broker (Zeebe) **and all required microservices (bank, shipping, customer,
-restaurant, …) are already running and reachable** before starting the acmeat-workers container.

@@ -109,50 +109,50 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Plugins for generating Java classes from WSDL -->
-            <!-- https://central.sonatype.com/artifact/com.sun.xml.ws/jaxws-maven-plugin?smo=true -->
-            <plugin>
-                <groupId>com.sun.xml.ws</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>4.0.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>
-                                <wsdlFile>bank.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <packageName>it.unibo.cs.asm.soap.bankclient</packageName>
-                            <sourceDestDir>${project.build.directory}/generated-sources/jaxws</sourceDestDir>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            &lt;!&ndash; Plugins for generating Java classes from WSDL &ndash;&gt;-->
+<!--            &lt;!&ndash; https://central.sonatype.com/artifact/com.sun.xml.ws/jaxws-maven-plugin?smo=true &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>com.sun.xml.ws</groupId>-->
+<!--                <artifactId>jaxws-maven-plugin</artifactId>-->
+<!--                <version>4.0.3</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>wsimport</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>-->
+<!--                            <wsdlFiles>-->
+<!--                                <wsdlFile>bank.wsdl</wsdlFile>-->
+<!--                            </wsdlFiles>-->
+<!--                            <packageName>it.unibo.cs.asm.soap.bankclient</packageName>-->
+<!--                            <sourceDestDir>${project.build.directory}/generated-sources/jaxws</sourceDestDir>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
-            <!-- Plugin to add the generated sources to the project -->
-            <!-- https://central.sonatype.com/artifact/org.codehaus.mojo/build-helper-maven-plugin?smo=true -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.6.0</version>
-                <executions>
-                    <execution>
-                        <id>add-wsimport-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/jaxws</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            &lt;!&ndash; Plugin to add the generated sources to the project &ndash;&gt;-->
+<!--            &lt;!&ndash; https://central.sonatype.com/artifact/org.codehaus.mojo/build-helper-maven-plugin?smo=true &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>build-helper-maven-plugin</artifactId>-->
+<!--                <version>3.6.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>add-wsimport-sources</id>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>add-source</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <sources>-->
+<!--                                <source>${project.build.directory}/generated-sources/jaxws</source>-->
+<!--                            </sources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
         </plugins>
     </build>

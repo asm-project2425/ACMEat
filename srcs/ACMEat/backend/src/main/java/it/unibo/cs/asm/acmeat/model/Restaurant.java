@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -18,16 +19,34 @@ public class Restaurant {
     private String address;
     @ManyToOne
     private City city;
-    @OneToMany
-    private List<Menu> menus;
-    @OneToMany
-    private List<TimeSlot> timeSlots;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Menu> menus;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TimeSlot> timeSlots;
 
-    public Restaurant(String name, String address, City city, List<Menu> menus, List<TimeSlot> timeSlots) {
+    public Restaurant(String name, String address, City city) {
         this.name = name;
         this.address = address;
         this.city = city;
-        this.menus = menus;
-        this.timeSlots = timeSlots;
+        this.menus = new HashSet<>();
+        this.timeSlots = new HashSet<>();
+    }
+
+    public void addMenu(Menu menu) {
+        menu.setRestaurant(this);
+         this.menus.add(menu);
+    }
+
+    public void removeMenu(Menu menu) {
+        this.menus.remove(menu);
+    }
+
+    public void addTimeSlot(TimeSlot timeSlot) {
+        timeSlot.setRestaurant(this);
+        this.timeSlots.add(timeSlot);
+    }
+
+    public void removeTimeSlot(TimeSlot timeSlot) {
+        this.timeSlots.remove(timeSlot);
     }
 }

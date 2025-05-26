@@ -132,10 +132,10 @@ services:
     networks:
       - camunda-platform
 
-  acme_db:
+  acmeat_db:
     image: postgres:17
     restart: always
-    container_name: acme_db
+    container_name: acmeat_db
     environment:
       POSTGRES_DB: acmeatdb
       POSTGRES_USER: acmeuser
@@ -144,6 +144,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - camunda-platform
 
   acmeat_backend:
     image: acmeat:latest
@@ -153,8 +155,10 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - ACMEAT_DB_URL=jdbc:postgresql://acmeat_db:5432/acmeatdb
       - ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500
     depends_on:
+      - acmeat_db
       - zeebe
     networks:
       - camunda-platform

@@ -1,4 +1,4 @@
-# BankService
+# Bank
 
 BankService is the banking microservice of the ACMEat project. It handles customer payments through SOAP-based operations and interacts with a PostgreSQL database to register and track payment transactions.
 

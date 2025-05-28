@@ -1,0 +1,45 @@
+services:
+
+  bank_backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    platform: linux/amd64 # for compatibility with arm64
+    ports:
+      - "8000:8000"
+    container_name: bank
+    depends_on:
+      - bank_db
+    networks:
+      - acmeat_network
+
+  bank_db:
+    image: postgres:17
+    restart: always
+    container_name: bank_db
+    environment:
+      POSTGRES_DB: bankdb
+      POSTGRES_USER: bankuser
+      POSTGRES_PASSWORD: bankpassword
+    ports:
+      - "8001:5432"
+    volumes:
+      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - acmeat_network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8002:8080
+    networks:
+      - acmeat_network
+
+volumes:
+  pgdata:
+
+networks:
+  acmeat_network:
+    external: true

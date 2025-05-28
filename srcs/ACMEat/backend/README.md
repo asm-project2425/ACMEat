@@ -2,6 +2,8 @@
 
 ## API Documentation: acme
 
+Swagger documentation for the ACMEat API is available at: http://localhost:8080/swagger-ui/index.html
+
 ### `retrieveCities`
 - **Method**: `GET`
 - **URL**: `http://localhost:8080/api/v1/cities`

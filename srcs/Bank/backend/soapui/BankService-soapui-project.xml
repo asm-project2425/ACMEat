@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="325b2609-8dee-44ca-b8f0-4d4bb7f7df3b" activeEnvironment="Default" name="BankService" resourceRoot="" soapui-version="5.8.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="31b93be1-e035-41d7-aa97-1b1eecd6ca3b" wsaVersion="NONE" name="BankBinding" type="wsdl" bindingName="{http://example.com/bank}BankBinding" soapVersion="1_1" anonymous="optional" definition="file:/Users/matteocardellini/Desktop/ACMEat/srcs/Bank/BankService/src/BankService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/Users/matteocardellini/Desktop/ACMEat/srcs/Bank/BankService/src/BankService.wsdl"><con:part><con:url>file:/Users/matteocardellini/Desktop/ACMEat/srcs/Bank/BankService/src/BankService.wsdl</con:url><con:content><![CDATA[<definitions name="BankService" targetNamespace="http://example.com/bank" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://example.com/bank" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+    <xsd:schema targetNamespace="http://example.com/bank">
+      <xsd:element name="login">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="username" type="xsd:string"/>
+            <xsd:element name="password" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="loginResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="success" type="xsd:boolean"/>
+            <xsd:element name="sid" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="pay">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sid" type="xsd:string"/>
+            <xsd:element name="bill" type="xsd:double"/>
+            <xsd:element name="orderId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="payResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="success" type="xsd:boolean"/>
+            <xsd:element name="token" type="xsd:string" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="verifyToken">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sid" type="xsd:string"/>
+            <xsd:element name="token" type="xsd:string"/>
+            <xsd:element name="orderId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="confirm">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sid" type="xsd:string"/>
+            <xsd:element name="orderId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="refund">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sid" type="xsd:string"/>
+            <xsd:element name="orderId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="logout">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sid" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="successResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="success" type="xsd:boolean"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+  <message name="LoginRequest">
+    <part name="parameters" element="tns:login"/>
+  </message>
+  <message name="LoginResponse">
+    <part name="parameters" element="tns:loginResponse"/>
+  </message>
+  <message name="PayRequest">
+    <part name="parameters" element="tns:pay"/>
+  </message>
+  <message name="PayResponse">
+    <part name="parameters" element="tns:payResponse"/>
+  </message>
+  <message name="VerifyTokenRequest">
+    <part name="parameters" element="tns:verifyToken"/>
+  </message>
+  <message name="ConfirmRequest">
+    <part name="parameters" element="tns:confirm"/>
+  </message>
+  <message name="RefundRequest">
+    <part name="parameters" element="tns:refund"/>
+  </message>
+  <message name="LogoutRequest">
+    <part name="parameters" element="tns:logout"/>
+  </message>
+  <message name="SuccessResponse">
+    <part name="parameters" element="tns:successResponse"/>
+  </message>
+  <portType name="BankInterface">
+    <operation name="login">
+      <input message="tns:LoginRequest"/>
+      <output message="tns:LoginResponse"/>
+    </operation>
+    <operation name="pay">
+      <input message="tns:PayRequest"/>
+      <output message="tns:PayResponse"/>
+    </operation>
+    <operation name="verifyToken">
+      <input message="tns:VerifyTokenRequest"/>
+      <output message="tns:SuccessResponse"/>
+    </operation>
+    <operation name="confirm">
+      <input message="tns:ConfirmRequest"/>
+      <output message="tns:SuccessResponse"/>
+    </operation>
+    <operation name="refund">
+      <input message="tns:RefundRequest"/>
+      <output message="tns:SuccessResponse"/>
+    </operation>
+    <operation name="logout">
+      <input message="tns:LogoutRequest"/>
+      <output message="tns:SuccessResponse"/>
+    </operation>
+  </portType>
+  <binding name="BankBinding" type="tns:BankInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="login">
+      <soap:operation soapAction="login"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="pay">
+      <soap:operation soapAction="pay"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="verifyToken">
+      <soap:operation soapAction="verifyToken"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="confirm">
+      <soap:operation soapAction="confirm"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="refund">
+      <soap:operation soapAction="refund"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="logout">
+      <soap:operation soapAction="logout"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="BankService">
+    <port name="Bank" binding="tns:BankBinding">
+      <soap:address location="http://localhost:8000"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8000</con:endpoint></con:endpoints><con:operation id="5d5b5b99-f65b-4fb1-a939-400c08c7d0c2" isOneWay="false" action="confirm" name="confirm" bindingOperationName="confirm" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="d857a993-97b3-4d9a-b8a1-1063482e0897" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:confirm>
+         <sid>7a5fee03-64aa-4132-a10d-08d343fe5f3a</sid>
+         <orderId>456</orderId>
+      </bank:confirm>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="confirm"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="6c89f625-d5c6-4f39-a387-83757dcc2cee" isOneWay="false" action="login" name="login" bindingOperationName="login" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="67b70998-e29b-4378-a746-d09c486da664" name="demo"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:login>
+         <username>demo</username>
+         <password>demo</password>
+      </bank:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="login"/><con:wsrmConfig version="1.2"/></con:call><con:call id="953a1dd9-7694-4991-805a-c8792ce10199" name="admin"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:login>
+         <username>acme</username>
+         <password>acme</password>
+      </bank:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="login"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="8f813820-7097-4810-873b-21aa27eee974" isOneWay="false" action="logout" name="logout" bindingOperationName="logout" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="56c00844-f302-48f1-baf8-68a1a468b66d" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:logout>
+         <sid>b4deec2c-a2ca-47d4-a380-4b9891c6fc86</sid>
+      </bank:logout>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="logout"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="0676575c-9982-4284-86d8-38ffb08daa01" isOneWay="false" action="pay" name="pay" bindingOperationName="pay" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b67c37c4-ed1a-4015-b918-f2427526fe8e" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:pay>
+         <sid>f68e6d2a-e579-430f-9a16-f2cf7e5d5b69</sid>
+         <bill>9</bill>
+         <orderId>456</orderId>
+      </bank:pay>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="pay"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="88d04215-8896-4c00-ae3f-921bde65eca5" isOneWay="false" action="refund" name="refund" bindingOperationName="refund" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b4ea68bd-7670-46e7-a6e4-855434042f50" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:refund>
+         <sid>26250775-eed2-404a-9fb0-aec1e40f37e3</sid>
+         <orderId>456</orderId>
+      </bank:refund>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="refund"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="8b02769a-f56a-4961-b3bf-df7422ccb1d1" isOneWay="false" action="verifyToken" name="verifyToken" bindingOperationName="verifyToken" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="c491d211-e4ee-4b91-bab2-9aab3670d425" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bank="http://example.com/bank">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <bank:verifyToken>
+         <sid>26250775-eed2-404a-9fb0-aec1e40f37e3</sid>
+         <token>ba114f89-3737-4062-8117-66fc1bf2695a</token>
+         <orderId>456</orderId>
+      </bank:verifyToken>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="verifyToken"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

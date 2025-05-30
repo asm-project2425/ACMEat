@@ -19,6 +19,12 @@ export interface Menu{
     quantity? : number
 }
 
+export interface TimeSlot{
+    id? : number,
+    startTime? : string,
+    endTime? : string
+}
+
 export interface Order{
     id? : number,
     restaurantId? : number,
@@ -26,6 +32,7 @@ export interface Order{
     timeSlotId? : number,
     deliveryAddress? : string
 }
+
 
 export interface citiesResponse{
     cities? : City[]
@@ -37,4 +44,5 @@ export interface restaurantsRsponse{
 
 export interface restaurantDetailsResponse{
     menus?: Menu[]
+    timeSlots? : TimeSlot[]
 }

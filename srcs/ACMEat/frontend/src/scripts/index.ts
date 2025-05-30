@@ -1,4 +1,4 @@
-import { getFetchConfig, type citiesResponse, type Menu, type Order, type restaurantDetailsResponse, type restaurantsRsponse } from "./interfaces";
+import { getFetchConfig, type citiesResponse, type Menu, type Order, type restaurantDetailsResponse, type restaurantsRsponse, type TimeSlot } from "./interfaces";
 
 const PUBLIC_SELF_HOST = import.meta.env.PUBLIC_SELF_HOST
 const PUBLIC_RETRIVE_CITIES = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RETRIVE_CITIES;
@@ -87,6 +87,7 @@ async function On_Locale_Change() {
     const jres : restaurantDetailsResponse = await res.json();
 
     const menus:Menu[] = jres.menus;
+    const orari : TimeSlot[] = jres.timeSlots;
 
     if(!menus || menus.length<1){
         alert(`Nessun menù trovato per ${value}`);
@@ -100,18 +101,15 @@ async function On_Locale_Change() {
         menu_select.options.add(CreateOption(`${m.name} ${m.price}€`, m.id.toString()));
     }
 
+    for(const o of orari){
+        orario_select.options.add(CreateOption(`${o.startTime} ${o.endTime}`, o.id.toString()));
+    }
+
+
     menu.style.visibility = "visible";
 }
 
 async function On_Menu_Change(){
-    ClearOptions(orario_select);
-    const orariSlotIds = [1];
-
-    for(const o of orariSlotIds){
-        orario_select.options.add(CreateOption(o.toString()));
-    }
-
-    console.log(orario_select);
 
     orario.style.visibility = "visible";
 }

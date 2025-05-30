@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build: .
+    environment:
+      - name=value
+    ports:
+      - "4321:4321"
+    networks:
+      - acmeat_network
+
+networks:
+  acmeat_network:
+    name: acmeat_network
+    external : true

@@ -1,0 +1,14 @@
+{
+  "name": "GIS",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "bottleneck": "^2.19.5",
+    "express": "^5.1.0",
+    "geolib": "^3.3.4"
+  }
+}

@@ -1,0 +1,7 @@
+services:
+  locale1:
+    build: .
+    volumes:
+      - "./service/:/app/"
+    ports:
+      - "9001:80"

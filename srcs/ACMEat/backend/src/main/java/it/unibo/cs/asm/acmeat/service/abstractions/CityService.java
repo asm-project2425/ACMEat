@@ -4,6 +4,6 @@ import it.unibo.cs.asm.acmeat.dto.entities.CityDTO;
 
 import java.util.List;
 
-public interface CityServiceInterface {
+public interface CityService {
     List<CityDTO> getCities();
 }

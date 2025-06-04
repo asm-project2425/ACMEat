@@ -4,6 +4,7 @@ import it.unibo.cs.asm.acmeat.model.City;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
 import it.unibo.cs.asm.acmeat.model.Menu;
 import it.unibo.cs.asm.acmeat.model.TimeSlot;
+import it.unibo.cs.asm.acmeat.model.util.Coordinate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -28,7 +29,8 @@ public class DataLoader implements ApplicationRunner {
         if (cityRepository.count() == 0) {
             City bologna = cityRepository.save(new City("Bologna"));
 
-            Restaurant restaurant1 = new Restaurant("Ristorante Bolognese", "Via Indipendenza 1",
+            Restaurant restaurant1 = new Restaurant("Ristorante Bolognese", new Coordinate(
+                    44.49945152011542, 11.357824447074432),
                     bologna);
             // Menu
             restaurant1.addMenu(new Menu("Pasta", new BigDecimal("12.50")));

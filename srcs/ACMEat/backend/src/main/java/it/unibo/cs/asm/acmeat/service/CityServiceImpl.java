@@ -2,7 +2,7 @@ package it.unibo.cs.asm.acmeat.service;
 
 import it.unibo.cs.asm.acmeat.dto.entities.CityDTO;
 import it.unibo.cs.asm.acmeat.model.City;
-import it.unibo.cs.asm.acmeat.service.abstractions.CityServiceInterface;
+import it.unibo.cs.asm.acmeat.service.abstractions.CityService;
 import it.unibo.cs.asm.acmeat.service.repository.CityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class CityService implements CityServiceInterface {
+public class CityServiceImpl implements CityService {
     private final CityRepository cityRepository;
 
     public City getCityById(int id) {

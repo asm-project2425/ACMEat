@@ -5,5 +5,5 @@ import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
 
 import java.util.List;
 
-public record RequestRestaurantDetails(List<MenuDTO> menus, List<TimeSlotDTO> timeSlots) {
+public record RequestRestaurantDetailsResponse(List<MenuDTO> menus, List<TimeSlotDTO> timeSlots) {
 }

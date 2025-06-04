@@ -9,6 +9,7 @@ public enum OrderStatus {
     PAYMENT_REQUESTED,
     PAID,
     PROCESSING,
+    ACTIVATED,
     PRE_DELIVERY,
     DELIVERED
 }

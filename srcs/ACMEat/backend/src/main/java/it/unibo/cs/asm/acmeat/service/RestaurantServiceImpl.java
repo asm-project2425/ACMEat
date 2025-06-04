@@ -5,7 +5,7 @@ import it.unibo.cs.asm.acmeat.dto.entities.RestaurantDTO;
 import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
 import it.unibo.cs.asm.acmeat.model.TimeSlot;
-import it.unibo.cs.asm.acmeat.service.abstractions.RestaurantServiceInterface;
+import it.unibo.cs.asm.acmeat.service.abstractions.RestaurantService;
 import it.unibo.cs.asm.acmeat.service.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,17 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class RestaurantService implements RestaurantServiceInterface {
+public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
 
     public Restaurant getRestaurantById(int id) {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant not found with id: " + id));
+    }
+
+    @Override
+    public RestaurantDTO getRestaurantDTOById(int id) {
+        return new RestaurantDTO(getRestaurantById(id));
     }
 
     @Override
@@ -43,5 +48,25 @@ public class RestaurantService implements RestaurantServiceInterface {
                 .map(restaurant -> restaurant.getTimeSlots().stream()
                         .sorted(Comparator.comparing(TimeSlot::getStartTime)).map(TimeSlotDTO::new).toList())
                 .orElseGet(ArrayList::new);
+    }
+
+    @Override
+    public boolean setMenuByRestaurantId(int restaurantId, List<MenuDTO> menus) {
+        Restaurant restaurant = getRestaurantById(restaurantId);
+        if (restaurant.updateMenus(menus)) {
+            restaurantRepository.save(restaurant);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setTimeSlotsByRestaurantId(int restaurantId, List<TimeSlotDTO> timeSlots) {
+        Restaurant restaurant = getRestaurantById(restaurantId);
+        if (restaurant.updateTimeSlots(timeSlots)) {
+            restaurantRepository.save(restaurant);
+            return true;
+        }
+        return false;
     }
 }

@@ -23,9 +23,11 @@ camunda:
       enabled: true
       grpc-address: ${ZEEBE_GATEWAY_ADDRESS:http://localhost:26500}
 
-#rest:
-#  restaurant:
-#    base-url: ${RESTAURANT_BASE_URL:http://localhost:4002}
+rest:
+  restaurant:
+    base-url: ${RESTAURANT_BASE_URL:http://localhost:4002}
+  gis:
+    base-url: ${GIS_BASE_URL:http://localhost:6002}
 #  shipping-service:
 #    base-url: ${SHIPPING_SERVICE_BASE_URL:http://localhost:4003}
 #

@@ -99,16 +99,19 @@ services:
   # acmeat_backend:
   #   image: acmeat:latest
   #   build:
-  #     context: ./backend
+  #     context: ./ACMEat/backend
   #   container_name: acmeat
   #   ports:
   #     - "8080:8080"
   #   environment:
   #     - ACMEAT_DB_URL=jdbc:postgresql://acmeat_db:5432/acmeatdb
   #     - ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500
+  #     - RESTAURANT1_BASE_URL=http://restaurant:4002
+  #     - GIS_BASE_URL=http://gis:6002
   #   depends_on:
   #     - acmeat_db
   #     - zeebe
+  #     - gis
   #   networks:
   #     - acmeat_network
 

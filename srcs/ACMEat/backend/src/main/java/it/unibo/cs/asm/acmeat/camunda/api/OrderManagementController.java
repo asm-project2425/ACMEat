@@ -61,7 +61,7 @@ public class OrderManagementController {
         zeebeService.sendMessage(MSG_RESTAURANT_SELECTED, correlationKey, Map.of());
         if (zeebeService.completeJob(JOB_RETRIEVE_RESTAURANT_DETAILS, correlationKey, Map.of())) {
             List<MenuDTO> menus = restaurantService.getMenuByRestaurantId(restaurantId);
-            List<TimeSlotDTO> timeSlots = restaurantService.getTimeSlotsByRestaurantId(restaurantId);
+            List<TimeSlotDTO> timeSlots = restaurantService.getActiveTimeSlotsByRestaurantId(restaurantId);
 
             return ResponseEntity.ok(new RequestRestaurantDetailsResponse(menus, timeSlots));
         }

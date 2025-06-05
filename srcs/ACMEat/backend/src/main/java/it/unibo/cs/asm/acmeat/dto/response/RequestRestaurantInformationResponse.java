@@ -6,6 +6,6 @@ import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
 
 import java.util.List;
 
-public record RequestRestaurantInformationResponse(RestaurantDTO restaurant, List<MenuDTO> menus,
+public record RequestRestaurantInformationResponse(String correlationKey, List<MenuDTO> menus,
                                                    List<TimeSlotDTO> timeSlots) {
 }

@@ -25,7 +25,7 @@ camunda:
 
 rest:
   restaurant:
-    base-url: ${RESTAURANT_BASE_URL:http://localhost:4002}
+    base-url: ${RESTAURANT1_BASE_URL:http://localhost:4002}
   gis:
     base-url: ${GIS_BASE_URL:http://localhost:6002}
 #  shipping-service:

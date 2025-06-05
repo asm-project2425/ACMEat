@@ -30,7 +30,7 @@ public class ZeebeServiceImpl implements ZeebeService {
         List<ActivatedJob> jobs = zeebeClient.newActivateJobsCommand()
                 .jobType(jobType)
                 .maxJobsToActivate(10)
-                .fetchVariables(List.of("correlationKey")) // migliora le performance
+                .fetchVariables(List.of("correlationKey"))
                 .send()
                 .join()
                 .getJobs();

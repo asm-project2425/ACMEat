@@ -1,10 +1,12 @@
-package it.unibo.cs.asm.acmeat.service.repository;
+package it.unibo.cs.asm.acmeat.config;
 
 import it.unibo.cs.asm.acmeat.model.City;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
 import it.unibo.cs.asm.acmeat.model.Menu;
 import it.unibo.cs.asm.acmeat.model.TimeSlot;
 import it.unibo.cs.asm.acmeat.model.util.Coordinate;
+import it.unibo.cs.asm.acmeat.service.repository.CityRepository;
+import it.unibo.cs.asm.acmeat.service.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

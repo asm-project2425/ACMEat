@@ -3,21 +3,27 @@ package it.unibo.cs.asm.acmeat.service.abstractions;
 import it.unibo.cs.asm.acmeat.dto.entities.MenuDTO;
 import it.unibo.cs.asm.acmeat.dto.entities.RestaurantDTO;
 import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
+import it.unibo.cs.asm.acmeat.model.Restaurant;
 
 import java.util.List;
 
 public interface RestaurantService {
 
-    RestaurantDTO getRestaurantDTOById(int id);
+    Restaurant getRestaurantById(int id);
 
     List<RestaurantDTO> getRestaurantsByCityId(int cityId);
 
     List<MenuDTO> getMenuByRestaurantId(int restaurantId);
 
+    List<TimeSlotDTO> getActiveTimeSlotsByRestaurantId(int restaurantId);
+
     List<TimeSlotDTO> getTimeSlotsByRestaurantId(int restaurantId);
 
-    boolean setMenuByRestaurantId(int restaurantId, List<MenuDTO> menus);
+    MenuDTO addMenuToRestaurant(int restaurantId, String name, double price);
 
-    boolean setTimeSlotsByRestaurantId(int restaurantId, List<TimeSlotDTO> timeSlots);
+    MenuDTO updateMenu(int restaurantId, int menuId, String name, double price);
 
+    void deleteMenu(int restaurantId, int menuId);
+
+    TimeSlotDTO updateTimeSlot(int restaurantId, int timeSlotId, boolean active);
 }

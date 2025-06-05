@@ -4,6 +4,7 @@ import it.unibo.cs.asm.acmeat.dto.entities.OrderDTO;
 import it.unibo.cs.asm.acmeat.dto.request.OrderedItemRequest;
 import it.unibo.cs.asm.acmeat.model.*;
 import it.unibo.cs.asm.acmeat.service.abstractions.OrderService;
+import it.unibo.cs.asm.acmeat.service.abstractions.RestaurantService;
 import it.unibo.cs.asm.acmeat.service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final RestaurantServiceImpl restaurantService;
+    private final RestaurantService restaurantService;
 
     public Order getOrderById(int orderId) {
         return orderRepository.findById(orderId)

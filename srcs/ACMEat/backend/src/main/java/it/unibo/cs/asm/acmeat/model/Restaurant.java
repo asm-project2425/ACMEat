@@ -1,15 +1,13 @@
 package it.unibo.cs.asm.acmeat.model;
 
-import it.unibo.cs.asm.acmeat.dto.entities.MenuDTO;
-import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
 import it.unibo.cs.asm.acmeat.model.util.Coordinate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -39,9 +37,14 @@ public class Restaurant {
         this.timeSlots = new HashSet<>();
     }
 
-    public void addMenu(Menu menu) {
+    public boolean addMenu(Menu menu) {
+        for (Menu existingMenu : this.menus) {
+            if (existingMenu.getName().equalsIgnoreCase(menu.getName())) {
+                return false; // Menu with the same name already exists
+            }
+        }
         menu.setRestaurant(this);
-         this.menus.add(menu);
+        return this.menus.add(menu);
     }
 
     public void addTimeSlot(TimeSlot timeSlot) {
@@ -49,15 +52,28 @@ public class Restaurant {
         this.timeSlots.add(timeSlot);
     }
 
-    public boolean updateMenus(List<MenuDTO> menus) {
-        // TODO: Implement logic to update menus
-        return true;
+    public boolean updateMenu(int menuId, String name, double price) {
+        for (Menu existingMenu : this.menus) {
+            if (existingMenu.getId() == menuId) {
+                existingMenu.setName(name);
+                existingMenu.setPrice(BigDecimal.valueOf(price));
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean updateTimeSlots(List<TimeSlotDTO> timeSlots) {
-        // TODO: Implement logic to update time slots
-        return true;
+    public boolean removeMenu(int menuId) {
+        return this.menus.removeIf(menu -> menu.getId() == menuId);
     }
 
-
+    public boolean updateTimeSlot(int timeSlotId, boolean active) {
+        for (TimeSlot timeSlot : this.timeSlots) {
+            if (timeSlot.getId() == timeSlotId) {
+                timeSlot.setActive(active);
+                return true;
+            }
+        }
+        return false;
+    }
 }

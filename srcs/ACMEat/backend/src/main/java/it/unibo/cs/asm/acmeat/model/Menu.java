@@ -15,7 +15,9 @@ public class Menu {
     @Id
     @GeneratedValue
     private int id;
+    @Setter
     private String name;
+    @Setter
     @Column(precision = 12, scale = 2)
     private BigDecimal price;
     @Setter

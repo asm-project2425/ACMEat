@@ -14,4 +14,10 @@ public class MenuDTO {
         this.name = menu.getName();
         this.price = String.valueOf(menu.getPrice());
     }
+
+    public MenuDTO(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = String.valueOf(price);
+    }
 }

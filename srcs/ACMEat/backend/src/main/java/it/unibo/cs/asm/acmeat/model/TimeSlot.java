@@ -18,6 +18,8 @@ public class TimeSlot {
     private LocalTime startTime;
     private LocalTime endTime;
     @Setter
+    private boolean active;
+    @Setter
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
@@ -25,5 +27,6 @@ public class TimeSlot {
     public TimeSlot(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
+        this.active = true;
     }
 }

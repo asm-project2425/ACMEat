@@ -77,6 +77,36 @@
         </div>
 
         <div class="info-box">
+            <h2>🔧 APIs</h2>
+            <a href="/avaible.php?id_ordine=#&orario=HH:MM">/avaible.php?id_ordine=#&orario=HH:MM</a>
+        </div>
+
+        <div class="info-box">
+            <h2>🍖 Ordini di oggi</h2>
+            <table>
+                <tr>
+                    <th>id_ordine</th>
+                    <th>orario</th>
+                </tr>
+                <?php
+                    require_once './lib/Utils.php';
+                    $orders = Utils::readOrdersFromFile();
+                    $today = date("Y-m-d");
+                    error_log("fetching orders".$today);
+                    foreach($orders as $o){
+                        if($o["data"]==$today){
+                            echo "<tr>";
+                            echo "<td>".$o["id"]."</td>";
+                            echo "<td>".$o["orario"]."</td>";
+                            echo "</tr>";
+                        }
+                    }
+                
+                ?>
+            </table>
+        </div>
+
+        <div class="info-box">
             <h2>📊 Informazioni Server</h2>
             <table>
                 <tr>
@@ -106,23 +136,7 @@
             </table>
         </div>
 
-        <div class="info-box">
-            <h2>🔧 Test Form PHP</h2>
-            <form method="POST" action="">
-                <div class="form-group">
-                    <label for="nome">Inserisci il tuo nome:</label>
-                    <input type="text" id="nome" name="nome" placeholder="Il tuo nome">
-                    <input type="submit" value="Invia">
-                </div>
-            </form>
-            
-            <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["nome"])) {
-                $nome = htmlspecialchars($_POST["nome"]);
-                echo "<div class='success'>👋 Ciao $nome! Il form PHP funziona perfettamente!</div>";
-            }
-            ?>
-        </div>
+        
 
         <div class="info-box">
             <h2>📦 Estensioni PHP Caricate</h2>

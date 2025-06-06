@@ -5,11 +5,9 @@ import it.unibo.cs.asm.acmeat.camunda.utility.ZeebeService;
 import it.unibo.cs.asm.acmeat.dto.entities.*;
 import it.unibo.cs.asm.acmeat.dto.request.CreateOrderRequest;
 import it.unibo.cs.asm.acmeat.dto.request.ReceiveShippingCostRequest;
-import it.unibo.cs.asm.acmeat.dto.response.CreateOrderResponse;
-import it.unibo.cs.asm.acmeat.dto.response.RequestCitiesResponse;
-import it.unibo.cs.asm.acmeat.dto.response.RequestRestaurantDetailsResponse;
-import it.unibo.cs.asm.acmeat.dto.response.RequestRestaurantsResponse;
+import it.unibo.cs.asm.acmeat.dto.response.*;
 import it.unibo.cs.asm.acmeat.exception.JobCompletionException;
+import it.unibo.cs.asm.acmeat.model.Order;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
 import it.unibo.cs.asm.acmeat.service.abstractions.CityService;
 import it.unibo.cs.asm.acmeat.service.abstractions.OrderService;
@@ -76,6 +74,12 @@ public class OrderManagementController {
                 VAR_DELIVERY_TIME, order.getDeliveryTime(), VAR_DELIVERY_ADDRESS, order.getDeliveryAddress()));
 
         return ResponseEntity.ok(new CreateOrderResponse(order));
+    }
+
+    @GetMapping("/orders/{orderId}/status")
+    public ResponseEntity<GetOrderStatusResponse> getOrderStatus(@PathVariable int orderId) {
+        String orderStatus = String.valueOf(orderService.getOrderById(orderId).getStatus());
+        return ResponseEntity.ok(new GetOrderStatusResponse(orderId, orderStatus));
     }
 
     @PostMapping("/shipping-company/cost")

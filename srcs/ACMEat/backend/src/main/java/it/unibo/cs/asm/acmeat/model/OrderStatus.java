@@ -1,13 +1,11 @@
 package it.unibo.cs.asm.acmeat.model;
 
 public enum OrderStatus {
-    CREATION,
+    CREATED,
     CANCELLED,
     SHIPPING_COMPANY_CHOSEN,
     PAYMENT_REQUESTED,
     PAID,
-    PROCESSING,
     ACTIVATED,
-    PRE_DELIVERY,
     DELIVERED
 }

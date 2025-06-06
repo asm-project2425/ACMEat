@@ -41,7 +41,7 @@ public class Order {
         this.creationDateTime = OffsetDateTime.now();
         this.deliveryDateTime = calculateDeliveryDateTime(timeSlot);
         this.deliveryAddress = deliveryAddress;
-        this.status = OrderStatus.CREATION;
+        this.status = OrderStatus.CREATED;
     }
 
     // Calculate the delivery date and time based on the time slot's end time

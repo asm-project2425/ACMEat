@@ -62,6 +62,16 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
 
 ---
 
+### `getOrderStatus`
+- **Method**: `GET`
+- **URL**: `/api/v1/orders/{orderId}/status`
+- **Path Parameters**:
+  - `orderId`: ID dell'ordine di cui si vuole conoscere lo stato
+- **Description**:  Recupera lo stato attuale dell’ordine specificato.
+- **Response**: Returns the id of the order anche the current status of the order (`CREATED`, `CANCELLED`, `SHIPPING_COMPANY_CHOSEN`, `PAYMENT_REQUESTED`, `PAID`, `ACTIVATED`, `DELIVERED`).
+
+---
+
 ### `receiveShippingCost`
 - **Method**: `POST`
 - **URL**: `/api/v1/shipping-company/cost`

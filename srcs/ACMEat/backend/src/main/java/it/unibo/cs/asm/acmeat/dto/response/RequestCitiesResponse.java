@@ -4,5 +4,5 @@ import it.unibo.cs.asm.acmeat.dto.entities.CityDTO;
 
 import java.util.List;
 
-public record RequestCitiesResponse(List<CityDTO> cities) {
+public record RequestCitiesResponse(String correlationKey, List<CityDTO> cities) {
 }

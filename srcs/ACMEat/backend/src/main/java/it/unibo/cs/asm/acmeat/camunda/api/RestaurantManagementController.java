@@ -27,11 +27,10 @@ public class RestaurantManagementController {
     public ResponseEntity<RequestRestaurantInformationResponse> retrieveRestaurantInformation(
             @PathVariable int restaurantId) {
         String correlationKey = UUID.randomUUID().toString();
-        zeebeService.sendMessage(MSG_REQUEST_RESTAURANT_INFORMATION, correlationKey, Map.of(CORRELATION_KEY,
+        zeebeService.sendMessage(MSG_REQUEST_RESTAURANT_INFORMATION, correlationKey, Map.of(VAR_CORRELATION_KEY,
                 correlationKey));
-        if (!zeebeService.completeJob(JOB_RETRIEVE_RESTAURANT_INFORMATION, correlationKey, Map.of())) {
-            throw new IllegalStateException("Restaurant information can only be updated between 22:00 and 10:00.");
-        }
+        zeebeService.completeJob(JOB_RETRIEVE_RESTAURANT_INFORMATION, correlationKey, Map.of());
+
         List<MenuDTO> menu = restaurantService.getMenuByRestaurantId(restaurantId);
         List<TimeSlotDTO> timeSlots = restaurantService.getTimeSlotsByRestaurantId(restaurantId);
 
@@ -65,11 +64,11 @@ public class RestaurantManagementController {
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<Boolean> confirmRestaurantInformationUpdate(
+    public ResponseEntity<Void> confirmRestaurantInformationUpdate(
             @RequestParam String correlationKey) {
         zeebeService.sendMessage(MSG_RESTAURANT_INFORMATION_UPDATED, correlationKey, Map.of());
-        boolean success = zeebeService.completeJob(JOB_UPDATE_RESTAURANT_INFORMATION, correlationKey, Map.of());
+        zeebeService.completeJob(JOB_UPDATE_RESTAURANT_INFORMATION, correlationKey, Map.of());
 
-        return ResponseEntity.ok(success);
+        return ResponseEntity.noContent().build();
     }
 }

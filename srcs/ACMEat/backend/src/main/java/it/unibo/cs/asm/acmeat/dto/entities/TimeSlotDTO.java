@@ -3,6 +3,8 @@ package it.unibo.cs.asm.acmeat.dto.entities;
 import it.unibo.cs.asm.acmeat.model.TimeSlot;
 import lombok.Getter;
 
+import java.time.format.DateTimeFormatter;
+
 @Getter
 public class TimeSlotDTO {
     private final int id;
@@ -12,8 +14,8 @@ public class TimeSlotDTO {
 
     public TimeSlotDTO(TimeSlot timeSlot) {
         this.id = timeSlot.getId();
-        this.startTime = String.valueOf(timeSlot.getStartTime());
-        this.endTime = String.valueOf(timeSlot.getEndTime());
+        this.startTime = timeSlot.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+        this.endTime = timeSlot.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.active = timeSlot.isActive();
     }
 }

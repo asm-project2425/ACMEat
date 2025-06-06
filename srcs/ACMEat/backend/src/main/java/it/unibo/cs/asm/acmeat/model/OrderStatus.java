@@ -2,10 +2,8 @@ package it.unibo.cs.asm.acmeat.model;
 
 public enum OrderStatus {
     CREATION,
-    RESTAURANT_VERIFICATION,
-    DELIVERY_VERIFICATION,
-    CANCELLATION_REQUESTED,
     CANCELLED,
+    SHIPPING_COMPANY_CHOSEN,
     PAYMENT_REQUESTED,
     PAID,
     PROCESSING,

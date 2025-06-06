@@ -3,7 +3,6 @@ services:
   bank_backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
     platform: linux/amd64 # for compatibility with arm64
     ports:
       - "8000:8000"

@@ -3,7 +3,6 @@ package it.unibo.cs.asm.acmeat.dto.entities;
 import it.unibo.cs.asm.acmeat.model.Order;
 import lombok.Getter;
 
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class OrderDTO {
     private final List<OrderedItemDTO> items;
     private final String price;
     private final String deliveryAddress;
-    private final String deliveryDateTime;
+    private final String deliveryTime;
 
     public OrderDTO(Order order) {
         this.id = order.getId();
@@ -22,7 +21,6 @@ public class OrderDTO {
         this.items = order.getItems().stream().map(OrderedItemDTO::new).toList();
         this.price = order.getPrice().toString();
         this.deliveryAddress = order.getDeliveryAddress();
-        this.deliveryDateTime = order.getDeliveryDateTime()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss O"));
+        this.deliveryTime = order.getDeliveryDateTime().format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 }

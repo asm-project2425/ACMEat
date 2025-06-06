@@ -19,6 +19,7 @@ public class Restaurant {
     @GeneratedValue
     private int id;
     private String name;
+    private String baseUrl;
     @Embedded
     private Coordinate position;
     @ManyToOne
@@ -29,8 +30,9 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TimeSlot> timeSlots;
 
-    public Restaurant(String name, Coordinate position, City city) {
+    public Restaurant(String name, String baseUrl, Coordinate position, City city) {
         this.name = name;
+        this.baseUrl = baseUrl;
         this.position = position;
         this.city = city;
         this.menus = new HashSet<>();

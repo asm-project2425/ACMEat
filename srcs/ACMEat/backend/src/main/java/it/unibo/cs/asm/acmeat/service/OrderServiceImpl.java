@@ -58,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
     public void setShippingCompany(int orderId, ShippingCompany shippingCompany) {
         Order order = getOrderById(orderId);
         order.setShippingCompany(shippingCompany);
+        order.setStatus(OrderStatus.SHIPPING_COMPANY_CHOSEN);
         orderRepository.save(order);
     }
 

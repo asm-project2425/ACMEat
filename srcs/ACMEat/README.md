@@ -12,31 +12,39 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
 ### `retrieveCities`
 - **Method**: `GET`
 - **URL**: `/api/v1/cities`
-- **Description**: Retrieves the list of available cities.
+- **Description**: Starts the process and sends the `requestCities` message, then completes the `Retrieve cities` task.
+- **Response**: Includes a `correlationKey` and a list of available cities.
 
 ---
 
 ### `retrieveRestaurants`
 - **Method**: `GET`
-- **URL**: `/api/v1/restaurants?cityId=1`
+- **URL**: `/api/v1/restaurants?correlationKey=...&cityId=...`
 - **Query Parameters**:
-  - `cityId`: ID of the city to filter restaurants.
-- **Description**: Retrieves restaurants in the specified city.
+  - `correlationKey`: Correlation key obtained from `retrieveCities`
+  - `cityId`: ID of the selected city
+- **Description**: Sends the `citySelected` message and completes the `Retrieve restaurants` task.
+- **Response**: List of restaurants available in the specified city.
 
 ---
 
 ### `retrieveRestaurantDetails`
 - **Method**: `GET`
-- **URL**: `/api/v1/restaurants/{restaurantId}`
+- **URL**: `/api/v1/restaurants/{restaurantId}?correlationKey=...`
 - **Path Parameters**:
   - `restaurantId`: ID of the restaurant
-- **Description**: Retrieves full details of the specified restaurant.
+- **Query Parameters**:
+  - `correlationKey`: Correlation key obtained from `retrieveCities`
+- **Description**: Sends the `restaurantSelected` message and completes the `Retrieve restaurant details` task.
+- **Response**: List of menus and time slots for the selected restaurant.
 
 ---
 
 ### `createOrder`
 - **Method**: `POST`
-- **URL**: `/api/v1/orders`
+- **URL**: `/api/v1/orders?correlationKey=...`
+- **Query Parameters**:
+  - `correlationKey`: Correlation key obtained from `retrieveCities`
 - **Request Body**:
 ```json
 {
@@ -49,7 +57,23 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
   "deliveryAddress": "Via Roma 42, Bologna"
 }
 ```
-- **Description**: Creates a new order with selected items and time slot.
+- **Description**: Sends the `orderConfirmation` message and completes the `Create order` task.
+- **Response**: Returns the created order details.
+
+---
+
+### `receiveShippingCost`
+- **Method**: `POST`
+- **URL**: `/api/v1/shipping-company/cost`
+- **Request Body**:
+```json
+{
+  "correlationKey": "abc-123",
+  "shippingCost": 5.90
+}
+```
+- **Description**: Receives the cost from a shipping company and sends the `sendShippingCost` message with the cost as a process variable (shippingInfo). This endpoint must be called within 15 seconds from the initial availability request.
+- **Response**: HTTP `204 No Content`.
 
 ---
 
@@ -70,8 +94,8 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
 - **URL**: `/api/v1/restaurants/confirm`
 - **Query Parameters**:
   - `correlationKey`: Correlation key obtained from `retrieveRestaurantInformation`
-- **Description**: Completes the update process in the BPMN engine.
-- **Response**: `true` if successful, `false` otherwise.
+- **Description**: Confirms and completes the restaurant information update in the BPMN engine.
+- **Response**: HTTP `204 No Content`.
 
 ---
 > **Note**:  
@@ -89,7 +113,7 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
   "price": 8.50
 }
 ```
-- **Description**: Adds a new menu item.
+- **Description**: Adds a new menu item to the specified restaurant.
 - **Response**: Created `MenuDTO` object.
 
 ---
@@ -107,7 +131,7 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
   "price": 9.00
 }
 ```
-- **Description**: Updates an existing menu item.
+- **Description**: Updates an existing menu item for the specified restaurant.
 - **Response**: Updated `MenuDTO` object.
 
 ---

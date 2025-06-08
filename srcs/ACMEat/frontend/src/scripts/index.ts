@@ -1,4 +1,4 @@
-import { getFetchConfig, type citiesResponse, type Menu, type Order, type restaurantDetailsResponse, type restaurantsRsponse, type TimeSlot } from "./interfaces";
+import { getFetchConfig, type citiesResponse, type Menu, type Order, type orderCreationResponse, type restaurantDetailsResponse, type restaurantsRsponse, type TimeSlot } from "./interfaces";
 
 const PUBLIC_SELF_HOST = import.meta.env.PUBLIC_SELF_HOST
 const PUBLIC_RETRIVE_CITIES = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RETRIVE_CITIES;
@@ -41,11 +41,12 @@ function ClearOptions(select:HTMLSelectElement){
     }
 }
 
+let correlationKey:string = undefined;
 async function Set_Comuni(){
     const res= await fetch(PUBLIC_RETRIVE_CITIES);
     const cRes : citiesResponse = await res.json();
     const comuni = cRes.cities;
-
+    correlationKey = cRes.correlationKey;
 
     if(!comuni || comuni.length<1){
         alert(`Nessun comune trovato`);
@@ -60,7 +61,7 @@ async function Set_Comuni(){
 
 async function On_Comune_Change() {
     const value = comune_select.value;
-    const res = await fetch(PUBLIC_RETRIVE_RESTAURANTS+`?cityId=${value}`)
+    const res = await fetch(PUBLIC_RETRIVE_RESTAURANTS+`?cityId=${value}&correlationKey=${correlationKey}`)
     const rRes : restaurantsRsponse = await res.json();
     const locali = rRes.restaurants;
 
@@ -83,7 +84,7 @@ async function On_Comune_Change() {
 
 async function On_Locale_Change() {
     const value = locale_select.value;
-    const res = await fetch(PUBLIC_RETRIVE_RESTAURANT_DETAILS+`/${value}`);
+    const res = await fetch(PUBLIC_RETRIVE_RESTAURANT_DETAILS+`/${value}?correlationKey=${correlationKey}`);
     const jres : restaurantDetailsResponse = await res.json();
 
     const menus:Menu[] = jres.menus;
@@ -142,13 +143,18 @@ async function On_Ordina() {
 
     } 
 
-    const res = await fetch(PUBLIC_CREATE_ORDER,{
+    const res = await fetch(PUBLIC_CREATE_ORDER+`?correlationKey=${correlationKey}`,{
         method : "post",
-        body : JSON.stringify(ordine)
+        body : JSON.stringify(ordine),
+        headers :{
+            "Content-Type":"application/json"
+        }
     });
 
-    console.log(await res.json());
-    alert(JSON.stringify(await res.json(), null, 2))
+    const jres : orderCreationResponse = await res.json();
+
+    console.log(jres);
+    alert(JSON.stringify(jres, null, 2))
 }
 
 

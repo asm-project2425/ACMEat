@@ -5,34 +5,43 @@ type loginRequest: void {
 
 type loginResponse: void {
 	.success: bool
-	.sid?: string
+	.sessionId?: string
 }
 
-type payRequest: void {
-	.sid: string
-	.bill: double
-  	.orderId: int
+type createPaymentRequest: void {
+	.sessionId: string
+	.amount: double
+	.orderId: int
 }
 
-type payResponse: void {
+type createPaymentResponse: void {
+	.success: bool
+	.paymentId?: int
+}
+
+type completePaymentRequest: void {
+	.sessionId: string
+	.paymentId: int
+}
+
+type completePaymentResponse: void {
 	.success: bool
 	.token?: string
 }
 
 type verifyTokenRequest: void {
-	.sid: string
+	.sessionId: string
 	.token: string
-	.orderId: int
-}
-
-type confirmRequest: void {
-	.sid: string
-	.orderId: int
 }
 
 type refundRequest: void {
-	.sid: string
-	.orderId: int
+	.sessionId: string
+	.paymentId: int
+}
+
+type confirmRequest: void {
+	.sessionId: string
+	.paymentId: int
 }
 
 type successResponse: void {
@@ -40,13 +49,14 @@ type successResponse: void {
 }
 
 type logoutRequest: void {
-	.sid: string
+	.sessionId: string
 }
 
 interface BankInterface {
     RequestResponse:
 		login( loginRequest )( loginResponse ),
-		pay( payRequest )( payResponse ),
+		createPayment( createPaymentRequest )( createPaymentResponse ),
+		completePayment( completePaymentRequest )( completePaymentResponse ),
 		verifyToken( verifyTokenRequest )( successResponse ),
 		refund( refundRequest )( successResponse ),
 		confirm( confirmRequest )( successResponse )

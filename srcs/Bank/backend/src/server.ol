@@ -1,11 +1,3 @@
-// This service handles both CLIENT and ADMIN (ACME) operations on a single input port. Clients can login, make 
-// payments, and logout. Admin (ACME) can verify tokens, confirm or refund payments.
-// For simplicity, the same session (`sid`) and variable (`idUsr`) are used throughout. However, in admin operations, 
-// the action must be performed on the correct client account, so the actual payer ID is retrieved from the database 
-// rather than relying on the session.
-// This unified approach keeps the logic compact and was chosen for educational clarity. A more robust design could 
-// include role separation and multiple input ports.
-
 include "console.iol"
 include "interface.iol"
 include "string_utils.iol"
@@ -22,12 +14,13 @@ inputPort Bank {
 
 cset {
     sid: 
-        loginResponse.sid
-        payRequest.sid
-        verifyTokenRequest.sid
-        confirmRequest.sid
-        refundRequest.sid
-        logoutRequest.sid
+        loginResponse.sessionId
+        createPaymentRequest.sessionId
+        completePaymentRequest.sessionId
+        verifyTokenRequest.sessionId
+        refundRequest.sessionId
+        confirmRequest.sessionId
+        logoutRequest.sessionId
 }
 
 execution { concurrent }
@@ -39,7 +32,7 @@ init {
     with(connectionInfo){
         .username = "bankuser"
         .password = "bankpassword"
-        .host = "bank_db" // localhost (for local testing)
+        .host = "bank_db" // localhost (for local testing: CLASSPATH=lib/postgresql-42.7.5.jar jolie src/server.ol)
         .database = "bankdb"
         .driver = "postgresql"
     }
@@ -47,128 +40,236 @@ init {
 }
 
 main {
-
-    // Login: set sid and user ID
+    // Login: user authentication and sessionId creation
     login(loginRequest)(loginResponse) {
         username = loginRequest.username;
         password = loginRequest.password;
 
-        println@Console("Login request: " + username + " / " + password)()
+        println@Console("Login request: " + username + " / " + password)();
 
-        query@Database("SELECT id FROM accounts WHERE username = '" + username + "' AND password = '" + password + 
-			"'")(queryResponse)
+        // Uso query parametrica per sicurezza
+        query@Database(
+            "SELECT id FROM accounts WHERE username = :u AND password = :p" {
+                .u = username,
+                .p = password
+            }
+        )(queryResponse)
 
-        if (queryResponse.row[0].id == null) {
-            println@Console("Invalid credentials")()
+        if (#queryResponse.row == 0) {
+            println@Console("Invalid credentials")();
             loginResponse.success = false
         } else {
-            loginResponse.sid = csets.sid = new
-            loginResponse.success = true
-            idUsr = queryResponse.row[0].id
-            println@Console("User " + username + " logged in with id " + idUsr)()
+            loginResponse.sessionId = csets.sid = new;
+            idUsr = queryResponse.row[0].id;
+            loginResponse.success = true;
+            println@Console("User " + username + " logged in with id " + idUsr)();
             keepRunning = true
         }
     }
 
     while (keepRunning) {
 
-        // Pay: deduct balance and create payment
-        [pay(payRequest)(payResponse) {
-            bill = payRequest.bill
-            orderId = payRequest.orderId
-            getRandomUUID@StringUtils()(uuid)
+        // Create payment: payment initiation with order ID and amount
+        [createPayment(createPaymentRequest)(createPaymentResponse) {
+            amount = createPaymentRequest.amount
+            orderId = createPaymentRequest.orderId
 
-            println@Console("PAY: order " + orderId + ", amount: " + bill + " for user ID " + idUsr)()
+            println@Console("CREATE PAYMENT: order " + orderId + ", amount: " + amount + ", created by user ID " + idUsr)()
 
-            query@Database("SELECT balance FROM accounts WHERE id = " + idUsr)(query)
-            balance = query.row[0].balance
+            // Check if payment already exists
+            query@Database("SELECT id FROM payments WHERE order_id = :order_id" {
+                .order_id = orderId
+            })(queryResponse)
 
-            if (bill <= balance) {
-                update@Database("UPDATE accounts SET balance = balance - " + bill + " WHERE id = " + idUsr)(res1)
-
-                queryText = "INSERT INTO payments (token, amount, payer_id, status, order_id) VALUES (:token, " + 
-					":amount, :payer_id, cast('created' as payment_status), :order_id)"
-                update@Database(queryText {
-                    .token = uuid,
-                    .amount = bill,
-                    .payer_id = idUsr,
-                    .order_id = orderId
-                })(res2)
-
-                payResponse.token = uuid
-                payResponse.success = true
-                keepRunning = false
-                println@Console("Payment successful. Token: " + uuid)()
+            if (#queryResponse.row > 0) {
+                println@Console("PAYMENT FAILED: order " + orderId + " already exists")()
+                createPaymentResponse.success = false
             } else {
-                println@Console("PAY FAILED: insufficient balance (" + balance + ")")()
-                payResponse.success = false
+                queryText = "INSERT INTO payments (amount, creator_id, status, order_id)
+                            VALUES (:amount, :creator_id, cast('created' as payment_status), :order_id)
+                            RETURNING id"
+                query@Database(queryText {
+                    .amount = amount,
+                    .creator_id = idUsr,
+                    .order_id = orderId
+                })(res)
+
+                paymentId = res.row[0].id
+
+                println@Console("PAYMENT CREATED: payment ID = " + paymentId)()
+                createPaymentResponse.success = true
+                createPaymentResponse.paymentId = paymentId
+            }
+        }]
+
+        // Complete payment: generate token and mark as 'created'
+        [completePayment(completePaymentRequest)(completePaymentResponse) {
+            paymentId = completePaymentRequest.paymentId
+
+            println@Console("COMPLETE PAYMENT: payment ID = " + paymentId + ", user ID = " + idUsr)()
+
+            // Recupera il pagamento
+            query@Database("
+                SELECT amount FROM payments
+                WHERE id = :payment_id AND status = 'created'" {
+                .payment_id = paymentId
+            })(queryResponse)
+
+            if (#queryResponse.row == 0) {
+                println@Console("COMPLETE FAILED: payment ID non valido o già elaborato")()
+                completePaymentResponse.success = false
+            } else {
+                amount = queryResponse.row[0].amount
+
+                // Controlla saldo utente
+                query@Database("SELECT balance FROM accounts WHERE id = :id" {
+                    .id = idUsr
+                })(balResponse)
+                balance = balResponse.row[0].balance
+
+                if (balance < amount) {
+                    println@Console("COMPLETE FAILED: saldo insufficiente (" + balance + " < " + amount + ")")()
+                    completePaymentResponse.success = false
+                } else {
+                    // Genera token
+                    getRandomUUID@StringUtils()(uuid)
+
+                    // Scala saldo e aggiorna pagamento
+                    update@Database("UPDATE accounts SET balance = balance - :amount WHERE id = :id" {
+                        .amount = amount,
+                        .id = idUsr
+                    })(res1)
+
+                    update@Database("
+                        UPDATE payments
+                        SET payer_id = :payer_id,
+                            token = :token,
+                            status = cast('paid' as payment_status),
+                            paid_at = CURRENT_TIMESTAMP
+                        WHERE id = :payment_id" {
+                        .payer_id = idUsr,
+                        .token = uuid,
+                        .payment_id = paymentId
+                    })(res2)
+
+                    println@Console("COMPLETE SUCCESS: token = " + uuid + " - pagamento effettuato da user " + idUsr)()
+                    completePaymentResponse.success = true
+                    completePaymentResponse.token = uuid
+                }
             }
         }]
 
         // Token validation: move payment to 'validated'
         [verifyToken(verifyTokenRequest)(successResponse) {
-            orderId = verifyTokenRequest.orderId
             token = verifyTokenRequest.token
 
-            println@Console("VERIFY TOKEN: token = " + token + ", order_id = " + orderId)()
+            println@Console("VERIFY TOKEN: token = " + token + " by user " + idUsr)()
 
-            query@Database("SELECT id FROM payments WHERE token = '" + token + "' AND order_id = " + orderId +
-				" AND status = 'created'")(queryResponse)
+            // Verifica che il token sia valido e in stato 'paid'
+            query@Database("
+                SELECT id FROM payments
+                WHERE token = :token AND status = 'paid'" {
+                .token = token
+            })(queryResponse)
 
-            if (queryResponse.row[0].id == null) {
-                println@Console("TOKEN INVALID or already processed")()
+            if (#queryResponse.row == 0) {
+                println@Console("VERIFY FAILED: invalid or already validated token")()
                 successResponse.success = false
             } else {
-                update@Database("UPDATE payments SET status = 'validated' WHERE token = '" + token + "'")(res)
-                println@Console("Token verified successfully")()
+                update@Database("
+                    UPDATE payments
+                    SET status = cast('validated' as payment_status),
+                        validated_at = CURRENT_TIMESTAMP
+                    WHERE token = :token" {
+                    .token = token
+                })(res)
+
+                println@Console("VERIFY SUCCESS: token validated")()
                 successResponse.success = true
             }
         }]
 
-        // Confirm: credit to ACME and mark payment completed
+        // Confirm: credit amount to ACME and mark as 'completed'
         [confirm(confirmRequest)(successResponse) {
-            orderId = confirmRequest.orderId
-            println@Console("CONFIRM: order_id = " + orderId)()
+            paymentId = confirmRequest.paymentId
 
-            query@Database("SELECT amount FROM payments WHERE order_id = " + orderId + " AND status = 'validated'")(
-				queryResponse)
+            println@Console("CONFIRM: payment ID = " + paymentId + " by user " + idUsr)()
 
-            if (queryResponse.row[0].amount == null) {
-                println@Console("CONFIRM FAILED: no validated transaction found")()
+            // Cerca il pagamento con stato 'validated'
+            query@Database("
+                SELECT amount, creator_id FROM payments
+                WHERE id = :payment_id AND status = 'validated'" {
+                .payment_id = paymentId
+            })(queryResponse)
+
+            if (#queryResponse.row == 0) {
+                println@Console("CONFIRM FAILED: no validated payment found for ID " + paymentId)()
                 successResponse.success = false
             } else {
                 amount = queryResponse.row[0].amount
+                acmeId = queryResponse.row[0].creator_id
 
-                update@Database("UPDATE payments SET status = 'completed' WHERE order_id = " + orderId)(res1)
-                update@Database("UPDATE accounts SET balance = balance + " + amount + " WHERE id = " + idUsr)(res2)
+                // Aggiorna stato e accredita ad ACME
+                update@Database("
+                    UPDATE payments
+                    SET status = cast('completed' as payment_status),
+                        confirmed_at = CURRENT_TIMESTAMP
+                    WHERE id = :payment_id" {
+                    .payment_id = paymentId
+                })(res1)
 
-                println@Console("CONFIRM SUCCESS: " + amount + " credited to ACME")()
+                update@Database("
+                    UPDATE accounts
+                    SET balance = balance + :amount
+                    WHERE id = :acme_id" {
+                    .amount = amount,
+                    .acme_id = acmeId
+                })(res2)
+
+                println@Console("CONFIRM SUCCESS: " + amount + " credited to ACME (user_id = " + acmeId + ")")()
                 successResponse.success = true
-                keepRunning = false
             }
         }]
 
         // Refund: return money to payer and mark refunded
         [refund(refundRequest)(successResponse) {
-            orderId = refundRequest.orderId
-            println@Console("REFUND: order_id = " + orderId)()
+            paymentId = refundRequest.paymentId
 
-            query@Database("SELECT amount, payer_id FROM payments WHERE order_id = " + orderId + 
-				" AND status = 'validated'")(queryResponse)
+            println@Console("REFUND: payment ID = " + paymentId + " by user " + idUsr)()
 
-            if (queryResponse.row[0].amount == null) {
-                println@Console("REFUND FAILED: no refundable transaction")()
+            // Cerca il pagamento con stato 'paid' o 'validated'
+            query@Database("
+                SELECT amount, payer_id FROM payments
+                WHERE id = :payment_id AND status IN ('paid', 'validated')" {
+                .payment_id = paymentId
+            })(queryResponse)
+
+            if (#queryResponse.row == 0) {
+                println@Console("REFUND FAILED: no refundable transaction for payment " + paymentId)()
                 successResponse.success = false
             } else {
                 amount = queryResponse.row[0].amount
-				payer = queryResponse.row[0].payer_id
+                payer = queryResponse.row[0].payer_id
 
-                update@Database("UPDATE payments SET status = 'refunded' WHERE order_id = " + orderId)(res1)
-                update@Database("UPDATE accounts SET balance = balance + " + amount + " WHERE id = " + payer)(res2)
+                // Aggiorna lo stato del pagamento e rimborsa l’importo
+                update@Database("
+                    UPDATE payments
+                    SET status = cast('refunded' as payment_status),
+                        confirmed_at = CURRENT_TIMESTAMP
+                    WHERE id = :payment_id" {
+                    .payment_id = paymentId
+                })(res1)
+
+                update@Database("
+                    UPDATE accounts
+                    SET balance = balance + :amount
+                    WHERE id = :payer_id" {
+                    .amount = amount,
+                    .payer_id = payer
+                })(res2)
 
                 println@Console("REFUND SUCCESS: " + amount + " refunded to user " + payer)()
                 successResponse.success = true
-                keepRunning = false
             }
         }]
 

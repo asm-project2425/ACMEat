@@ -1,50 +1,112 @@
-# Bank
+# ACMEat Bank Service
 
-BankService is the banking microservice of the ACMEat project. It handles customer payments through SOAP-based operations and interacts with a PostgreSQL database to register and track payment transactions.
+## SOAP API Documentation
 
-## SOAP Endpoints
-
-| Operation      | Description                                     |
-|----------------|-------------------------------------------------|
-| `login`        | Authenticates a user and starts a session       |
-| `pay`          | Deducts an amount from the user's balance and creates a payment |
-| `verifyToken`  | ACME validates the payment token                |
-| `confirm`      | ACME confirms the delivery and credits the payment |
-| `refund`       | ACME cancels the payment and refunds the user   |
-| `logout`       | Terminates the user's session                  |
-
-All endpoints are available via SOAP on port `8000`.
-
+All SOAP operations are available at:  
+**http://localhost:8000**  
 > WSDL file: [`src/BankService.wsdl`](src/BankService.wsdl)
 
-## Database Tables
+---
 
-### `accounts`
-- **Description**: Stores user account information.
-- **Columns**:
-  - `id` (INTEGER, PK): Unique identifier for the account.
-  - `username` (TEXT, NOT NULL): User's login name.
-  - `password` (TEXT, NOT NULL): User's hashed password.
-  - `balance` (NUMERIC(12, 2), NOT NULL): User's account balance (>= 0).
+## Operations Summary
 
-### `payments`
-- **Description**: Tracks payment transactions.
-- **Columns**:
-  - `id` (INTEGER, PK): Unique identifier for the payment.
-  - `payer_id` (INTEGER, FK): ID of the user making the payment.
-  - `order_id` (INTEGER, UNIQUE, NOT NULL): Associated order ID.
-  - `token` (TEXT, UNIQUE, NOT NULL): Unique payment token.
-  - `amount` (NUMERIC(12, 2), NOT NULL): Payment amount (> 0).
-  - `status` (ENUM, NOT NULL): Payment status (`created`, `validated`, `completed`, `refunded`).
+| Operation           | Input Type              | Output Type              | Description                                               |
+|---------------------|--------------------------|---------------------------|-----------------------------------------------------------|
+| `login`             | `loginRequest`           | `loginResponse`           | Authenticates user and returns session ID                |
+| `createPayment`     | `createPaymentRequest`   | `createPaymentResponse`   | Initializes a new payment, returns payment ID            |
+| `completePayment`   | `completePaymentRequest` | `completePaymentResponse` | Completes a payment and returns a token                  |
+| `verifyToken`       | `verifyTokenRequest`     | `successResponse`         | Verifies a token after customer submits it               |
+| `refund`            | `refundRequest`          | `successResponse`         | Refunds a payment if allowed                             |
+| `confirm`           | `confirmRequest`         | `successResponse`         | Credits the money to ACME upon delivery                  |
+| `logout`            | `logoutRequest`          | `void` (OneWay)           | Ends the current session                                 |
 
-## Running the Service
+---
 
-### Docker Compose
+## Data Types
 
-The service is designed to run as part of the global `Bank` setup:
-
-```bash
-docker compose up --build
+### loginRequest
+```xml
+<login>
+  <username>string</username>
+  <password>string</password>
+</login>
 ```
 
-> The service will be available at: `http://localhost:8000/?wsdl`
+### loginResponse
+```xml
+<loginResponse>
+  <success>boolean</success>
+  <sessionId>string (optional)</sessionId>
+</loginResponse>
+```
+
+### createPaymentRequest
+```xml
+<createPayment>
+  <sessionId>string</sessionId>
+  <amount>double</amount>
+  <orderId>int</orderId>
+</createPayment>
+```
+
+### createPaymentResponse
+```xml
+<createPaymentResponse>
+  <success>boolean</success>
+  <paymentId>int (optional)</paymentId>
+</createPaymentResponse>
+```
+
+### completePaymentRequest
+```xml
+<completePayment>
+  <sessionId>string</sessionId>
+  <paymentId>int</paymentId>
+</completePayment>
+```
+
+### completePaymentResponse
+```xml
+<completePaymentResponse>
+  <success>boolean</success>
+  <token>string (optional)</token>
+</completePaymentResponse>
+```
+
+### verifyTokenRequest
+```xml
+<verifyToken>
+  <sessionId>string</sessionId>
+  <token>string</token>
+</verifyToken>
+```
+
+### refundRequest
+```xml
+<refund>
+  <sessionId>string</sessionId>
+  <paymentId>int</paymentId>
+</refund>
+```
+
+### confirmRequest
+```xml
+<confirm>
+  <sessionId>string</sessionId>
+  <paymentId>int</paymentId>
+</confirm>
+```
+
+### successResponse
+```xml
+<successResponse>
+  <success>boolean</success>
+</successResponse>
+```
+
+### logoutRequest (OneWay)
+```xml
+<logout>
+  <sessionId>string</sessionId>
+</logout>
+```

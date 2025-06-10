@@ -1,6 +1,13 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://example.com/bank" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="BankService" targetNamespace="http://example.com/bank">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://example.com/bank"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             name="BankService"
+             targetNamespace="http://example.com/bank">
+
   <types>
     <xsd:schema targetNamespace="http://example.com/bank">
+
       <xsd:element name="login">
         <xsd:complexType>
           <xsd:sequence>
@@ -9,24 +16,45 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
       <xsd:element name="loginResponse">
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="success" type="xsd:boolean"/>
-            <xsd:element name="sid" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="sessionId" type="xsd:string" minOccurs="0"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="pay">
+
+      <xsd:element name="createPayment">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="sid" type="xsd:string"/>
-            <xsd:element name="bill" type="xsd:double"/>
+            <xsd:element name="sessionId" type="xsd:string"/>
+            <xsd:element name="amount" type="xsd:double"/>
             <xsd:element name="orderId" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="payResponse">
+
+      <xsd:element name="createPaymentResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="success" type="xsd:boolean"/>
+            <xsd:element name="paymentId" type="xsd:int" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="completePayment">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sessionId" type="xsd:string"/>
+            <xsd:element name="paymentId" type="xsd:int"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="completePaymentResponse">
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="success" type="xsd:boolean"/>
@@ -34,38 +62,42 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
       <xsd:element name="verifyToken">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="sid" type="xsd:string"/>
+            <xsd:element name="sessionId" type="xsd:string"/>
             <xsd:element name="token" type="xsd:string"/>
-            <xsd:element name="orderId" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
       <xsd:element name="confirm">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="sid" type="xsd:string"/>
-            <xsd:element name="orderId" type="xsd:int"/>
+            <xsd:element name="sessionId" type="xsd:string"/>
+            <xsd:element name="paymentId" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
       <xsd:element name="refund">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="sid" type="xsd:string"/>
-            <xsd:element name="orderId" type="xsd:int"/>
+            <xsd:element name="sessionId" type="xsd:string"/>
+            <xsd:element name="paymentId" type="xsd:int"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
       <xsd:element name="logout">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="sid" type="xsd:string"/>
+            <xsd:element name="sessionId" type="xsd:string"/>
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
       <xsd:element name="successResponse">
         <xsd:complexType>
           <xsd:sequence>
@@ -73,43 +105,37 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+
     </xsd:schema>
   </types>
-  <message name="LoginRequest">
-    <part name="parameters" element="tns:login"/>
-  </message>
-  <message name="LoginResponse">
-    <part name="parameters" element="tns:loginResponse"/>
-  </message>
-  <message name="PayRequest">
-    <part name="parameters" element="tns:pay"/>
-  </message>
-  <message name="PayResponse">
-    <part name="parameters" element="tns:payResponse"/>
-  </message>
-  <message name="VerifyTokenRequest">
-    <part name="parameters" element="tns:verifyToken"/>
-  </message>
-  <message name="ConfirmRequest">
-    <part name="parameters" element="tns:confirm"/>
-  </message>
-  <message name="RefundRequest">
-    <part name="parameters" element="tns:refund"/>
-  </message>
-  <message name="LogoutRequest">
-    <part name="parameters" element="tns:logout"/>
-  </message>
-  <message name="SuccessResponse">
-    <part name="parameters" element="tns:successResponse"/>
-  </message>
+
+  <message name="LoginRequest"><part name="parameters" element="tns:login"/></message>
+  <message name="LoginResponse"><part name="parameters" element="tns:loginResponse"/></message>
+
+  <message name="CreatePaymentRequest"><part name="parameters" element="tns:createPayment"/></message>
+  <message name="CreatePaymentResponse"><part name="parameters" element="tns:createPaymentResponse"/></message>
+
+  <message name="CompletePaymentRequest"><part name="parameters" element="tns:completePayment"/></message>
+  <message name="CompletePaymentResponse"><part name="parameters" element="tns:completePaymentResponse"/></message>
+
+  <message name="VerifyTokenRequest"><part name="parameters" element="tns:verifyToken"/></message>
+  <message name="ConfirmRequest"><part name="parameters" element="tns:confirm"/></message>
+  <message name="RefundRequest"><part name="parameters" element="tns:refund"/></message>
+  <message name="LogoutRequest"><part name="parameters" element="tns:logout"/></message>
+  <message name="SuccessResponse"><part name="parameters" element="tns:successResponse"/></message>
+
   <portType name="BankInterface">
     <operation name="login">
       <input message="tns:LoginRequest"/>
       <output message="tns:LoginResponse"/>
     </operation>
-    <operation name="pay">
-      <input message="tns:PayRequest"/>
-      <output message="tns:PayResponse"/>
+    <operation name="createPayment">
+      <input message="tns:CreatePaymentRequest"/>
+      <output message="tns:CreatePaymentResponse"/>
+    </operation>
+    <operation name="completePayment">
+      <input message="tns:CompletePaymentRequest"/>
+      <output message="tns:CompletePaymentResponse"/>
     </operation>
     <operation name="verifyToken">
       <input message="tns:VerifyTokenRequest"/>
@@ -128,63 +154,46 @@
       <output message="tns:SuccessResponse"/>
     </operation>
   </portType>
+
   <binding name="BankBinding" type="tns:BankInterface">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="login">
       <soap:operation soapAction="login"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
     </operation>
-    <operation name="pay">
-      <soap:operation soapAction="pay"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
+    <operation name="createPayment">
+      <soap:operation soapAction="createPayment"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+    <operation name="completePayment">
+      <soap:operation soapAction="completePayment"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
     </operation>
     <operation name="verifyToken">
       <soap:operation soapAction="verifyToken"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
     </operation>
     <operation name="confirm">
       <soap:operation soapAction="confirm"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
     </operation>
     <operation name="refund">
       <soap:operation soapAction="refund"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
     </operation>
     <operation name="logout">
       <soap:operation soapAction="logout"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
     </operation>
   </binding>
+
   <service name="BankService">
     <port name="Bank" binding="tns:BankBinding">
       <soap:address location="http://localhost:8000"/>

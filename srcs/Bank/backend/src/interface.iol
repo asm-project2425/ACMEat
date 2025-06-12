@@ -34,9 +34,17 @@ type verifyTokenRequest: void {
 	.token: string
 }
 
+type verifyTokenResponse: void {
+	.success: bool
+}
+
 type refundRequest: void {
 	.sessionId: string
 	.paymentId: int
+}
+
+type refundResponse: void {
+	.success: bool
 }
 
 type confirmRequest: void {
@@ -44,7 +52,7 @@ type confirmRequest: void {
 	.paymentId: int
 }
 
-type successResponse: void {
+type confirmResponse: void {
 	.success: bool
 }
 
@@ -57,9 +65,9 @@ interface BankInterface {
 		login( loginRequest )( loginResponse ),
 		createPayment( createPaymentRequest )( createPaymentResponse ),
 		completePayment( completePaymentRequest )( completePaymentResponse ),
-		verifyToken( verifyTokenRequest )( successResponse ),
-		refund( refundRequest )( successResponse ),
-		confirm( confirmRequest )( successResponse )
+		verifyToken( verifyTokenRequest )( verifyTokenResponse ),
+		refund( refundRequest )( refundResponse ),
+		confirm( confirmRequest )( confirmResponse )
 	OneWay:
 		logout( logoutRequest )
 }

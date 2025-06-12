@@ -1,3 +1,15 @@
+/*
+For generating the WSDL file, run:
+```
+jolie2wsdl \
+  --namespace jolie.bank.soap.wsdl \
+  --portName BankServicePort \
+  --portAddr http://localhost:8000 \
+  --outputFile BankService.wsdl \
+  generateWsdl.ol
+```
+*/
+
 include "console.iol"
 include "interface.iol"
 include "string_utils.iol"
@@ -7,7 +19,7 @@ inputPort Bank {
     Location: "socket://0.0.0.0:8000"
     Protocol: soap {
         .wsdl = "BankService.wsdl";
-        .wsdl.port = "Bank";
+        .wsdl.port = "BankServicePort";
     }
     Interfaces: BankInterface
 }
@@ -108,7 +120,7 @@ main {
 
             println@Console("COMPLETE PAYMENT: payment ID = " + paymentId + ", user ID = " + idUsr)()
 
-            // Recupera il pagamento
+            // Retrieve payment
             query@Database("
                 SELECT amount FROM payments
                 WHERE id = :payment_id AND status = 'created'" {
@@ -121,7 +133,7 @@ main {
             } else {
                 amount = queryResponse.row[0].amount
 
-                // Controlla saldo utente
+                // Check user balance
                 query@Database("SELECT balance FROM accounts WHERE id = :id" {
                     .id = idUsr
                 })(balResponse)
@@ -131,10 +143,10 @@ main {
                     println@Console("COMPLETE FAILED: saldo insufficiente (" + balance + " < " + amount + ")")()
                     completePaymentResponse.success = false
                 } else {
-                    // Genera token
+                    // Generate UUID token
                     getRandomUUID@StringUtils()(uuid)
 
-                    // Scala saldo e aggiorna pagamento
+                    // Update payment and user balance
                     update@Database("UPDATE accounts SET balance = balance - :amount WHERE id = :id" {
                         .amount = amount,
                         .id = idUsr
@@ -160,12 +172,12 @@ main {
         }]
 
         // Token validation: move payment to 'validated'
-        [verifyToken(verifyTokenRequest)(successResponse) {
+        [verifyToken(verifyTokenRequest)(verifyTokenResponse) {
             token = verifyTokenRequest.token
 
             println@Console("VERIFY TOKEN: token = " + token + " by user " + idUsr)()
 
-            // Verifica che il token sia valido e in stato 'paid'
+            // Check if token is valid and payment is 'paid'
             query@Database("
                 SELECT id FROM payments
                 WHERE token = :token AND status = 'paid'" {
@@ -174,7 +186,7 @@ main {
 
             if (#queryResponse.row == 0) {
                 println@Console("VERIFY FAILED: invalid or already validated token")()
-                successResponse.success = false
+                verifyTokenResponse.success = false
             } else {
                 update@Database("
                     UPDATE payments
@@ -185,17 +197,17 @@ main {
                 })(res)
 
                 println@Console("VERIFY SUCCESS: token validated")()
-                successResponse.success = true
+                verifyTokenResponse.success = true
             }
         }]
 
         // Confirm: credit amount to ACME and mark as 'completed'
-        [confirm(confirmRequest)(successResponse) {
+        [confirm(confirmRequest)(confirmResponse) {
             paymentId = confirmRequest.paymentId
 
             println@Console("CONFIRM: payment ID = " + paymentId + " by user " + idUsr)()
 
-            // Cerca il pagamento con stato 'validated'
+            // Search for validated payment
             query@Database("
                 SELECT amount, creator_id FROM payments
                 WHERE id = :payment_id AND status = 'validated'" {
@@ -204,12 +216,12 @@ main {
 
             if (#queryResponse.row == 0) {
                 println@Console("CONFIRM FAILED: no validated payment found for ID " + paymentId)()
-                successResponse.success = false
+                confirmResponse.success = false
             } else {
                 amount = queryResponse.row[0].amount
                 acmeId = queryResponse.row[0].creator_id
 
-                // Aggiorna stato e accredita ad ACME
+                // Update payment status and credit
                 update@Database("
                     UPDATE payments
                     SET status = cast('completed' as payment_status),
@@ -227,17 +239,17 @@ main {
                 })(res2)
 
                 println@Console("CONFIRM SUCCESS: " + amount + " credited to ACME (user_id = " + acmeId + ")")()
-                successResponse.success = true
+                confirmResponse.success = true
             }
         }]
 
         // Refund: return money to payer and mark refunded
-        [refund(refundRequest)(successResponse) {
+        [refund(refundRequest)(refundResponse) {
             paymentId = refundRequest.paymentId
 
             println@Console("REFUND: payment ID = " + paymentId + " by user " + idUsr)()
 
-            // Cerca il pagamento con stato 'paid' o 'validated'
+            // Check payment with status 'paid' or 'validated'
             query@Database("
                 SELECT amount, payer_id FROM payments
                 WHERE id = :payment_id AND status IN ('paid', 'validated')" {
@@ -246,12 +258,12 @@ main {
 
             if (#queryResponse.row == 0) {
                 println@Console("REFUND FAILED: no refundable transaction for payment " + paymentId)()
-                successResponse.success = false
+                refundResponse.success = false
             } else {
                 amount = queryResponse.row[0].amount
                 payer = queryResponse.row[0].payer_id
 
-                // Aggiorna lo stato del pagamento e rimborsa l’importo
+                // Update payment status and refund amount
                 update@Database("
                     UPDATE payments
                     SET status = cast('refunded' as payment_status),
@@ -269,7 +281,7 @@ main {
                 })(res2)
 
                 println@Console("REFUND SUCCESS: " + amount + " refunded to user " + payer)()
-                successResponse.success = true
+                refundResponse.success = true
             }
         }]
 

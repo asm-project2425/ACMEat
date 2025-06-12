@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="31672300-d3ae-4c53-a8be-bb2d1b7175da" activeEnvironment="Default" name="BankService" resourceRoot="" soapui-version="5.8.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="01e6ccb1-715b-437b-b544-3b7b7d9bf250" wsaVersion="NONE" name="BankSOAPBinding" type="wsdl" bindingName="{jolie.bank.soap.wsdl.wsdl}BankSOAPBinding" soapVersion="1_1" anonymous="optional" definition="file:/Users/matteocardellini/Documents/OneDrive%20-%20Alma%20Mater%20Studiorum%20Università%20di%20Bologna/ExamsToDo/ARCHITETTURE%20SOFTWARE%20A%20MICROSERVIZI/Project/ACMEat/srcs/Bank/backend/src/BankService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/Users/matteocardellini/Documents/OneDrive%20-%20Alma%20Mater%20Studiorum%20Università%20di%20Bologna/ExamsToDo/ARCHITETTURE%20SOFTWARE%20A%20MICROSERVIZI/Project/ACMEat/srcs/Bank/backend/src/BankService.wsdl"><con:part><con:url>file:/Users/matteocardellini/Documents/OneDrive%20-%20Alma%20Mater%20Studiorum%20Università%20di%20Bologna/ExamsToDo/ARCHITETTURE%20SOFTWARE%20A%20MICROSERVIZI/Project/ACMEat/srcs/Bank/backend/src/BankService.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="jolie.bank.soap.wsdl.wsdl" xmlns:xsd1="jolie.bank.soap.wsdl.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="jolie.bank.soap.wsdl.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema targetNamespace="jolie.bank.soap.wsdl.xsd" xmlns:sch="jolie.bank.soap.wsdl.xsd">
+      <xs:element name="confirm">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="paymentId" type="xs:int"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="confirmResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="verifyToken">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="token" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="verifyTokenResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="logout">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="completePayment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="paymentId" type="xs:int"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="completePaymentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/>
+            <xs:element maxOccurs="1" minOccurs="0" name="token" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createPayment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="amount" type="xs:double"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="orderId" type="xs:int"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createPaymentResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/>
+            <xs:element maxOccurs="1" minOccurs="0" name="paymentId" type="xs:int"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="login">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="password" type="xs:string"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="username" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="loginResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/>
+            <xs:element maxOccurs="1" minOccurs="0" name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="refund">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="paymentId" type="xs:int"/>
+            <xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="refundResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="refundResponse">
+    <wsdl:part name="body" element="xsd1:refundResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="confirmRequest">
+    <wsdl:part name="body" element="xsd1:confirm"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="logoutRequest">
+    <wsdl:part name="body" element="xsd1:logout"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="loginRequest">
+    <wsdl:part name="body" element="xsd1:login"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="loginResponse">
+    <wsdl:part name="body" element="xsd1:loginResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createPaymentRequest">
+    <wsdl:part name="body" element="xsd1:createPayment"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="confirmResponse">
+    <wsdl:part name="body" element="xsd1:confirmResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createPaymentResponse">
+    <wsdl:part name="body" element="xsd1:createPaymentResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="refundRequest">
+    <wsdl:part name="body" element="xsd1:refund"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="completePaymentRequest">
+    <wsdl:part name="body" element="xsd1:completePayment"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyTokenRequest">
+    <wsdl:part name="body" element="xsd1:verifyToken"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyTokenResponse">
+    <wsdl:part name="body" element="xsd1:verifyTokenResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="completePaymentResponse">
+    <wsdl:part name="body" element="xsd1:completePaymentResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Bank">
+    <wsdl:operation name="confirm">
+      <wsdl:input message="tns:confirmRequest"></wsdl:input>
+      <wsdl:output message="tns:confirmResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifyToken">
+      <wsdl:input message="tns:verifyTokenRequest"></wsdl:input>
+      <wsdl:output message="tns:verifyTokenResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="logout">
+      <wsdl:input message="tns:logoutRequest"></wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="completePayment">
+      <wsdl:input message="tns:completePaymentRequest"></wsdl:input>
+      <wsdl:output message="tns:completePaymentResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createPayment">
+      <wsdl:input message="tns:createPaymentRequest"></wsdl:input>
+      <wsdl:output message="tns:createPaymentResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <wsdl:input message="tns:loginRequest"></wsdl:input>
+      <wsdl:output message="tns:loginResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="refund">
+      <wsdl:input message="tns:refundRequest"></wsdl:input>
+      <wsdl:output message="tns:refundResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BankSOAPBinding" type="tns:Bank">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="confirm">
+      <soap:operation soapAction="confirm" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifyToken">
+      <soap:operation soapAction="verifyToken" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="logout">
+      <soap:operation soapAction="logout" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="completePayment">
+      <soap:operation soapAction="completePayment" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createPayment">
+      <soap:operation soapAction="createPayment" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <soap:operation soapAction="login" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="refund">
+      <soap:operation soapAction="refund" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BankService">
+    <wsdl:port name="BankServicePort" binding="tns:BankSOAPBinding">
+      <soap:address location="http://localhost:8000"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8000</con:endpoint></con:endpoints><con:operation id="b773b19f-9b12-4249-b235-e1b80ccd2528" isOneWay="false" action="completePayment" name="completePayment" bindingOperationName="completePayment" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="620fd66f-b310-4303-ab89-d4766a65f9a2" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:completePayment>
+         <paymentId>4</paymentId>
+         <sessionId>8a08d580-759c-4a3a-9179-1e6f20b9d939</sessionId>
+      </jol:completePayment>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="completePayment"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="48691c29-889f-4209-9d73-c50127c76194" isOneWay="false" action="confirm" name="confirm" bindingOperationName="confirm" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b05fdcf7-6a2b-4315-90f3-abb05dfe0c65" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:confirm>
+         <paymentId>3</paymentId>
+         <sessionId>814adc5b-f57e-43fd-a60d-dfdd2c274310</sessionId>
+      </jol:confirm>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="confirm"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="5a7911bc-6626-48b2-add3-a29e0b972509" isOneWay="false" action="createPayment" name="createPayment" bindingOperationName="createPayment" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b7bee666-40e0-4ba7-a053-57c0ab1e89bd" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:createPayment>
+         <amount>12</amount>
+         <orderId>10</orderId>
+         <sessionId>814adc5b-f57e-43fd-a60d-dfdd2c274310</sessionId>
+      </jol:createPayment>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="createPayment"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="7553bbab-e60e-4f53-b23b-9e1700f0963c" isOneWay="false" action="login" name="login" bindingOperationName="login" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="06021584-fd94-4eb7-a099-15a6bc3f1ff5" name="demo"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:login>
+         <password>demo</password>
+         <username>demo</username>
+      </jol:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="login"/><con:wsrmConfig version="1.2"/></con:call><con:call id="f772b318-ac75-43e8-abc2-1736a36a4b3b" name="acme"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:login>
+         <password>acme</password>
+         <username>acme</username>
+      </jol:login>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="login"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="47361fae-4b24-4331-86ab-aaba2916f7b5" isOneWay="false" action="logout" name="logout" bindingOperationName="logout" type="One-Way" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="0c97cf4a-1a2d-4120-a276-ed138aeb4788" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:logout>
+         <sessionId>8a08d580-759c-4a3a-9179-1e6f20b9d939</sessionId>
+      </jol:logout>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="logout"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="edd01ecb-7e2f-4a51-8e2c-50880df1337e" isOneWay="false" action="refund" name="refund" bindingOperationName="refund" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="e068af2d-a6ec-45ee-8ba8-dc61afe4c877" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:refund>
+         <paymentId>4</paymentId>
+         <sessionId>814adc5b-f57e-43fd-a60d-dfdd2c274310</sessionId>
+      </jol:refund>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="refund"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="d4ad9343-e878-47ef-9d41-8bdc748caba6" isOneWay="false" action="verifyToken" name="verifyToken" bindingOperationName="verifyToken" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="1b3fc509-063a-49b5-8b3d-a16fae60226e" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8000</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jol="jolie.bank.soap.wsdl.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jol:verifyToken>
+         <sessionId>814adc5b-f57e-43fd-a60d-dfdd2c274310</sessionId>
+         <token>059a6cfc-fc9b-4a02-98ba-2791982ee3f5</token>
+      </jol:verifyToken>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="verifyToken"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

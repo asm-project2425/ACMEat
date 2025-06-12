@@ -1,24 +1,26 @@
-# ACMEat Bank Service
+# Bank
 
 ## SOAP API Documentation
 
-All SOAP operations are available at:  
-**http://localhost:8000**  
-> WSDL file: [`src/BankService.wsdl`](src/BankService.wsdl)
+All SOAP operations are available at: **http://localhost:8000**
+
+> WSDL file: [`src/BankService.wsdl`](src/BankService.wsdl)  
+> Target namespace: `jolie.bank.soap.wsdl.wsdl`  
+> Schema namespace: `jolie.bank.soap.wsdl.xsd`
 
 ---
 
 ## Operations Summary
 
-| Operation           | Input Type              | Output Type              | Description                                               |
-|---------------------|--------------------------|---------------------------|-----------------------------------------------------------|
-| `login`             | `loginRequest`           | `loginResponse`           | Authenticates user and returns session ID                |
-| `createPayment`     | `createPaymentRequest`   | `createPaymentResponse`   | Initializes a new payment, returns payment ID            |
-| `completePayment`   | `completePaymentRequest` | `completePaymentResponse` | Completes a payment and returns a token                  |
-| `verifyToken`       | `verifyTokenRequest`     | `successResponse`         | Verifies a token after customer submits it               |
-| `refund`            | `refundRequest`          | `successResponse`         | Refunds a payment if allowed                             |
-| `confirm`           | `confirmRequest`         | `successResponse`         | Credits the money to ACME upon delivery                  |
-| `logout`            | `logoutRequest`          | `void` (OneWay)           | Ends the current session                                 |
+| Operation           | Input Type              | Output Type               | Description                                               |
+|---------------------|--------------------------|----------------------------|-----------------------------------------------------------|
+| `login`             | `loginRequest`           | `loginResponse`            | Authenticates user and returns session ID                |
+| `createPayment`     | `createPaymentRequest`   | `createPaymentResponse`    | Initializes a new payment, returns payment ID            |
+| `completePayment`   | `completePaymentRequest` | `completePaymentResponse`  | Completes a payment and returns a token                  |
+| `verifyToken`       | `verifyTokenRequest`     | `verifyTokenResponse`      | Verifies a token after customer submits it               |
+| `refund`            | `refundRequest`          | `refundResponse`           | Refunds a payment if allowed                             |
+| `confirm`           | `confirmRequest`         | `confirmResponse`          | Credits the money to ACME upon delivery                  |
+| `logout`            | `logoutRequest`          | `void` (OneWay)            | Ends the current session                                 |
 
 ---
 
@@ -26,7 +28,7 @@ All SOAP operations are available at:
 
 ### loginRequest
 ```xml
-<login>
+<login xmlns="jolie.bank.soap.wsdl.xsd">
   <username>string</username>
   <password>string</password>
 </login>
@@ -34,7 +36,7 @@ All SOAP operations are available at:
 
 ### loginResponse
 ```xml
-<loginResponse>
+<loginResponse xmlns="jolie.bank.soap.wsdl.xsd">
   <success>boolean</success>
   <sessionId>string (optional)</sessionId>
 </loginResponse>
@@ -42,16 +44,16 @@ All SOAP operations are available at:
 
 ### createPaymentRequest
 ```xml
-<createPayment>
-  <sessionId>string</sessionId>
+<createPayment xmlns="jolie.bank.soap.wsdl.xsd">
   <amount>double</amount>
   <orderId>int</orderId>
+  <sessionId>string</sessionId>
 </createPayment>
 ```
 
 ### createPaymentResponse
 ```xml
-<createPaymentResponse>
+<createPaymentResponse xmlns="jolie.bank.soap.wsdl.xsd">
   <success>boolean</success>
   <paymentId>int (optional)</paymentId>
 </createPaymentResponse>
@@ -59,15 +61,15 @@ All SOAP operations are available at:
 
 ### completePaymentRequest
 ```xml
-<completePayment>
-  <sessionId>string</sessionId>
+<completePayment xmlns="jolie.bank.soap.wsdl.xsd">
   <paymentId>int</paymentId>
+  <sessionId>string</sessionId>
 </completePayment>
 ```
 
 ### completePaymentResponse
 ```xml
-<completePaymentResponse>
+<completePaymentResponse xmlns="jolie.bank.soap.wsdl.xsd">
   <success>boolean</success>
   <token>string (optional)</token>
 </completePaymentResponse>
@@ -75,38 +77,52 @@ All SOAP operations are available at:
 
 ### verifyTokenRequest
 ```xml
-<verifyToken>
+<verifyToken xmlns="jolie.bank.soap.wsdl.xsd">
   <sessionId>string</sessionId>
   <token>string</token>
 </verifyToken>
 ```
 
+### verifyTokenResponse
+```xml
+<verifyTokenResponse xmlns="jolie.bank.soap.wsdl.xsd">
+  <success>boolean</success>
+</verifyTokenResponse>
+```
+
 ### refundRequest
 ```xml
-<refund>
-  <sessionId>string</sessionId>
+<refund xmlns="jolie.bank.soap.wsdl.xsd">
   <paymentId>int</paymentId>
+  <sessionId>string</sessionId>
 </refund>
+```
+
+### refundResponse
+```xml
+<refundResponse xmlns="jolie.bank.soap.wsdl.xsd">
+  <success>boolean</success>
+</refundResponse>
 ```
 
 ### confirmRequest
 ```xml
-<confirm>
-  <sessionId>string</sessionId>
+<confirm xmlns="jolie.bank.soap.wsdl.xsd">
   <paymentId>int</paymentId>
+  <sessionId>string</sessionId>
 </confirm>
 ```
 
-### successResponse
+### confirmResponse
 ```xml
-<successResponse>
+<confirmResponse xmlns="jolie.bank.soap.wsdl.xsd">
   <success>boolean</success>
-</successResponse>
+</confirmResponse>
 ```
 
 ### logoutRequest (OneWay)
 ```xml
-<logout>
+<logout xmlns="jolie.bank.soap.wsdl.xsd">
   <sessionId>string</sessionId>
 </logout>
 ```

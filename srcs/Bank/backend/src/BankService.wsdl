@@ -1,202 +1,171 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:tns="http://example.com/bank"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-             name="BankService"
-             targetNamespace="http://example.com/bank">
-
-  <types>
-    <xsd:schema targetNamespace="http://example.com/bank">
-
-      <xsd:element name="login">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="username" type="xsd:string"/>
-            <xsd:element name="password" type="xsd:string"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="loginResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="success" type="xsd:boolean"/>
-            <xsd:element name="sessionId" type="xsd:string" minOccurs="0"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="createPayment">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="sessionId" type="xsd:string"/>
-            <xsd:element name="amount" type="xsd:double"/>
-            <xsd:element name="orderId" type="xsd:int"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="createPaymentResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="success" type="xsd:boolean"/>
-            <xsd:element name="paymentId" type="xsd:int" minOccurs="0"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="completePayment">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="sessionId" type="xsd:string"/>
-            <xsd:element name="paymentId" type="xsd:int"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="completePaymentResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="success" type="xsd:boolean"/>
-            <xsd:element name="token" type="xsd:string" minOccurs="0"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="verifyToken">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="sessionId" type="xsd:string"/>
-            <xsd:element name="token" type="xsd:string"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="confirm">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="sessionId" type="xsd:string"/>
-            <xsd:element name="paymentId" type="xsd:int"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="refund">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="sessionId" type="xsd:string"/>
-            <xsd:element name="paymentId" type="xsd:int"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="logout">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="sessionId" type="xsd:string"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-      <xsd:element name="successResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="success" type="xsd:boolean"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-
-    </xsd:schema>
-  </types>
-
-  <message name="LoginRequest"><part name="parameters" element="tns:login"/></message>
-  <message name="LoginResponse"><part name="parameters" element="tns:loginResponse"/></message>
-
-  <message name="CreatePaymentRequest"><part name="parameters" element="tns:createPayment"/></message>
-  <message name="CreatePaymentResponse"><part name="parameters" element="tns:createPaymentResponse"/></message>
-
-  <message name="CompletePaymentRequest"><part name="parameters" element="tns:completePayment"/></message>
-  <message name="CompletePaymentResponse"><part name="parameters" element="tns:completePaymentResponse"/></message>
-
-  <message name="VerifyTokenRequest"><part name="parameters" element="tns:verifyToken"/></message>
-  <message name="ConfirmRequest"><part name="parameters" element="tns:confirm"/></message>
-  <message name="RefundRequest"><part name="parameters" element="tns:refund"/></message>
-  <message name="LogoutRequest"><part name="parameters" element="tns:logout"/></message>
-  <message name="SuccessResponse"><part name="parameters" element="tns:successResponse"/></message>
-
-  <portType name="BankInterface">
-    <operation name="login">
-      <input message="tns:LoginRequest"/>
-      <output message="tns:LoginResponse"/>
-    </operation>
-    <operation name="createPayment">
-      <input message="tns:CreatePaymentRequest"/>
-      <output message="tns:CreatePaymentResponse"/>
-    </operation>
-    <operation name="completePayment">
-      <input message="tns:CompletePaymentRequest"/>
-      <output message="tns:CompletePaymentResponse"/>
-    </operation>
-    <operation name="verifyToken">
-      <input message="tns:VerifyTokenRequest"/>
-      <output message="tns:SuccessResponse"/>
-    </operation>
-    <operation name="confirm">
-      <input message="tns:ConfirmRequest"/>
-      <output message="tns:SuccessResponse"/>
-    </operation>
-    <operation name="refund">
-      <input message="tns:RefundRequest"/>
-      <output message="tns:SuccessResponse"/>
-    </operation>
-    <operation name="logout">
-      <input message="tns:LogoutRequest"/>
-      <output message="tns:SuccessResponse"/>
-    </operation>
-  </portType>
-
-  <binding name="BankBinding" type="tns:BankInterface">
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="jolie.bank.soap.wsdl.wsdl" xmlns:xsd1="jolie.bank.soap.wsdl.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="jolie.bank.soap.wsdl.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema targetNamespace="jolie.bank.soap.wsdl.xsd" xmlns:sch="jolie.bank.soap.wsdl.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="confirm"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="paymentId" type="xs:int"/><xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="confirmResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="verifyToken"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="token" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verifyTokenResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="logout"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="completePayment"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="paymentId" type="xs:int"/><xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="completePaymentResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="0" name="token" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="createPayment"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="amount" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="orderId" type="xs:int"/><xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="createPaymentResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="0" name="paymentId" type="xs:int"/></xs:sequence></xs:complexType></xs:element><xs:element name="login"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="password" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="username" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="loginResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="0" name="sessionId" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="refund"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="paymentId" type="xs:int"/><xs:element maxOccurs="1" minOccurs="1" name="sessionId" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="refundResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="success" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element></xs:schema>
+  </wsdl:types>
+  <wsdl:message name="refundResponse">
+    <wsdl:part name="body" element="xsd1:refundResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="confirmRequest">
+    <wsdl:part name="body" element="xsd1:confirm">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="logoutRequest">
+    <wsdl:part name="body" element="xsd1:logout">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="loginRequest">
+    <wsdl:part name="body" element="xsd1:login">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="loginResponse">
+    <wsdl:part name="body" element="xsd1:loginResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createPaymentRequest">
+    <wsdl:part name="body" element="xsd1:createPayment">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="confirmResponse">
+    <wsdl:part name="body" element="xsd1:confirmResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createPaymentResponse">
+    <wsdl:part name="body" element="xsd1:createPaymentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="refundRequest">
+    <wsdl:part name="body" element="xsd1:refund">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="completePaymentRequest">
+    <wsdl:part name="body" element="xsd1:completePayment">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyTokenRequest">
+    <wsdl:part name="body" element="xsd1:verifyToken">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="verifyTokenResponse">
+    <wsdl:part name="body" element="xsd1:verifyTokenResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="completePaymentResponse">
+    <wsdl:part name="body" element="xsd1:completePaymentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Bank">
+    <wsdl:operation name="confirm">
+      <wsdl:input message="tns:confirmRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:confirmResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifyToken">
+      <wsdl:input message="tns:verifyTokenRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:verifyTokenResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="logout">
+      <wsdl:input message="tns:logoutRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="completePayment">
+      <wsdl:input message="tns:completePaymentRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:completePaymentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createPayment">
+      <wsdl:input message="tns:createPaymentRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:createPaymentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <wsdl:input message="tns:loginRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:loginResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="refund">
+      <wsdl:input message="tns:refundRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:refundResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BankSOAPBinding" type="tns:Bank">
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <operation name="login">
-      <soap:operation soapAction="login"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-    <operation name="createPayment">
-      <soap:operation soapAction="createPayment"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-    <operation name="completePayment">
-      <soap:operation soapAction="completePayment"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-    <operation name="verifyToken">
-      <soap:operation soapAction="verifyToken"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-    <operation name="confirm">
-      <soap:operation soapAction="confirm"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-    <operation name="refund">
-      <soap:operation soapAction="refund"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-    <operation name="logout">
-      <soap:operation soapAction="logout"/>
-      <input><soap:body use="literal"/></input>
-      <output><soap:body use="literal"/></output>
-    </operation>
-  </binding>
-
-  <service name="BankService">
-    <port name="Bank" binding="tns:BankBinding">
+    <wsdl:operation name="confirm">
+      <soap:operation soapAction="confirm" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="verifyToken">
+      <soap:operation soapAction="verifyToken" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="logout">
+      <soap:operation soapAction="logout" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="completePayment">
+      <soap:operation soapAction="completePayment" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createPayment">
+      <soap:operation soapAction="createPayment" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="login">
+      <soap:operation soapAction="login" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="refund">
+      <soap:operation soapAction="refund" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BankService">
+    <wsdl:port name="BankServicePort" binding="tns:BankSOAPBinding">
       <soap:address location="http://localhost:8000"/>
-    </port>
-  </service>
-</definitions>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

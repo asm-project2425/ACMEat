@@ -1,5 +1,4 @@
 services:
-
   bank_backend:
     build:
       context: ./backend
@@ -9,7 +8,6 @@ services:
     container_name: bank
     depends_on:
       - bank_db
-
   bank_db:
     image: postgres:17
     restart: always
@@ -19,7 +17,7 @@ services:
       POSTGRES_USER: bankuser
       POSTGRES_PASSWORD: bankpassword
     ports:
-      - "5432:5432"
+      - "8001:5432"
     volumes:
       - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata:/var/lib/postgresql/data

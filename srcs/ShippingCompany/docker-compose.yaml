@@ -1,0 +1,56 @@
+services:
+
+  shipping_management:
+    build:
+      context: ./ShippingManagement
+    ports:
+      - "5000:3000"
+    container_name: shipping_management
+    depends_on:
+      - vehicle_assigner
+      - vehicle_traker
+
+  vehicle_assigner:
+    build:
+      context: ./VehicleAssigner
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db
+    ports:
+      - "5001:3000"
+    container_name: vehicle_assigner
+    depends_on:
+      - shipping_company_db
+
+  vehicle_traker:
+    build:
+      context: ./VehicleTraker
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db
+    ports:
+      - "5002:3000"
+    container_name: vehicle_traker
+    depends_on:
+      - shipping_company_db
+
+  shipping_company_db:
+    image: postgres:17
+    restart: always
+    container_name: shipping_company_db
+    environment:
+      POSTGRES_DB: shippingcompanydb
+      POSTGRES_USER: shippingcompanyuser
+      POSTGRES_PASSWORD: shippingcompanypassword
+    ports:
+      - "5003:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata_shipping_company:/var/lib/postgresql/data
+
+volumes:
+  pgdata_shipping_company:

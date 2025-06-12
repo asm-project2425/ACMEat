@@ -1,0 +1,14 @@
+{
+  "name": "VehicleTraker",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.13.3",
+    "postgres": "^3.4.5"
+  }
+}

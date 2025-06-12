@@ -24,8 +24,6 @@ services:
       start_period: 30s
     volumes:
       - zeebe:/usr/local/zeebe/data
-    networks:
-      - acmeat_network
     depends_on:
       - elasticsearch
 
@@ -47,8 +45,6 @@ services:
       timeout: 1s
       retries: 5
       start_period: 30s
-    networks:
-      - acmeat_network
     depends_on:
       - zeebe
       - elasticsearch
@@ -78,8 +74,48 @@ services:
       retries: 3
     volumes:
       - elastic:/usr/share/elasticsearch/data
-    networks:
-      - acmeat_network
+
+  gis:
+    image: gis:latest
+    build:
+      context: ./GIS
+    container_name: gis
+    ports:
+      - "6002:6002"
+
+  restaurant1:
+    build:
+      context: ./Restaurant
+    platform: linux/amd64 # for compatibility with arm64
+    container_name: restaurant1
+    volumes:
+      - "./Restaurant/service/:/app/"
+    ports:
+      - "9001:80"
+
+  bank_db:
+    image: postgres:17
+    restart: always
+    container_name: bank_db
+    environment:
+      POSTGRES_DB: bankdb
+      POSTGRES_USER: bankuser
+      POSTGRES_PASSWORD: bankpassword
+    ports:
+      - "8001:5432"
+    volumes:
+      - ./Bank/backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata_bank:/var/lib/postgresql/data
+  
+  bank_backend:
+    build:
+      context: ./Bank/backend
+    container_name: bank
+    platform: linux/amd64 # for compatibility with arm64
+    ports:
+      - "8000:8000"
+    depends_on:
+      - bank_db
 
   acmeat_db:
     image: postgres:17
@@ -92,57 +128,31 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - acmeat_network
-
-  # acmeat_backend:
-  #   image: acmeat:latest
-  #   build:
-  #     context: ./ACMEat/backend
-  #   container_name: acmeat
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - ACMEAT_DB_URL=jdbc:postgresql://acmeat_db:5432/acmeatdb
-  #     - ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500
-  #     - RESTAURANT1_BASE_URL=http://restaurant1:80
-  #     - GIS_BASE_URL=http://gis:6002
-  #   depends_on:
-  #     - acmeat_db
-  #     - zeebe
-  #     - gis
-  #   networks:
-  #     - acmeat_network
-
-  gis:
-    image: gis:latest
+      - pgdata_acme:/var/lib/postgresql/data
+  
+  acmeat_backend:
+    image: acmeat:latest
     build:
-      context: ./GIS
-    container_name: gis
+      context: ./ACMEat/backend
+    container_name: acmeat
     ports:
-      - "6002:6002"
-    networks:
-      - acmeat_network
-
-  restaurant1:
-    build:
-      context: ./Restaurant
-    platform: linux/amd64 # for compatibility with arm64
-    container_name: restaurant1
-    volumes:
-      - "./Restaurant/service/:/app/"
-    ports:
-      - "9001:80"
-    networks:
-      - acmeat_network
+      - "8080:8080"
+    environment:
+      - ACMEAT_DB_URL=jdbc:postgresql://acmeat_db:5432/acmeatdb
+      - ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500
+      - RESTAURANT1_BASE_URL=http://restaurant1:80
+      - GIS_BASE_URL=http://gis:6002
+      - BANK_BASE_URL=http://bank:8000
+      - SHIPPING_SERVICE1_BASE_URL=http://shipping_service1:9000 # update when shipping_service1 is added
+    depends_on:
+      - acmeat_db
+      - operate # depends on Operate for monitoring
+      - gis
+      - restaurant1
+      - bank_backend
 
 volumes:
   zeebe:
   elastic:
-  pgdata:
-
-networks:
-  acmeat_network:
-    name: acmeat_network
-    driver: bridge
+  pgdata_bank:
+  pgdata_acme:

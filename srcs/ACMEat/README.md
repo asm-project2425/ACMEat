@@ -66,9 +66,9 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
 - **Method**: `GET`
 - **URL**: `/api/v1/orders/{orderId}/status`
 - **Path Parameters**:
-  - `orderId`: ID dell'ordine di cui si vuole conoscere lo stato
-- **Description**:  Recupera lo stato attuale dell’ordine specificato.
-- **Response**: Returns the id of the order anche the current status of the order (`CREATED`, `CANCELLED`, `SHIPPING_COMPANY_CHOSEN`, `PAYMENT_REQUESTED`, `PAID`, `ACTIVATED`, `DELIVERED`).
+  - `orderId`: ID of the order to check the status
+- **Description**: Retrieves the current status of the specified order.
+- **Response**: Returns the id of the order anche the current status of the order (`CREATED`, `CANCELLED`, `RESTAURANT_CONFIRMED`, `SHIPPING_COMPANY_CHOSEN`, `PAID`, `CANCELLATION_REJECTED`, `DELIVERED`).
 
 ---
 
@@ -83,6 +83,48 @@ Interactive Swagger UI is available at:  **http://localhost:8080/swagger-ui/inde
 }
 ```
 - **Description**: Receives the cost from a shipping company and sends the `sendShippingCost` message with the cost as a process variable (shippingInfo). This endpoint must be called within 15 seconds from the initial availability request.
+- **Response**: HTTP `204 No Content`.
+
+---
+
+### `paymentRedirect`
+- **Method**: `GET`
+- **URL**: `/api/v1/bank/payment?correlationKey=...&paymentId=...`
+- **Query Parameters**:
+  - `correlationKey`: Correlation key associated with the current process
+  - `paymentId`: ID of the payment to complete
+- **Description**: Sends the `completePayment` message and completes the `Redirect to bank` task. Returns a URL for the user to complete the payment.
+- **Response**: JSON object containing the URL to redirect the user.
+
+---
+
+### `verifyPayment`
+- **Method**: `POST`
+- **URL**: `/api/v1/bank/verify-payment?correlationKey=...&paymentToken=...`
+- **Query Parameters**:
+  - `correlationKey`: Correlation key associated with the current process
+  - `paymentToken`: Token received by the user from the bank
+- **Description**: Sends the `receiveTokenToVerify` message with the provided token to validate the payment.
+- **Response**: HTTP `204 No Content`.
+
+---
+
+### `cancelOrder`
+- **Method**: `POST`
+- **URL**: `/api/v1/orders/cancel?correlationKey=...`
+- **Query Parameters**:
+  - `correlationKey`: Correlation key associated with the current process
+- **Description**: Sends the `requestOrderCancellation` message to cancel an active order.
+- **Response**: HTTP `204 No Content`.
+
+---
+
+### `orderDelivered`
+- **Method**: `POST`
+- **URL**: `/api/v1/orders/delivered?correlationKey=...`
+- **Query Parameters**:
+  - `correlationKey`: Correlation key associated with the current process
+- **Description**: Sends the `orderDelivered` message to indicate that the order has been successfully delivered.
 - **Response**: HTTP `204 No Content`.
 
 ---

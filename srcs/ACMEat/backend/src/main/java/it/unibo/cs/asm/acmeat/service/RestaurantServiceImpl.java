@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -41,11 +42,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<TimeSlotDTO> getActiveTimeSlotsByRestaurantId(int restaurantId) {
+        LocalTime now = LocalTime.now();
         return restaurantRepository.findById(restaurantId)
                 .map(restaurant -> restaurant.getTimeSlots().stream()
                         .filter(TimeSlot::isActive)
+                        .filter(slot -> slot.getStartTime().isAfter(now))
                         .sorted(Comparator.comparing(TimeSlot::getStartTime))
-                        .map(TimeSlotDTO::new).toList())
+                        .map(TimeSlotDTO::new)
+                        .toList())
                 .orElseGet(ArrayList::new);
     }
 

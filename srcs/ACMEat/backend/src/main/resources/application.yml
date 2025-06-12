@@ -34,6 +34,6 @@ rest:
     base-urls:
       1: ${SHIPPING_SERVICE1_BASE_URL:http://localhost:4003}
 
-#soap:
-#  bank:
-#    endpoint: ${BANK_SOAP_ENDPOINT:localhost:8000}
+soap:
+  bank:
+    endpoint: ${BANK_BASE_URL:http://localhost:8000}

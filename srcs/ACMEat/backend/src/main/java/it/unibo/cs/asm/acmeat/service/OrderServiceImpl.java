@@ -34,13 +34,19 @@ public class OrderServiceImpl implements OrderService {
         return new OrderDTO(order);
     }
 
-    public TimeSlot getTimeSlotById(Restaurant restaurant, int timeSlotId) {
+    private TimeSlot getTimeSlotById(Restaurant restaurant, int timeSlotId) {
         return restaurant.getTimeSlots().stream()
                 .filter(ts -> ts.getId() == timeSlotId).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Time slot not found with id: " + timeSlotId));
     }
 
-    public List<OrderedItem> mapToOrderedItems(Restaurant restaurant, List<OrderedItemRequest> items) {
+    private Menu getMenuById(Restaurant restaurant, int menuId) {
+        return restaurant.getMenus().stream()
+                .filter(m -> m.getId() == menuId).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Menu not found with id: " + menuId));
+    }
+
+    private List<OrderedItem> mapToOrderedItems(Restaurant restaurant, List<OrderedItemRequest> items) {
         return items.stream()
                 .map(item -> {
                     Menu menu = getMenuById(restaurant, item.menuId());
@@ -49,39 +55,17 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
-    public Menu getMenuById(Restaurant restaurant, int menuId) {
-        return restaurant.getMenus().stream()
-                .filter(m -> m.getId() == menuId).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Menu not found with id: " + menuId));
-    }
-
     @Override
     public void setShippingCompany(int orderId, ShippingCompany shippingCompany) {
         Order order = getOrderById(orderId);
         order.setShippingCompany(shippingCompany);
-        order.setStatus(OrderStatus.SHIPPING_COMPANY_CHOSEN);
         orderRepository.save(order);
     }
 
     @Override
-    public void cancelOrder(int orderId) {
+    public void updateOrderStatus(int orderId, OrderStatus status) {
         Order order = getOrderById(orderId);
-        order.setStatus(OrderStatus.CANCELLED);
+        order.setStatus(status);
         orderRepository.save(order);
     }
-
-    @Override
-    public void orderActivated(int orderId) {
-        Order order = getOrderById(orderId);
-        order.setStatus(OrderStatus.ACTIVATED);
-        orderRepository.save(order);
-    }
-
-    @Override
-    public void orderDelivered(int orderId) {
-        Order order = getOrderById(orderId);
-        order.setStatus(OrderStatus.DELIVERED);
-        orderRepository.save(order);
-    }
-
 }

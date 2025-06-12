@@ -14,8 +14,7 @@ FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-# aggiungere il file wsdl quando viene colleggato la banca SOAP
-#COPY src/main/resources/wsdl/bank.wsdl /app/src/main/resources/wsdl/bank.wsdl
+COPY src/main/resources/wsdl/bank.wsdl /app/src/main/resources/wsdl/bank.wsdl
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

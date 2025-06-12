@@ -52,4 +52,9 @@ public class ShippingCompanyWorkers {
     public void requestShippingCancellation(@Variable int orderId, @Variable String shippingCompanyId) {
         // TODO: chiamare l'api per richiedere la cancellazione della spedizione
     }
+
+    @JobWorker(type = JOB_CONFIRM_SHIPPING_COMPANY)
+    public void confirmShippingCompany() {
+        // TODO: chiamare l'API per confermare la compagnia di spedizione selezionata
+    }
 }

@@ -2,8 +2,8 @@ package it.unibo.cs.asm.acmeat.camunda.worker;
 
 import io.camunda.zeebe.spring.client.annotation.JobWorker;
 import io.camunda.zeebe.spring.client.annotation.Variable;
-import it.unibo.cs.asm.acmeat.camunda.utility.ZeebeService;
 import it.unibo.cs.asm.acmeat.dto.entities.ShippingCompanyDTO;
+import it.unibo.cs.asm.acmeat.model.OrderStatus;
 import it.unibo.cs.asm.acmeat.model.util.Coordinate;
 import it.unibo.cs.asm.acmeat.service.abstractions.OrderService;
 import it.unibo.cs.asm.acmeat.service.abstractions.ShippingCompanyService;
@@ -21,18 +21,19 @@ import static it.unibo.cs.asm.acmeat.camunda.utility.ProcessConstants.*;
 @RequiredArgsConstructor
 @Component
 public class AcmeWorkers {
-    private final ZeebeService zeebeService;
     private final OrderService orderService;
     private final ShippingCompanyService shippingCompanyService;
 
-    @JobWorker(type = JOB_CANCEL_ORDER1)
-    public void orderCancellation1(@Variable int orderId) {
-        orderService.cancelOrder(orderId);
+    @JobWorker(type = JOB_CANCEL_ORDER)
+    public void orderCancellation(@Variable int orderId) {
+        orderService.updateOrderStatus(orderId, OrderStatus.CANCELLED);
         log.info("Order cancellation completed for order {}", orderId);
     }
 
     @JobWorker(type = JOB_RETRIEVE_SHIPPING_SERVICES)
-    public Map<String, List<ShippingCompanyDTO>> retrieveShippingCompanies(@Variable Coordinate restaurantPosition) {
+    public Map<String, List<ShippingCompanyDTO>> retrieveShippingCompanies(@Variable int orderId,
+                                                                           @Variable Coordinate restaurantPosition) {
+        orderService.updateOrderStatus(orderId, OrderStatus.RESTAURANT_CONFIRMED);
         List<ShippingCompanyDTO> shippingCompanies = shippingCompanyService.getShippingCompanies(restaurantPosition);
 
         if (shippingCompanies.isEmpty()) {
@@ -53,25 +54,23 @@ public class AcmeWorkers {
         double shippingCost = (double) selected.get("shippingCost");
 
         orderService.setShippingCompany(orderId, shippingCompanyService.getShippingCompanyById(shippingCompanyId));
-
-        // TODO: notificare tutti i servizi che non sono stati selezionati (da fare in un job separato in shipping
-        //  company workers)
+        orderService.updateOrderStatus(orderId, OrderStatus.SHIPPING_COMPANY_CHOSEN);
 
         return Map.of(VAR_SHIPPING_COST, shippingCost);
     }
 
-    @JobWorker(type = JOB_CANCEL_ORDER2)
-    public void orderCancellation2(@Variable int orderId) {
-        // TODO: chiamare l'api per cancellare l'ordine nel ristorante
-        // TODO: chiamare anche l'api per cancellare l'ordine nel servizio di spedizione
-        orderService.cancelOrder(orderId);
-        log.info("Order cancellation completed for order {}", orderId);
-    }
-
     @JobWorker(type = JOB_ORDER_ACTIVE)
     public void orderActive(@Variable int orderId) {
-        // TODO: chiamare l'api che conferma alla shipping company che l'ordine è attivo
-        orderService.orderActivated(orderId);
+        orderService.updateOrderStatus(orderId, OrderStatus.PAID);
     }
 
+    @JobWorker(type = JOB_CANCELLATION_REJECTED)
+    public void orderCancellationRejected(@Variable int orderId) {
+        orderService.updateOrderStatus(orderId, OrderStatus.CANCELLATION_REJECTED);
+    }
+
+    @JobWorker(type = JOB_ORDER_COMPLETED)
+    public void orderCompleted(@Variable int orderId) {
+        orderService.updateOrderStatus(orderId, OrderStatus.DELIVERED);
+    }
 }

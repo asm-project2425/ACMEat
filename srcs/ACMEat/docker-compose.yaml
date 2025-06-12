@@ -106,6 +106,8 @@ services:
     environment:
       - ACMEAT_DB_URL=jdbc:postgresql://acmeat_db:5432/acmeatdb
       - ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500
+      - RESTAURANT1_BASE_URL=http://restaurant1:80
+      - GIS_BASE_URL=http://gis:6002
     depends_on:
       - acmeat_db
       - zeebe

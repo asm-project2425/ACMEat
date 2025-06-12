@@ -6,8 +6,6 @@ import it.unibo.cs.asm.acmeat.dto.entities.*;
 import it.unibo.cs.asm.acmeat.dto.request.CreateOrderRequest;
 import it.unibo.cs.asm.acmeat.dto.request.ReceiveShippingCostRequest;
 import it.unibo.cs.asm.acmeat.dto.response.*;
-import it.unibo.cs.asm.acmeat.exception.JobCompletionException;
-import it.unibo.cs.asm.acmeat.model.Order;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
 import it.unibo.cs.asm.acmeat.service.abstractions.CityService;
 import it.unibo.cs.asm.acmeat.service.abstractions.OrderService;
@@ -71,7 +69,8 @@ public class OrderManagementController {
         OrderDTO order = orderService.createOrder(request.restaurantId(), request.items(), request.timeSlotId(),
                 request.deliveryAddress());
         zeebeService.completeJob(JOB_CREATE_ORDER, correlationKey, Map.of(VAR_ORDER_ID, order.getId(),
-                VAR_DELIVERY_TIME, order.getDeliveryTime(), VAR_DELIVERY_ADDRESS, order.getDeliveryAddress()));
+                VAR_ORDER_PRICE, order.getPrice(), VAR_DELIVERY_TIME, order.getDeliveryTime(),
+                VAR_DELIVERY_ADDRESS, order.getDeliveryAddress()));
 
         return ResponseEntity.ok(new CreateOrderResponse(order));
     }
@@ -92,36 +91,32 @@ public class OrderManagementController {
 
     private record ShippingCompanyInfo(String id, double shippingCost) {}
 
-    // ----------------------------------------------------------------------------------------------------------------
-
     @GetMapping("/bank/payment")
-    public ResponseEntity<?> paymentRedirect(@Variable int paymentId, @RequestParam String orderId) {
-        // TODO: vedere bene questo metodo
-        zeebeService.sendMessage("BankRedirect", orderId, Map.of());
-        zeebeService.completeJob(JOB_BANK_REDIRECT, orderId, Map.of());
+    public ResponseEntity<PaymentRedirectResponse> paymentRedirect(@RequestParam String correlationKey,
+                                                                   @Variable Integer paymentId) {
+        zeebeService.sendMessage(MSG_COMPLETE_PAYMENT, correlationKey, Map.of());
+        zeebeService.completeJob(JOB_BANK_REDIRECT, correlationKey, Map.of());
 
-        // TODO: chiamare la banca che inizializza il pagamento
-        String url = "https://bank.example.com/payment?orderId=" + paymentId;
+        String redirectUrl = "https://bank-frontend/payment?paymentId=" + paymentId;
 
-        return ResponseEntity.ok(Map.of("redirect-url", url));
+        return ResponseEntity.ok(new PaymentRedirectResponse(redirectUrl));
     }
 
     @PostMapping("bank/verify-payment")
-    public ResponseEntity<?> verifyPayment(@RequestParam String paymentToken) {
-        // TODO: chiamare l'enpoint soap della banca per verificare il pagamento
-        zeebeService.sendMessage(MSG_RECEIVE_TOKEN_TO_VERIFY, paymentToken, Map.of());
-        throw new JobCompletionException(JOB_RETRIEVE_RESTAURANTS);
+    public ResponseEntity<Void> verifyPayment(@RequestParam String correlationKey, @RequestParam String paymentToken) {
+        zeebeService.sendMessage(MSG_RECEIVE_TOKEN_TO_VERIFY, correlationKey, Map.of(VAR_PAYMENT_TOKEN, paymentToken));
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/orders/cancel")
-    public ResponseEntity<?> cancelOrder(@RequestParam String correlationKey, @RequestParam int orderId) {
+    public ResponseEntity<Void> cancelOrder(@RequestParam String correlationKey) {
         zeebeService.sendMessage(MSG_REQUEST_ORDER_CANCELLATION, correlationKey, Map.of());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/orders/delivered")
-    public ResponseEntity<?> orderDelivered(@RequestParam String correlationKey, @RequestParam int orderId) {
+    public ResponseEntity<Void> orderDelivered(@RequestParam String correlationKey) {
         zeebeService.sendMessage(MSG_ORDER_DELIVERED, correlationKey, Map.of());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

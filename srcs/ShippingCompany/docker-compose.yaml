@@ -1,5 +1,12 @@
 services:
 
+  gis:
+    build:
+      context: ../GIS
+    container_name: gis
+    ports:
+      - "6002:6002"
+
   shipping_management:
     build:
       context: ./ShippingManagement
@@ -9,6 +16,7 @@ services:
     depends_on:
       - vehicle_assigner
       - vehicle_traker
+      - gis
 
   vehicle_assigner:
     build:

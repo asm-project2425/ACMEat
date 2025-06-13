@@ -1,27 +1,73 @@
 import express from "express";
 import { Pool } from 'pg';
 
-const pool = new Pool();
-pool.on('error', (err, client) => {
-    console.error('Unexpected error on idle client', err)
-    process.exit(-1)
-})
-
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.get('/api/v1', async function (req, res) {
-    res.status(200).send("VehicleAssigner running");
+app.use(express.json());
+
+const pool = new Pool();
+pool.on('error', (err, client) => {
+    console.error('Unexpected error on idle client', err);
+    process.exit(-1);
 });
 
-app.get('/api/v1/testDB', async function (req, res) {
-    res.status(200).json((await pool.query("SELECT * FROM vehicles")).rows.map((row) => {
-        return {
-            "id": row.id,
-            "status": row.status,
-            "current_delivery_id": row.current_delivery_id
-        };
-    }));
+app.post('/api/v1/reserve', async function (req, res) {
+    if (!req.body || !req.body.deliveryTime || !req.body.cost ||
+        !req.body.restaurantAddress || !req.body.deliveryAddress) {
+        res.sendStatus(400);
+        return;
+    }
+
+    const deliveryTime = new Date(req.body.deliveryTime);
+
+    const vehiclesInUse = "SELECT vehicle_id FROM deliveries WHERE \
+status != 'cancelled' AND status != 'delivered' AND \
+(($1::TIMESTAMPTZ - make_interval(mins => 5)) >= (time - make_interval(mins => 5)) AND \
+($1::TIMESTAMPTZ - make_interval(mins => 5)) < (time + make_interval(mins => 5))) OR \
+(($1::TIMESTAMPTZ + make_interval(mins => 5)) > (time - make_interval(mins => 5)) AND \
+($1::TIMESTAMPTZ + make_interval(mins => 5)) <= (time + make_interval(mins => 5)))";
+
+    let vehicle;
+    try {
+        vehicle = await pool.query(
+            `SELECT id
+             FROM vehicles
+             WHERE id NOT IN (${vehiclesInUse})
+             LIMIT 1`,
+            [deliveryTime]
+        );
+    } catch (e) {
+        console.error("DB error:");
+        console.error(e);
+        res.status(500).send('Internal db error');
+        return;
+    }
+
+    if (vehicle.rows.length === 0) {
+        res.status(409).send('No vehicles available');
+        return;
+    }
+
+    try {
+        let deliveryId = await pool.query(
+            "INSERT INTO deliveries (vehicle_id, cost, time, local_address, client_address) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+            [
+                vehicle.rows[0].id,
+                req.body.cost,
+                deliveryTime,
+                req.body.restaurantAddress,
+                req.body.deliveryAddress
+            ]
+        );
+        res.status(201).json({
+            deliveryId: deliveryId.rows[0].id
+        });
+    } catch (e) {
+        console.error("DB error:");
+        console.error(e);
+        res.status(500).send('Internal db error');
+    }
 });
 
 app.listen(port, () => console.log(`VehicleAssigner service listening on port ${port}`));

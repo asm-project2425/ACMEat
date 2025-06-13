@@ -1,14 +1,16 @@
 import express from "express";
 import { Pool } from 'pg';
 
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(express.json());
+
 const pool = new Pool();
 pool.on('error', (err, client) => {
     console.error('Unexpected error on idle client', err);
     process.exit(-1);
 });
-
-const app = express();
-const port = process.env.PORT || 3000;
 
 app.get('/api/v1', async function (req, res) {
     res.status(200).send("VehicleTraker running");

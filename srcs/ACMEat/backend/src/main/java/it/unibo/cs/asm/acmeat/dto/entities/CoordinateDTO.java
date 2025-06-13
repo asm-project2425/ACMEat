@@ -1,6 +1,6 @@
 package it.unibo.cs.asm.acmeat.dto.entities;
 
-import it.unibo.cs.asm.acmeat.model.util.Coordinate;
+import it.unibo.cs.asm.acmeat.model.Coordinate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

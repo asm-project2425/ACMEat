@@ -1,6 +1,5 @@
 package it.unibo.cs.asm.acmeat.model;
 
-import it.unibo.cs.asm.acmeat.model.util.Coordinate;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

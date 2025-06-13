@@ -1,10 +1,10 @@
 package it.unibo.cs.asm.acmeat.config;
 
 import it.unibo.cs.asm.acmeat.model.*;
-import it.unibo.cs.asm.acmeat.model.util.Coordinate;
-import it.unibo.cs.asm.acmeat.service.repository.CityRepository;
-import it.unibo.cs.asm.acmeat.service.repository.RestaurantRepository;
-import it.unibo.cs.asm.acmeat.service.repository.ShippingCompanyRepository;
+import it.unibo.cs.asm.acmeat.model.Coordinate;
+import it.unibo.cs.asm.acmeat.repository.CityRepository;
+import it.unibo.cs.asm.acmeat.repository.RestaurantRepository;
+import it.unibo.cs.asm.acmeat.repository.ShippingCompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Component

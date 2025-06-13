@@ -2,10 +2,9 @@ package it.unibo.cs.asm.acmeat.service;
 
 import it.unibo.cs.asm.acmeat.dto.entities.ShippingCompanyDTO;
 import it.unibo.cs.asm.acmeat.model.ShippingCompany;
-import it.unibo.cs.asm.acmeat.model.util.Coordinate;
-import it.unibo.cs.asm.acmeat.service.abstractions.ShippingCompanyService;
-import it.unibo.cs.asm.acmeat.service.repository.CoordinateService;
-import it.unibo.cs.asm.acmeat.service.repository.ShippingCompanyRepository;
+import it.unibo.cs.asm.acmeat.model.Coordinate;
+import it.unibo.cs.asm.acmeat.integration.GISService;
+import it.unibo.cs.asm.acmeat.repository.ShippingCompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ import java.util.List;
 @Service
 public class ShippingCompanyServiceImpl implements ShippingCompanyService {
     private final ShippingCompanyRepository shippingCompanyRepository;
-    private final CoordinateService coordinateService;
+    private final GISService GISService;
 
     @Override
     public ShippingCompany getShippingCompanyById(int id) {
@@ -28,7 +27,7 @@ public class ShippingCompanyServiceImpl implements ShippingCompanyService {
     public List<ShippingCompanyDTO> getShippingCompanies(Coordinate restaurantPosition) {
         List<ShippingCompanyDTO> result = new ArrayList<>();
         for (ShippingCompany company : shippingCompanyRepository.findAll()) {
-            double distance = coordinateService.distanceBetween(restaurantPosition, company.getPosition());
+            double distance = GISService.distanceBetween(restaurantPosition, company.getPosition());
             if (distance <= 10000) {
                 result.add(new ShippingCompanyDTO(company));
             }

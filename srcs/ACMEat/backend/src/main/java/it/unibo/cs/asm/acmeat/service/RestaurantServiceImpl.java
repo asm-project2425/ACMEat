@@ -6,8 +6,7 @@ import it.unibo.cs.asm.acmeat.dto.entities.TimeSlotDTO;
 import it.unibo.cs.asm.acmeat.model.Menu;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
 import it.unibo.cs.asm.acmeat.model.TimeSlot;
-import it.unibo.cs.asm.acmeat.service.abstractions.RestaurantService;
-import it.unibo.cs.asm.acmeat.service.repository.RestaurantRepository;
+import it.unibo.cs.asm.acmeat.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

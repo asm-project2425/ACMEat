@@ -13,7 +13,7 @@ pool.on('error', (err, client) => {
 });
 
 app.get('/api/v1', async function (req, res) {
-    res.status(200).send("VehicleTraker running");
+    res.status(200).send("VehicleTracker running");
 });
 
 app.get('/api/v1/testDB', async function (req, res) {
@@ -26,4 +26,4 @@ app.get('/api/v1/testDB', async function (req, res) {
     }));
 });
 
-app.listen(port, () => console.log(`VehicleTraker service listening on port ${port}`));
+app.listen(port, () => console.log(`VehicleTracker service listening on port ${port}`));

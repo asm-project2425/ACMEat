@@ -15,7 +15,7 @@ services:
     container_name: shipping_management
     depends_on:
       - vehicle_assigner
-      - vehicle_traker
+      - vehicle_tracker
       - gis
 
   vehicle_assigner:
@@ -32,9 +32,9 @@ services:
     depends_on:
       - shipping_company_db
 
-  vehicle_traker:
+  vehicle_tracker:
     build:
-      context: ./VehicleTraker
+      context: ./VehicleTracker
     environment:
       PGDATABASE: shippingcompanydb
       PGUSER: shippingcompanyuser
@@ -42,7 +42,7 @@ services:
       PGHOST: shipping_company_db
     ports:
       - "5002:3000"
-    container_name: vehicle_traker
+    container_name: vehicle_tracker
     depends_on:
       - shipping_company_db
 

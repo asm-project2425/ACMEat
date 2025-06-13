@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-WORKDIR /vehicle_traker
+WORKDIR /vehicle_tracker
 
 COPY . .
 

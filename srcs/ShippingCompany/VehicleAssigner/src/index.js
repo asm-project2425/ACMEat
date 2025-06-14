@@ -70,7 +70,43 @@ app.post('/api/v1/reserve', async function (req, res) {
     }
 });
 
-const backgroundTask = async function() {
+app.post('/api/v1/confirmDelivery', async function (req, res) {
+    if (!req.body || !req.body.deliveryId) {
+        res.sendStatus(400);
+        return;
+    }
+
+    let result;
+    try {
+        result = await pool.query("UPDATE deliveries SET status = 'confirmed' WHERE id = $1 AND status = 'created' RETURNING id", [req.body.deliveryId]);
+    } catch (e) {
+        console.error("DB error:");
+        console.error(e);
+        res.status(500).send('Internal db error');
+        return;
+    }
+    res.sendStatus(result.rows.length === 0 ? 404 : 200);
+});
+
+app.post('/api/v1/cancelDelivery', async function (req, res) {
+    if (!req.body || !req.body.deliveryId) {
+        res.sendStatus(400);
+        return;
+    }
+
+    let result;
+    try {
+        result = await pool.query("UPDATE deliveries SET status = 'cancelled' WHERE id = $1 AND status != 'delivered' RETURNING id", [req.body.deliveryId]);
+    } catch (e) {
+        console.error("DB error:");
+        console.error(e);
+        res.status(500).send('Internal db error');
+        return;
+    }
+    res.sendStatus(result.rows.length === 0 ? 404 : 200);
+});
+
+const backgroundTask = async function () {
     try {
         await pool.query("UPDATE deliveries SET status = 'cancelled' WHERE status = 'created' AND (created_at + make_interval(mins => 2)) < now()");
     } catch (e) {

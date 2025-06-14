@@ -49,7 +49,6 @@ app.post('/api/v1/availability', async function (req, res) {
     const assignerRes = await fetch(`${vehicle_assigner_url}/reserve`, {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -74,24 +73,50 @@ app.post('/api/v1/availability', async function (req, res) {
     console.log(`Delivery id: ${deliveryId}, cost: ${cost}, distance: ${distance} m`);
 });
 
-app.post('/api/v1/confirmDelivery', async function (req, res) {
-    if (!req.body || !req.body.id) {
+app.post('/api/v1/confirm', async function (req, res) {
+    if (!req.body || !req.body.deliveryId) {
         res.sendStatus(400);
         return;
     }
 
+    const response = await fetch(`${vehicle_assigner_url}/confirmDelivery`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            deliveryId: req.body.deliveryId,
+        })
+    });
+    if (!response.ok) {
+        res.sendStatus(response.status);
+        return;
+    }
+
     res.sendStatus(200);
-    // TODO
 });
 
-app.post('/api/v1/cancelDelivery', async function (req, res) {
-    if (!req.body || !req.body.id) {
+app.post('/api/v1/cancel', async function (req, res) {
+    if (!req.body || !req.body.deliveryId) {
         res.sendStatus(400);
         return;
     }
 
+    const response = await fetch(`${vehicle_assigner_url}/cancelDelivery`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            deliveryId: req.body.deliveryId,
+        })
+    });
+    if (!response.ok) {
+        res.sendStatus(response.status);
+        return;
+    }
+
     res.sendStatus(200);
-    // TODO
 });
 
 app.listen(port, () => console.log(`ShippingManagement service listening on port ${port}`));

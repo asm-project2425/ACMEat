@@ -13,8 +13,8 @@ function round(n) {
 }
 
 app.post('/api/v1/availability', async function (req, res) {
-    if (!req.body || req.body.correlationKey == null || !req.body.deliveryTime ||
-        !req.body.restaurantAddress || !req.body.deliveryAddress) {
+    if (!req.body || req.body.correlationKey == null || req.body.orderId == null ||
+        !req.body.deliveryTime || !req.body.restaurantAddress || !req.body.deliveryAddress) {
         res.sendStatus(400);
         return;
     }
@@ -44,7 +44,7 @@ app.post('/api/v1/availability', async function (req, res) {
     }
     const { distance } = await responseDistance.json();
 
-    const cost = round(Math.random() + (0.0001) * distance);
+    const cost = round(Math.random() + 0.00015 * distance);
 
     const assignerRes = await fetch(`${vehicle_assigner_url}/reserve`, {
         method: 'POST',
@@ -54,6 +54,7 @@ app.post('/api/v1/availability', async function (req, res) {
         },
         body: JSON.stringify({
             deliveryTime: req.body.deliveryTime,
+            orderId: req.body.orderId,
             cost,
             restaurantAddress: req.body.restaurantAddress,
             deliveryAddress: req.body.deliveryAddress
@@ -70,7 +71,7 @@ app.post('/api/v1/availability', async function (req, res) {
     let { deliveryId } = await assignerRes.json();
 
     // TODO: Response to ACMEat
-    console.log(`Delivery id: ${deliveryId}`);
+    console.log(`Delivery id: ${deliveryId}, cost: ${cost}, distance: ${distance} m`);
 });
 
 app.post('/api/v1/confirmDelivery', async function (req, res) {

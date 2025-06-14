@@ -13,8 +13,8 @@ pool.on('error', (err, client) => {
 });
 
 app.post('/api/v1/reserve', async function (req, res) {
-    if (!req.body || !req.body.deliveryTime || !req.body.cost ||
-        !req.body.restaurantAddress || !req.body.deliveryAddress) {
+    if (!req.body || !req.body.deliveryTime || req.body.orderId == null ||
+        !req.body.cost || !req.body.restaurantAddress || !req.body.deliveryAddress) {
         res.sendStatus(400);
         return;
     }
@@ -51,9 +51,10 @@ status != 'cancelled' AND status != 'delivered' AND \
 
     try {
         let deliveryId = await pool.query(
-            "INSERT INTO deliveries (vehicle_id, cost, time, local_address, client_address) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+            "INSERT INTO deliveries (vehicle_id, order_id, cost, time, local_address, client_address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
             [
                 vehicle.rows[0].id,
+                req.body.orderId,
                 req.body.cost,
                 deliveryTime,
                 req.body.restaurantAddress,
@@ -69,5 +70,17 @@ status != 'cancelled' AND status != 'delivered' AND \
         res.status(500).send('Internal db error');
     }
 });
+
+const backgroundTask = async function() {
+    try {
+        await pool.query("UPDATE deliveries SET status = 'cancelled' WHERE status = 'created' AND (created_at + make_interval(mins => 2)) < now()");
+    } catch (e) {
+        console.error("Background task: DB error:");
+        console.error(e);
+    }
+
+    setTimeout(backgroundTask, 1000 * 60); // Every minute
+};
+setTimeout(backgroundTask, 1000 * 60); // Every minute
 
 app.listen(port, () => console.log(`VehicleAssigner service listening on port ${port}`));

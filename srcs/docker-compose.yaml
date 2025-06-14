@@ -106,7 +106,7 @@ services:
     volumes:
       - ./Bank/backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_bank:/var/lib/postgresql/data
-  
+
   bank_backend:
     build:
       context: ./Bank/backend
@@ -129,7 +129,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata_acme:/var/lib/postgresql/data
-  
+
   acmeat_backend:
     image: acmeat:latest
     build:
@@ -151,8 +151,63 @@ services:
       - restaurant1
       - bank_backend
 
+  shipping_management:
+    build:
+      context: ./ShippingCompany/ShippingManagement
+    ports:
+      - "5000:3000"
+    container_name: shipping_management
+    depends_on:
+      - vehicle_assigner
+      - vehicle_tracker
+      - gis
+      - acmeat_backend
+
+  vehicle_assigner:
+    build:
+      context: ./ShippingCompany/VehicleAssigner
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db
+    ports:
+      - "5001:3000"
+    container_name: vehicle_assigner
+    depends_on:
+      - shipping_company_db
+
+  vehicle_tracker:
+    build:
+      context: ./ShippingCompany/VehicleTracker
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db
+    ports:
+      - "5002:3000"
+    container_name: vehicle_tracker
+    depends_on:
+      - shipping_company_db
+
+  shipping_company_db:
+    image: postgres:17
+    restart: always
+    container_name: shipping_company_db
+    environment:
+      POSTGRES_DB: shippingcompanydb
+      POSTGRES_USER: shippingcompanyuser
+      POSTGRES_PASSWORD: shippingcompanypassword
+    ports:
+      - "5003:5432"
+    volumes:
+      - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata_shipping_company:/var/lib/postgresql/data
+
 volumes:
   zeebe:
   elastic:
   pgdata_bank:
   pgdata_acme:
+  pgdata_shipping_company:

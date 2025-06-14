@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const vehicle_assigner_url = "http://vehicle_assigner:3000/api/v1";
 const vehicle_tracker_url = "http://vehicle_tracker:3000/api/v1";
+const acmeat_backend_url = "http://acmeat_backend:8080/api/v1";
 const gis_url = "http://gis:6002/api/v1";
 
 app.use(express.json());
@@ -69,8 +70,26 @@ app.post('/api/v1/availability', async function (req, res) {
 
     let { deliveryId } = await assignerRes.json();
 
-    // TODO: Response to ACMEat
     console.log(`Delivery id: ${deliveryId}, cost: ${cost}, distance: ${distance} m`);
+
+    // Response to ACMEat
+    try {
+        const response = await fetch(`${acmeat_backend_url}/shipping-company/cost`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                correlationKey: req.body.correlationKey,
+                shippingCost: cost,
+            })
+        });
+        if (!response.ok) {
+            throw await response.text();
+        }
+    } catch (e) {
+        console.error(`Error responding to ACMEat: ${e}`);
+    }
 });
 
 app.post('/api/v1/confirm', async function (req, res) {

@@ -21,12 +21,11 @@ app.post('/api/v1/reserve', async function (req, res) {
 
     const deliveryTime = new Date(req.body.deliveryTime);
 
-    const vehiclesInUse = "SELECT vehicle_id FROM deliveries WHERE \
-status != 'cancelled' AND status != 'delivered' AND \
-(($1::TIMESTAMPTZ - make_interval(mins => 5)) >= (time - make_interval(mins => 5)) AND \
+    const vehiclesInUse = "SELECT vehicle_id FROM deliveries WHERE status != 'cancelled' AND \
+((($1::TIMESTAMPTZ - make_interval(mins => 5)) >= (time - make_interval(mins => 5)) AND \
 ($1::TIMESTAMPTZ - make_interval(mins => 5)) < (time + make_interval(mins => 5))) OR \
 (($1::TIMESTAMPTZ + make_interval(mins => 5)) > (time - make_interval(mins => 5)) AND \
-($1::TIMESTAMPTZ + make_interval(mins => 5)) <= (time + make_interval(mins => 5)))";
+($1::TIMESTAMPTZ + make_interval(mins => 5)) <= (time + make_interval(mins => 5))))";
 
     let vehicle;
     try {

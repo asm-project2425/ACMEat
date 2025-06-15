@@ -154,10 +154,16 @@ services:
   shipping_management:
     build:
       context: ./ShippingCompany/ShippingManagement
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db
     ports:
       - "5000:3000"
     container_name: shipping_management
     depends_on:
+      - shipping_company_db
       - vehicle_assigner
       - vehicle_tracker
       - gis

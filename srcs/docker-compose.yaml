@@ -160,7 +160,7 @@ services:
       PGPASSWORD: shippingcompanypassword
       PGHOST: shipping_company_db
     ports:
-      - "5000:3000"
+      - "5004:3000"
     container_name: shipping_management
     depends_on:
       - shipping_company_db

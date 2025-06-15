@@ -23,26 +23,28 @@ public class RestaurantWorkers {
     public static final String CANCEL_ORDER_PATH = "/cancel_order.php";
 
     @JobWorker(type = JOB_CHECK_RESTAURANT_AVAILABILITY)
-    public void checkRestaurantAvailability(@Variable String correlationKey, @Variable String restaurantBaseUrl,
-                                            @Variable int orderId, @Variable String deliveryTime) {
+    public void checkRestaurantAvailability(@Variable String restaurantBaseUrl, @Variable int orderId,
+                                            @Variable String deliveryTime) {
         RestClient restClient = restClientBuilder.baseUrl(restaurantBaseUrl).build();
 
-        AvailabilityResponse response = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(AVAIBLE_PATH)
-                        .queryParam("id_ordine", orderId)
-                        .queryParam("orario", deliveryTime)
-                        .build())
-                .retrieve()
-                .body(AvailabilityResponse.class);
+        boolean isAvailable = false;
 
-        if (response == null) {
-            log.warn("Null response received from {} for order {}", restaurantBaseUrl, orderId);
+        try {
+            AvailabilityResponse response = restClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path(AVAIBLE_PATH)
+                            .queryParam("id_ordine", orderId)
+                            .queryParam("orario", deliveryTime)
+                            .build())
+                    .retrieve()
+                    .body(AvailabilityResponse.class);
+            isAvailable = response != null && response.avaible();
+        } catch (Exception e) {
+            log.warn("Failed to check availability for order {} at restaurant {}: {}", orderId, restaurantBaseUrl, e.getMessage());
         }
-        boolean isAvailable = response != null && response.avaible;
 
-        zeebeService.sendMessage(MSG_RESTAURANT_AVAILABILITY, correlationKey, Map.of(VAR_RESTAURANT_AVAILABILITY,
-                isAvailable));
+        zeebeService.sendMessage(MSG_RESTAURANT_AVAILABILITY, String.valueOf(orderId), Map.of(
+                VAR_RESTAURANT_AVAILABILITY, isAvailable));
     }
 
     private record AvailabilityResponse(boolean avaible) {}

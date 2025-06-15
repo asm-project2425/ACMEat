@@ -43,4 +43,12 @@ public interface OrderService {
      * @param status  the new status to set
      */
     void updateOrderStatus(int orderId, OrderStatus status);
+
+    /**
+     * Saves the payment ID associated with the specified order.
+     *
+     * @param orderId   the ID of the order
+     * @param paymentId the payment ID to save
+     */
+    void savePaymentId(int orderId, int paymentId);
 }

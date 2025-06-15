@@ -14,6 +14,7 @@ public final class ProcessConstants {
     public static final String VAR_SHIPPING_COMPANY_CORRELATION_KEY = "shippingCompanyCorrelationKey";
     public static final String VAR_SHIPPING_INFO = "shippingInfo";
     public static final String VAR_SHIPPING_COST = "shippingCost";
+    public static final String VAR_SHIPPING_COMAPNY_BASE_URL = "shippingCompanyBaseUrl";
     public static final String VAR_PAYMENT_ID = "paymentId";
     public static final String VAR_PAYMENT_TOKEN = "paymentToken";
     public static final String VAR_VALID_PAYMENT = "validPayment";
@@ -30,6 +31,7 @@ public final class ProcessConstants {
     public static final String JOB_SHIPPING_SERVICE_AVAILABILITY_REQUEST = "shipping-service-availability-request";
     public static final String JOB_LOWEST_SHIPPING_SERVICE = "select-lowest-shipping-service";
     public static final String JOB_PAYMENT_REQUEST = "payment-request";
+    public static final String JOB_SAVE_PAYMENT = "save-payment";
     public static final String JOB_BANK_REDIRECT = "bank-redirect";
     public static final String JOB_VERIFY_PAYMENT_TOKEN = "verify-payment-token";
     public static final String JOB_ORDER_ACTIVE = "order-active";

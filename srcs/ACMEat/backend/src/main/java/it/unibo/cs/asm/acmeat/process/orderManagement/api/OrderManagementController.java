@@ -1,8 +1,8 @@
 package it.unibo.cs.asm.acmeat.process.orderManagement.api;
 
-import io.camunda.zeebe.spring.client.annotation.Variable;
 import it.unibo.cs.asm.acmeat.dto.request.CreateOrderRequest;
 import it.unibo.cs.asm.acmeat.dto.request.ReceiveShippingCostRequest;
+import it.unibo.cs.asm.acmeat.dto.request.VerifyPaymentRequest;
 import it.unibo.cs.asm.acmeat.dto.response.*;
 import it.unibo.cs.asm.acmeat.process.orderManagement.worker.AcmeOMWorkers;
 import lombok.RequiredArgsConstructor;
@@ -46,30 +46,26 @@ public class OrderManagementController {
         return ResponseEntity.noContent().build();
     }
 
-    private record ShippingCompanyInfo(String id, double shippingCost) {}
-
     @GetMapping("/bank/payment")
-    public ResponseEntity<PaymentRedirectResponse> paymentRedirect(@RequestParam String correlationKey,
-                                                                   @Variable Integer paymentId) {
-        return ResponseEntity.ok(acmeOMWorkers.paymentRedirectManually(correlationKey, paymentId));
+    public ResponseEntity<PaymentRedirectResponse> paymentRedirect(@RequestParam int orderId) {
+        return ResponseEntity.ok(acmeOMWorkers.paymentRedirectManually(orderId));
     }
 
     @PostMapping("/bank/verify-payment")
-    public ResponseEntity<Void> verifyPayment(@RequestParam String correlationKey,
-                                              @RequestParam String paymentToken) {
-        acmeOMWorkers.verifyPaymentManually(correlationKey, paymentToken);
+    public ResponseEntity<Void> verifyPayment(@RequestBody VerifyPaymentRequest request) {
+        acmeOMWorkers.verifyPaymentManually(request.orderId(), request.paymentToken());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/orders/cancel")
-    public ResponseEntity<Void> cancelOrder(@RequestParam String correlationKey) {
-        acmeOMWorkers.cancelOrderManually(correlationKey);
+    public ResponseEntity<Void> cancelOrder(@RequestParam int orderId) {
+        acmeOMWorkers.cancelOrderManually(orderId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/orders/delivered")
-    public ResponseEntity<Void> orderDelivered(@RequestParam String correlationKey) {
-        acmeOMWorkers.orderDeliveredManually(correlationKey);
+    public ResponseEntity<Void> orderDelivered(@RequestParam int orderId) {
+        acmeOMWorkers.orderDeliveredManually(orderId);
         return ResponseEntity.noContent().build();
     }
 }

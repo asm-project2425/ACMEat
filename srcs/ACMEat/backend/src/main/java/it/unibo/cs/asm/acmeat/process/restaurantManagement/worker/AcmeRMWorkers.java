@@ -25,7 +25,7 @@ public class AcmeRMWorkers {
     public RequestRestaurantInformationResponse retrieveRestaurantInformationManually(int restaurantId) {
         String correlationKey = UUID.randomUUID().toString();
         zeebeService.sendMessage(MSG_REQUEST_RESTAURANT_INFORMATION, correlationKey, Map.of(VAR_CORRELATION_KEY, correlationKey));
-        zeebeService.completeJob(JOB_RETRIEVE_RESTAURANT_INFORMATION, correlationKey, Map.of());
+        zeebeService.completeJob(JOB_RETRIEVE_RESTAURANT_INFORMATION, VAR_CORRELATION_KEY, correlationKey, Map.of());
 
         List<MenuDTO> menu = restaurantService.getMenuByRestaurantId(restaurantId);
         List<TimeSlotDTO> timeSlots = restaurantService.getTimeSlotsByRestaurantId(restaurantId);
@@ -35,6 +35,6 @@ public class AcmeRMWorkers {
 
     public void confirmRestaurantInformationUpdateManually(String correlationKey) {
         zeebeService.sendMessage(MSG_RESTAURANT_INFORMATION_UPDATED, correlationKey, Map.of());
-        zeebeService.completeJob(JOB_UPDATE_RESTAURANT_INFORMATION, correlationKey, Map.of());
+        zeebeService.completeJob(JOB_UPDATE_RESTAURANT_INFORMATION, VAR_CORRELATION_KEY, correlationKey, Map.of());
     }
 }

@@ -18,7 +18,6 @@ import static it.unibo.cs.asm.acmeat.process.common.ProcessConstants.*;
 @RequiredArgsConstructor
 @Component
 public class ShippingCompanyWorkers {
-    private final ZeebeService zeebeService;
     private final RestClient.Builder restClientBuilder;
 
     private static final String AVAILABLE_PATH = "/api/v1/available";
@@ -52,8 +51,8 @@ public class ShippingCompanyWorkers {
                                                CoordinateDTO restaurantPosition, String deliveryAddress) {}
 
     @JobWorker(type = JOB_REQUEST_SHIPPING_CANCELLATION)
-    public void requestShippingCancellation(@Variable ShippingCompanyDTO shippingCompany, @Variable int orderId) {
-        RestClient restClient = restClientBuilder.baseUrl(shippingCompany.getBaseUrl()).build();
+    public void requestShippingCancellation(@Variable String shippingCompanyBaseUrl, @Variable int orderId) {
+        RestClient restClient = restClientBuilder.baseUrl(shippingCompanyBaseUrl).build();
 
         try {
             restClient.post()
@@ -64,14 +63,13 @@ public class ShippingCompanyWorkers {
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
-            log.warn("Failed to request shipping cancellation for order {} at {}: {}", orderId, shippingCompany.getId(),
-                    e.getMessage());
+            log.warn("Failed to request shipping cancellation for order {}: {}", orderId, e.getMessage());
         }
     }
 
     @JobWorker(type = JOB_CONFIRM_SHIPPING_COMPANY)
-    public void confirmShippingCompany(@Variable ShippingCompanyDTO shippingCompany, @Variable int orderId) {
-        RestClient restClient = restClientBuilder.baseUrl(shippingCompany.getBaseUrl()).build();
+    public void confirmShippingCompany(@Variable String shippingCompanyBaseUrl, @Variable int orderId) {
+        RestClient restClient = restClientBuilder.baseUrl(shippingCompanyBaseUrl).build();
 
         try {
             restClient.post()
@@ -82,8 +80,7 @@ public class ShippingCompanyWorkers {
                     .retrieve()
                     .toBodilessEntity();
         } catch (Exception e) {
-            log.warn("Failed to confirm shipping for order {} at {}: {}", orderId, shippingCompany.getId(),
-                    e.getMessage());
+            log.warn("Failed to confirm shipping for order {}: {}", orderId, e.getMessage());
         }
     }
 }

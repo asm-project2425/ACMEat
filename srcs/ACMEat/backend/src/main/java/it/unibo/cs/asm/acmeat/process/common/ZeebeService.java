@@ -16,8 +16,9 @@ public interface ZeebeService {
      * Completes a job in the Zeebe workflow engine.
      *
      * @param jobType The type of the job to complete.
-     * @param correlationKey The correlation key to identify the job.
-     * @param variables The variables to pass along with the job completion.
+     * @param variableName The name of the variable to match against the job's variables.
+     * @param expectedValue The expected value of the variable to match.
+     * @param variables The variables to pass when completing the job.
      */
-    void completeJob(String jobType, String correlationKey, Map<String, Object> variables);
+    void completeJob(String jobType, String variableName, Object expectedValue, Map<String, Object> variables);
 }

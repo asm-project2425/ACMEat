@@ -38,34 +38,35 @@ public class ZeebeServiceImpl implements ZeebeService {
     }
 
     @Override
-    public void completeJob(String jobType, String correlationKey, Map<String, Object> variables) {
+    public void completeJob(String jobType, String variableName, Object expectedValue, Map<String, Object> variables) {
         List<ActivatedJob> jobs = zeebeClient.newActivateJobsCommand()
                 .jobType(jobType)
                 .maxJobsToActivate(10)
-                .fetchVariables(List.of(VAR_CORRELATION_KEY))
+                .fetchVariables(List.of(variableName))
                 .send()
                 .join()
                 .getJobs();
         log.info("Found {} jobs of type '{}'", jobs.size(), jobType);
 
-        Optional<ActivatedJob> matchingJob = findJobByCorrelationKey(jobs, correlationKey);
+        Optional<ActivatedJob> matchingJob = findJobByVariable(jobs, variableName, expectedValue);
         if (matchingJob.isPresent()) {
             ActivatedJob job = matchingJob.get();
             zeebeClient.newCompleteCommand(job.getKey()).variables(variables).send().join();
-            log.info("Completed job {} for correlationKey '{}'", job.getKey(), correlationKey);
+            log.info("Completed job {} for {}: '{}'", job.getKey(), variableName, expectedValue);
             return;
         }
 
-        log.warn("No matching job found for correlationKey '{}'", correlationKey);
+        log.warn("No matching job found for {}: '{}'", variableName, expectedValue);
         if (JOB_RETRIEVE_RESTAURANT_INFORMATION.equals(jobType)) {
             throw new RestaurantUpdateNotAllowedException();
         }
         throw new JobCompletionException(jobType);
     }
 
-    private Optional<ActivatedJob> findJobByCorrelationKey(List<ActivatedJob> jobs, String correlationKey) {
+    private Optional<ActivatedJob> findJobByVariable(List<ActivatedJob> jobs, String variableName,
+                                                     Object expectedValue) {
         return jobs.stream()
-                .filter(job -> correlationKey.equals(job.getVariablesAsMap().get(VAR_CORRELATION_KEY)))
+                .filter(job -> expectedValue.equals(job.getVariablesAsMap().get(variableName)))
                 .findFirst();
     }
 

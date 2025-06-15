@@ -33,6 +33,8 @@ public class Order {
     @Setter
     @ManyToOne
     private ShippingCompany shippingCompany;
+    @Setter
+    private int paymentId;
 
     public Order(Restaurant restaurant, List<OrderedItem> orderedItems, TimeSlot timeSlot, String deliveryAddress) {
         this.restaurant = restaurant;

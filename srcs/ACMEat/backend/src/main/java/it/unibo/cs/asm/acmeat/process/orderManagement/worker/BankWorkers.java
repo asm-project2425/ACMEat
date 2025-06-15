@@ -24,20 +24,19 @@ public class BankWorkers {
     private static final String ACME_PASSWORD = "acme";
 
     @JobWorker(type = JOB_PAYMENT_REQUEST)
-    public void paymentRequest(@Variable String correlationKey, @Variable int orderId, @Variable double orderPrice,
-                               @Variable double shippingCost) {
+    public void paymentRequest(@Variable int orderId, @Variable double orderPrice, @Variable double shippingCost) {
         LoginResponse loginResponse = bankService.login(ACME_USERNAME, ACME_PASSWORD);
         double amount = orderPrice + shippingCost;
         CreatePaymentResponse createPaymentResponse = bankService.createPayment(loginResponse.getSessionId(), amount,
                 orderId);
         bankService.logout(loginResponse.getSessionId());
 
-        zeebeService.sendMessage(MSG_PAYMENT_REQUEST, correlationKey, Map.of(VAR_PAYMENT_ID,
+        zeebeService.sendMessage(MSG_PAYMENT_REQUEST, String.valueOf(orderId), Map.of(VAR_PAYMENT_ID,
                 createPaymentResponse.getPaymentId()));
     }
 
     @JobWorker(type = JOB_VERIFY_PAYMENT_TOKEN)
-    public void verifyPaymentToken(@Variable String paymentToken, @Variable String correlationKey) {
+    public void verifyPaymentToken(@Variable String paymentToken, @Variable int orderId) {
         LoginResponse loginResponse = bankService.login(ACME_USERNAME, ACME_PASSWORD);
         VerifyTokenResponse verifyResponse = bankService.verifyToken(loginResponse.getSessionId(), paymentToken);
         bankService.logout(loginResponse.getSessionId());
@@ -48,7 +47,7 @@ public class BankWorkers {
             log.info("Payment verification successful for token {}", paymentToken);
         }
 
-        zeebeService.sendMessage(MSG_PAYMENT_VALIDITY, correlationKey, Map.of(VAR_VALID_PAYMENT,
+        zeebeService.sendMessage(MSG_PAYMENT_VALIDITY, String.valueOf(orderId), Map.of(VAR_VALID_PAYMENT,
                 verifyResponse.isSuccess()));
     }
 

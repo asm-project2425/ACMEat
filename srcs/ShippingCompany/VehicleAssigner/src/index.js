@@ -96,7 +96,7 @@ app.post('/api/v1/cancelDelivery', async function (req, res) {
 
     let result;
     try {
-        result = await pool.query("UPDATE deliveries SET status = 'cancelled' WHERE id = $1 AND status != 'delivered' RETURNING id", [req.body.deliveryId]);
+        result = await pool.query("UPDATE deliveries SET status = 'cancelled' WHERE id = $1 AND (status = 'created' OR status = 'confirmed') RETURNING id", [req.body.deliveryId]);
     } catch (e) {
         console.error("DB error:");
         console.error(e);

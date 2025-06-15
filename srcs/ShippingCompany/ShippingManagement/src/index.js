@@ -1,4 +1,5 @@
 import express from "express";
+import { Pool } from 'pg';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,9 +10,11 @@ const gis_url = "http://gis:6002/api/v1";
 
 app.use(express.json());
 
-function round(n) {
-    return Math.round(n * 100) / 100;
-}
+const pool = new Pool();
+pool.on('error', (err, client) => {
+    console.error('Unexpected error on idle client', err);
+    process.exit(-1);
+});
 
 app.post('/api/v1/availability', async function (req, res) {
     if (!req.body || req.body.correlationKey == null || req.body.orderId == null ||
@@ -113,6 +116,8 @@ app.post('/api/v1/confirm', async function (req, res) {
     }
 
     res.sendStatus(200);
+
+    runUpdateDeliveries();
 });
 
 app.post('/api/v1/cancel', async function (req, res) {
@@ -136,6 +141,118 @@ app.post('/api/v1/cancel', async function (req, res) {
     }
 
     res.sendStatus(200);
+
+    runUpdateDeliveries();
 });
+
+let taskId;
+async function updateDeliveries() {
+    taskId = null;
+
+    let delivering = await pool.query(
+        `UPDATE deliveries
+         SET status = 'delivering'
+         WHERE status = 'confirmed'
+           AND now() >= (time - make_interval(mins => 5))
+         RETURNING id, vehicle_id`
+    );
+
+    for (let row of delivering.rows) {
+        await startTracking(row.vehicle_id, row.id);
+    }
+
+    let delivered = await pool.query(
+        `UPDATE deliveries
+         SET status = 'delivered'
+         WHERE status = 'delivering'
+           AND now() >= time
+         RETURNING order_id`
+    );
+
+    for (let row of delivered.rows) {
+        await notifyOrderDelivered(row.order_id);
+    }
+
+    let completed = await pool.query(
+        `UPDATE deliveries
+         SET status = 'completed'
+         WHERE status = 'delivered'
+           AND now() >= (time + make_interval(mins => 5))
+         RETURNING vehicle_id`
+    );
+
+    for (let row of completed.rows) {
+        await endTracking(row.vehicle_id);
+    }
+
+    taskId = setTimeout(updateDeliveries, 1000 * 10); // Every 10 seconds
+}
+setImmediate(updateDeliveries);
+
+function runUpdateDeliveries() {
+    if (taskId == null) {
+        // Task is being run by setImmediate
+        return;
+    }
+    clearTimeout(taskId);
+    taskId = null;
+    setImmediate(updateDeliveries);
+}
+
+async function startTracking(vehicleId, deliveryId) {
+    try {
+        const response = await fetch(`${vehicle_tracker_url}/deliveryStarted`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                vehicleId,
+                deliveryId
+            })
+        });
+        if (!response.ok) {
+            throw await response.text();
+        }
+    } catch (e) {
+        console.error(`Error starting tracking of vehicle ${vehicleId} for delivery ${deliveryId}: ${e}`);
+    }
+}
+
+async function endTracking(vehicleId) {
+    try {
+        const response = await fetch(`${vehicle_tracker_url}/deliveryEnded`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                vehicleId
+            })
+        });
+        if (!response.ok) {
+            throw await response.text();
+        }
+    } catch (e) {
+        console.error(`Error ending tracking of vehicle ${vehicleId}: ${e}`);
+    }
+}
+
+async function notifyOrderDelivered(orderId) {
+    try {
+        const response = await fetch(`${acmeat_backend_url}/orders/delivered?orderId=${orderId}`, {
+            method: 'POST'
+        });
+        if (!response.ok) {
+            throw await response.text();
+        }
+    } catch (e) {
+        console.error(`Error notifying order delivery to ACMEat: ${e}`);
+    }
+}
+
+function round(n) {
+    return Math.round(n * 100) / 100;
+}
 
 app.listen(port, () => console.log(`ShippingManagement service listening on port ${port}`));

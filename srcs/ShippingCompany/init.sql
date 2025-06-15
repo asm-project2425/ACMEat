@@ -3,7 +3,8 @@ CREATE TYPE delivery_status AS ENUM (
     'confirmed',
     'cancelled',
     'delivering',
-    'delivered'
+    'delivered',
+    'completed'
 );
 
 CREATE TYPE vehicle_status AS ENUM (

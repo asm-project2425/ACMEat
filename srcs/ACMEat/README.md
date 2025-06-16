@@ -180,25 +180,6 @@ These endpoints interact directly with the ACMEat domain model and services.
 * **Description**: Retrieves the current status of the specified order.
 * **Response**: Order ID and status (`CREATED`, `CANCELLED`, `RESTAURANT_CONFIRMED`, `SHIPPING_COMPANY_CHOSEN`, `PAID`, `CANCELLATION_REJECTED`, `DELIVERED`).
 
-#### `getRestaurantsByCity`
-
-* **Method**: `GET`
-* **URL**: `/api/v1/restaurants?cityId=...`
-* **Query Parameters**:
-
-  * `cityId`: ID of the city
-* **Description**: Returns the list of restaurants in the specified city.
-* **Response**: List of `RestaurantDTO`.
-
-#### `getRestaurantById`
-
-* **Method**: `GET`
-* **URL**: `/api/v1/restaurants/{restaurantId}`
-* **Path Parameters**:
-
-  * `restaurantId`: ID of the restaurant
-* **Response**: Restaurant details (`RestaurantDTO`).
-
 #### `addMenu`
 
 * **Method**: `POST`

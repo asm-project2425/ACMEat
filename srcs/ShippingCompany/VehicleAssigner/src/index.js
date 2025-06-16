@@ -106,7 +106,7 @@ app.post('/api/v1/cancelDelivery', async function (req, res) {
     res.sendStatus(result.rows.length === 0 ? 404 : 200);
 });
 
-const backgroundTask = async function () {
+async function backgroundTask() {
     try {
         await pool.query("UPDATE deliveries SET status = 'cancelled' WHERE status = 'created' AND (created_at + make_interval(mins => 2)) < now()");
     } catch (e) {
@@ -115,7 +115,7 @@ const backgroundTask = async function () {
     }
 
     setTimeout(backgroundTask, 1000 * 60); // Every minute
-};
-setTimeout(backgroundTask, 1000 * 60); // Every minute
+}
+setImmediate(backgroundTask);
 
 app.listen(port, () => console.log(`VehicleAssigner service listening on port ${port}`));

@@ -1,7 +1,15 @@
 package it.unibo.cs.asm.acmeat.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
-public record CreateOrderRequest(int restaurantId, List<OrderedItemRequest> items, int timeSlotId,
-                                 String deliveryAddress) {
+public record CreateOrderRequest(
+        @NotNull int restaurantId,
+        @NotEmpty List<OrderedItemRequest> items,
+        @NotNull int timeSlotId,
+        @NotBlank String deliveryAddress
+) {
 }

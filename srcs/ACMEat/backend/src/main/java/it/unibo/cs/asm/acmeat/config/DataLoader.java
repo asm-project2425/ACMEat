@@ -37,7 +37,7 @@ public class DataLoader implements ApplicationRunner {
             City bologna = cityRepository.save(new City("Bologna"));
 
             Restaurant restaurant1 = new Restaurant("Ristorante Bolognese", restaurantBaseUrl,
-                    new Coordinate(44.49945152011542, 11.357824447074432), bologna);
+                    "Via S. Donato, 17d, 40127 Bologna BO", bologna);
             // Menu
             restaurant1.addMenu(new Menu("Pasta", new BigDecimal("12.50")));
             restaurant1.addMenu(new Menu("Pizza", new BigDecimal("8.50")));

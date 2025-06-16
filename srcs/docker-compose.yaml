@@ -143,10 +143,10 @@ services:
       - RESTAURANT1_BASE_URL=http://restaurant1:80
       - GIS_BASE_URL=http://gis:6002
       - BANK_BASE_URL=http://bank:8000
-      - SHIPPING_SERVICE1_BASE_URL=http://shipping_service1:9000 # update when shipping_service1 is added
+      - SHIPPING_SERVICE1_BASE_URL=http://shipping_management:3000
     depends_on:
       - acmeat_db
-      - operate # depends on Operate for monitoring
+      - operate
       - gis
       - restaurant1
       - bank_backend

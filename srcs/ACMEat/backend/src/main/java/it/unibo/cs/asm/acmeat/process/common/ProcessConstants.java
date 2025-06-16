@@ -4,7 +4,7 @@ public final class ProcessConstants {
     // Process Variables
     public static final String VAR_CORRELATION_KEY = "correlationKey";
     public static final String VAR_RESTAURANT_BASE_URL = "restaurantBaseUrl";
-    public static final String VAR_RESTAURANT_POSITION = "restaurantPosition";
+    public static final String VAR_RESTAURANT_ADDRESS = "restaurantAddress";
     public static final String VAR_ORDER_ID = "orderId";
     public static final String VAR_ORDER_PRICE = "orderPrice";
     public static final String VAR_DELIVERY_TIME = "deliveryTime";

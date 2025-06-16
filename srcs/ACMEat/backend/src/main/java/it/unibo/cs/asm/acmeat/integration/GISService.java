@@ -10,5 +10,13 @@ public interface GISService {
      * @param b the second coordinate
      * @return the distance in meters
      */
-    double distanceBetween(Coordinate a, Coordinate b);
+    double calculateDistance(Coordinate a, Coordinate b);
+
+    /**
+     * Geocodes an address to its coordinates
+     *
+     * @param address the address to geocode
+     * @return the coordinates of the address
+     */
+    Coordinate getCoordinates(String address);
 }

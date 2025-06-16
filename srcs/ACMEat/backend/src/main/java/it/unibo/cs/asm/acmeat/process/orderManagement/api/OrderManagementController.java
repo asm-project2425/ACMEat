@@ -5,6 +5,7 @@ import it.unibo.cs.asm.acmeat.dto.request.ReceiveShippingCostRequest;
 import it.unibo.cs.asm.acmeat.dto.request.VerifyPaymentRequest;
 import it.unibo.cs.asm.acmeat.dto.response.*;
 import it.unibo.cs.asm.acmeat.process.orderManagement.worker.AcmeOMWorkers;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +37,12 @@ public class OrderManagementController {
 
     @PostMapping("/orders")
     public ResponseEntity<CreateOrderResponse> createOrder(@RequestParam String correlationKey,
-                                                           @RequestBody CreateOrderRequest request) {
+                                                           @RequestBody @Valid CreateOrderRequest request) {
         return ResponseEntity.ok(acmeOMWorkers.createOrderManually(correlationKey, request));
     }
 
     @PostMapping("/shipping-company/cost")
-    public ResponseEntity<Void> receiveShippingCost(@RequestBody ReceiveShippingCostRequest request) {
+    public ResponseEntity<Void> receiveShippingCost(@RequestBody @Valid ReceiveShippingCostRequest request) {
         acmeOMWorkers.receiveShippingCostManually(request);
         return ResponseEntity.noContent().build();
     }
@@ -52,7 +53,7 @@ public class OrderManagementController {
     }
 
     @PostMapping("/bank/verify-payment")
-    public ResponseEntity<Void> verifyPayment(@RequestBody VerifyPaymentRequest request) {
+    public ResponseEntity<Void> verifyPayment(@RequestBody @Valid VerifyPaymentRequest request) {
         acmeOMWorkers.verifyPaymentManually(request.orderId(), request.paymentToken());
         return ResponseEntity.noContent().build();
     }

@@ -7,9 +7,7 @@ import it.unibo.cs.asm.acmeat.dto.request.CreateOrderRequest;
 import it.unibo.cs.asm.acmeat.dto.request.ReceiveShippingCostRequest;
 import it.unibo.cs.asm.acmeat.dto.response.*;
 import it.unibo.cs.asm.acmeat.model.OrderStatus;
-import it.unibo.cs.asm.acmeat.model.Coordinate;
 import it.unibo.cs.asm.acmeat.model.Restaurant;
-import it.unibo.cs.asm.acmeat.model.ShippingCompany;
 import it.unibo.cs.asm.acmeat.process.common.ZeebeService;
 import it.unibo.cs.asm.acmeat.service.CityService;
 import it.unibo.cs.asm.acmeat.service.OrderService;
@@ -56,7 +54,7 @@ public class AcmeOMWorkers {
     public RequestRestaurantDetailsResponse retrieveRestaurantDetailsManually(String correlationKey, int restaurantId) {
         Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
         zeebeService.sendMessage(MSG_RESTAURANT_SELECTED, correlationKey, Map.of(VAR_RESTAURANT_BASE_URL,
-                restaurant.getBaseUrl(), VAR_RESTAURANT_POSITION, restaurant.getPosition()));
+                restaurant.getBaseUrl(), VAR_RESTAURANT_ADDRESS, restaurant.getAddress()));
         List<MenuDTO> menus = restaurantService.getMenuByRestaurantId(restaurantId);
         List<TimeSlotDTO> timeSlots = restaurantService.getActiveTimeSlotsByRestaurantId(restaurantId);
         zeebeService.completeJob(JOB_RETRIEVE_RESTAURANT_DETAILS, VAR_CORRELATION_KEY, correlationKey, Map.of());
@@ -83,12 +81,12 @@ public class AcmeOMWorkers {
 
     @JobWorker(type = JOB_RETRIEVE_SHIPPING_SERVICES)
     public Map<String, List<ShippingCompanyDTO>> retrieveShippingCompanies(@Variable int orderId,
-                                                                           @Variable Coordinate restaurantPosition) {
+                                                                           @Variable String restaurantAddress) {
         orderService.updateOrderStatus(orderId, OrderStatus.RESTAURANT_CONFIRMED);
-        List<ShippingCompanyDTO> shippingCompanies = shippingCompanyService.getShippingCompanies(restaurantPosition);
+        List<ShippingCompanyDTO> shippingCompanies = shippingCompanyService.getShippingCompanies(restaurantAddress);
 
         if (shippingCompanies.isEmpty()) {
-            log.warn("No shipping companies found for restaurant position {}", restaurantPosition);
+            log.warn("No shipping companies found for restaurant position {}", restaurantAddress);
         }
 
         return Map.of(VAR_SHIPPING_COMPANIES, shippingCompanies);

@@ -2,8 +2,6 @@ package it.unibo.cs.asm.acmeat.process.orderManagement.worker;
 
 import io.camunda.zeebe.spring.client.annotation.JobWorker;
 import io.camunda.zeebe.spring.client.annotation.Variable;
-import it.unibo.cs.asm.acmeat.process.common.ZeebeService;
-import it.unibo.cs.asm.acmeat.dto.entities.CoordinateDTO;
 import it.unibo.cs.asm.acmeat.dto.entities.ShippingCompanyDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +27,13 @@ public class ShippingCompanyWorkers {
                                                                   @Variable ShippingCompanyDTO shippingCompany,
                                                                   @Variable int orderId,
                                                                   @Variable String deliveryTime,
-                                                                  @Variable CoordinateDTO restaurantPosition,
+                                                                  @Variable String restaurantAddress,
                                                                   @Variable String deliveryAddress) {
         String shippingCompanyCorrelationKey = correlationKey + "+" + shippingCompany.getId();
         RestClient restClient = restClientBuilder.baseUrl(shippingCompany.getBaseUrl()).build();
 
         ShippingAvailabilityRequest request = new ShippingAvailabilityRequest(shippingCompanyCorrelationKey, orderId,
-                deliveryTime, restaurantPosition, deliveryAddress);
+                deliveryTime, restaurantAddress, deliveryAddress);
 
         try {
             restClient.post().uri(AVAILABLE_PATH).body(request).retrieve().toBodilessEntity();
@@ -48,39 +46,34 @@ public class ShippingCompanyWorkers {
     }
 
     private record ShippingAvailabilityRequest(String correlationKey, int orderId, String deliveryTime,
-                                               CoordinateDTO restaurantPosition, String deliveryAddress) {}
+                                               String restaurantAddress, String deliveryAddress) {}
 
     @JobWorker(type = JOB_REQUEST_SHIPPING_CANCELLATION)
     public void requestShippingCancellation(@Variable String shippingCompanyBaseUrl, @Variable int orderId) {
         RestClient restClient = restClientBuilder.baseUrl(shippingCompanyBaseUrl).build();
+        ShippingCancellationRequest cancellationRequest = new ShippingCancellationRequest(String.valueOf(orderId));
 
         try {
-            restClient.post()
-                    .uri(uriBuilder -> uriBuilder
-                            .path(CANCELLATION_PATH)
-                            .queryParam("id_ordine", orderId)
-                            .build())
-                    .retrieve()
-                    .toBodilessEntity();
+            restClient.post().uri(CANCELLATION_PATH).body(cancellationRequest).retrieve().toBodilessEntity();
         } catch (Exception e) {
             log.warn("Failed to request shipping cancellation for order {}: {}", orderId, e.getMessage());
         }
     }
 
+    private record ShippingCancellationRequest(String deliveryId) {}
+
     @JobWorker(type = JOB_CONFIRM_SHIPPING_COMPANY)
     public void confirmShippingCompany(@Variable String shippingCompanyBaseUrl, @Variable int orderId) {
         RestClient restClient = restClientBuilder.baseUrl(shippingCompanyBaseUrl).build();
+        ShippingConfirmationRequest confirmationRequest = new ShippingConfirmationRequest(String.valueOf(orderId));
 
         try {
             restClient.post()
-                    .uri(uriBuilder -> uriBuilder
-                            .path(CONFIRMATION_PATH)
-                            .queryParam("id_ordine", orderId)
-                            .build())
-                    .retrieve()
-                    .toBodilessEntity();
+                    .uri(CONFIRMATION_PATH).body(confirmationRequest).retrieve().toBodilessEntity();
         } catch (Exception e) {
             log.warn("Failed to confirm shipping for order {}: {}", orderId, e.getMessage());
         }
     }
+
+    private record ShippingConfirmationRequest(String deliveryId) {}
 }

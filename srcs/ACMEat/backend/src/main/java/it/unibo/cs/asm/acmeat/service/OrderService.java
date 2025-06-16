@@ -18,7 +18,8 @@ public interface OrderService {
     Order getOrderById(int orderId);
 
     /**
-     * Creates a new order with the specified restaurant, items, time slot, and address.
+     * Creates a new order with the specified restaurant, items, time slot, and address. The delivery address must be
+     * within 10 km of the restaurant's city.
      *
      * @param restaurantId the ID of the restaurant
      * @param items        the list of ordered items

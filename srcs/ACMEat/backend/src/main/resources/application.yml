@@ -27,12 +27,11 @@ rest:
   restaurant:
     base-urls:
       1: ${RESTAURANT1_BASE_URL:http://localhost:9001}
-#      2: ${RESTAURANT2_BASE_URL:http://localhost:9002}
   gis:
     base-url: ${GIS_BASE_URL:http://localhost:6002}
   shipping-company:
     base-urls:
-      1: ${SHIPPING_SERVICE1_BASE_URL:http://localhost:4003}
+      1: ${SHIPPING_SERVICE1_BASE_URL:http://localhost:5004}
 
 soap:
   bank:

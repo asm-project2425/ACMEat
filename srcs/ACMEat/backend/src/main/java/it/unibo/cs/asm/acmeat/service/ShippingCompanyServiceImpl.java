@@ -23,12 +23,15 @@ public class ShippingCompanyServiceImpl implements ShippingCompanyService {
                 .orElseThrow(() -> new IllegalArgumentException("Shipping company not found with id: " + id));
     }
 
+    private static final double MAX_DISTANCE_METERS = 10000; // 10 km
+
     @Override
-    public List<ShippingCompanyDTO> getShippingCompanies(Coordinate restaurantPosition) {
+    public List<ShippingCompanyDTO> getShippingCompanies(String restaurantAddress) {
         List<ShippingCompanyDTO> result = new ArrayList<>();
+        Coordinate restaurantPosition = GISService.getCoordinates(restaurantAddress);
         for (ShippingCompany company : shippingCompanyRepository.findAll()) {
-            double distance = GISService.distanceBetween(restaurantPosition, company.getPosition());
-            if (distance <= 10000) {
+            double distance = GISService.calculateDistance(restaurantPosition, company.getPosition());
+            if (distance <= MAX_DISTANCE_METERS) {
                 result.add(new ShippingCompanyDTO(company));
             }
         }

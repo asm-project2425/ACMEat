@@ -2,7 +2,6 @@ package it.unibo.cs.asm.acmeat.service;
 
 import it.unibo.cs.asm.acmeat.dto.entities.ShippingCompanyDTO;
 import it.unibo.cs.asm.acmeat.model.ShippingCompany;
-import it.unibo.cs.asm.acmeat.model.Coordinate;
 
 import java.util.List;
 
@@ -18,8 +17,8 @@ public interface ShippingCompanyService {
     /**
      * Retrieves a list of ShippingCompanyDTOs that can serve a restaurant based on its position.
      *
-     * @param restaurantPosition the position of the restaurant
+     * @param restaurantAddress the address of the restaurant
      * @return a list of ShippingCompanyDTOs that can serve the restaurant
      */
-    List<ShippingCompanyDTO> getShippingCompanies(Coordinate restaurantPosition);
+    List<ShippingCompanyDTO> getShippingCompanies(String restaurantAddress);
 }

@@ -2,6 +2,7 @@ package it.unibo.cs.asm.acmeat.service;
 
 import it.unibo.cs.asm.acmeat.dto.entities.OrderDTO;
 import it.unibo.cs.asm.acmeat.dto.request.OrderedItemRequest;
+import it.unibo.cs.asm.acmeat.integration.GISService;
 import it.unibo.cs.asm.acmeat.model.*;
 import it.unibo.cs.asm.acmeat.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final RestaurantService restaurantService;
+    private final GISService gisService;
 
     @Override
     public Order getOrderById(int orderId) {
@@ -24,12 +26,26 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO createOrder(int restaurantId, List<OrderedItemRequest> items, int timeSlotId, String address) {
         Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
+        validateAddress(address, restaurant.getCity().getName());
         TimeSlot timeSlot = getTimeSlotById(restaurant, timeSlotId);
         List<OrderedItem> orderedItems = mapToOrderedItems(restaurant, items);
 
         Order order = new Order(restaurant, orderedItems, timeSlot, address);
         orderRepository.save(order);
         return new OrderDTO(order);
+    }
+
+    private static final double MAX_DISTANCE_METERS = 15000; // 15 km
+
+    private void validateAddress(String address, String cityName) {
+        Coordinate addressCoordinate = gisService.getCoordinates(address);
+        Coordinate cityCoordinate = gisService.getCoordinates(cityName);
+
+        double distance = gisService.calculateDistance(addressCoordinate, cityCoordinate);
+
+        if (distance > MAX_DISTANCE_METERS) {
+            throw new IllegalStateException("Delivery address is more than 10 km away from the city.");
+        }
     }
 
     private TimeSlot getTimeSlotById(Restaurant restaurant, int timeSlotId) {

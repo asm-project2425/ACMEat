@@ -11,13 +11,15 @@ import java.util.Optional;
 public class GISServiceImpl implements GISService {
     private final RestClient restClient;
     private static final String DISTANCE_PATH = "/api/v1/distance";
+    private static final String LOCATE_PATH = "/api/v1/locate";
 
     public GISServiceImpl(RestClient.Builder restClientBuilder,
                           @Value("${rest.gis.base-url}") String gisBaseUrl) {
         this.restClient = restClientBuilder.baseUrl(gisBaseUrl).build();
     }
 
-    public double distanceBetween(Coordinate a, Coordinate b) {
+    @Override
+    public double calculateDistance(Coordinate a, Coordinate b) {
         return Optional.ofNullable(
                         restClient.get().uri(uriBuilder -> uriBuilder.path(DISTANCE_PATH)
                                         .queryParam("lat1", a.latitude())
@@ -33,4 +35,18 @@ public class GISServiceImpl implements GISService {
     }
 
     private record DistanceResponse(double distance) {}
+
+    @Override
+    public Coordinate getCoordinates(String address) {
+        return Optional.ofNullable(restClient.get().uri(uriBuilder -> uriBuilder
+                                .path(LOCATE_PATH)
+                                .queryParam("query", address)
+                                .build())
+                        .retrieve()
+                        .body(GeocodeResponse.class)
+                ).map(response -> new Coordinate(response.lat(), response.lon()))
+                .orElseThrow(() -> new IllegalStateException("Failed to geocode address: " + address));
+    }
+
+    private record GeocodeResponse(double lat, double lon) {}
 }

@@ -5,7 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const vehicle_assigner_url = "http://vehicle_assigner:3000/api/v1";
 const vehicle_tracker_url = "http://vehicle_tracker:3000/api/v1";
-const acmeat_backend_url = "http://acmeat_backend:8080/api/v1";
+const acmeat_backend_url = "http://acmeat:8080/api/v1";
 const gis_url = "http://gis:6002/api/v1";
 
 app.use(express.json());

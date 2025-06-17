@@ -29,6 +29,7 @@ async function On_order_accepted(order: orderCreationResponse, correlationKey:st
     let url = await GetPayment(1, order.order.id);
     url = url.replaceAll("https", "http");
     url = url.replaceAll("bank-frontend", "localhost:8002");
+    url += `&orderId=${order.order.id}`;
     window.location.href = url;
 }
 

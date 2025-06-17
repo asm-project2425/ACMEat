@@ -107,6 +107,9 @@ async function On_Locale_Change() {
         orario_select.options.add(CreateOption(`${o.startTime} ${o.endTime}`, o.id.toString()));
     }
 
+    if(orari.length<=0)
+        orario_select.options.add(CreateOption(`1`, `1`));
+
 
     menu.style.visibility = "visible";
 }

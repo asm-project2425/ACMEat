@@ -61,3 +61,13 @@ export interface restaurantDetailsResponse{
 export interface orderCreationResponse{
     order?: Order,
 }
+
+export interface paymentToken{
+    orderId?:number,
+    paymentToken?:string
+}
+
+export interface orderStatus{
+    orderId?:string,
+    status?:string
+}

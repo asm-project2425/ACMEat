@@ -89,7 +89,7 @@
                     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
                     $password = isset($_POST['password']) ? trim($_POST['password']) : '';
                     $paymentId = isset($_POST['paymentId']) ? trim($_POST['paymentId']) : '';
-                
+                    $orderId = isset($_POST['orderId']) ? trim($_POST['orderId']) : '';
                     try{
                         $client = new SoapClient($wsdlFile, $options);
                         $params = [
@@ -112,7 +112,7 @@
                             }else{
                                 $token = $response->token;
                                 echo '✅ pagamento avvenuto con successo, token: '.$token.'<br>';
-                                $url = 'host.docker.internal:4321/paymentSuccess?token='.$token;
+                                $url = 'http://localhost:4321/payment_confirm?token='.$token.'&orderId='.$orderId;
                                 echo '<a href="'.$url.'">Redirect manuale</a>';
                                 echo '<script type="text/javascript">';
                                 echo 'window.location.href = "'.$url.'";';
@@ -157,6 +157,7 @@
                 </div>
                 <?php
                     echo '<input type="text" id="paymentId" name="paymentId" value="'.$_GET["paymentId"].'" hidden>';
+                    echo '<input type="text" id="orderId" name="orderId" value="'.$_GET["orderId"].'" hidden>';
                 ?>
                 <button type="submit">Paga</button>
             </form>

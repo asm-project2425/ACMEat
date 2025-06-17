@@ -1,5 +1,6 @@
 import type { orderCreationResponse } from "./interfaces";
 const PUBLIC_SELF_HOST = import.meta.env.PUBLIC_SELF_HOST
+const PUBLIC_RECIVE_SHIPPING_COST = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RECIVE_SHIPPING_COST;
 const PUBLIC_PAYMENT_REDIRECT = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_PAYMENT_REDIRECT;
 
 const div = document.getElementById("order_accepted") as HTMLDivElement;
@@ -9,9 +10,10 @@ const address = document.getElementById("address") as HTMLLabelElement;
 const time = document.getElementById("time") as HTMLLabelElement;
 const price = document.getElementById("price") as HTMLLabelElement;
 const request_label = document.getElementById("request_label") as HTMLLabelElement;
+const shipping_price = document.getElementById("shipping_price") as HTMLLabelElement;
 
 
-async function On_order_accepted(order: orderCreationResponse) {
+async function On_order_accepted(order: orderCreationResponse, correlationKey:string) {
     console.log(`%c Ordine accettato`, `color: green`);
     console.log(order);
     div.className = "";
@@ -22,19 +24,60 @@ async function On_order_accepted(order: orderCreationResponse) {
     time.textContent = `Orario previsto : ${order.order.deliveryTime}`;
     price.textContent = `Prezzo : ${order.order.price}`;
 
-    GetPayment(1, order.order.id);
+    const s_cost:string = await GetShippingCost(1, order_id, correlationKey+"+1");
+    shipping_price.textContent = s_cost;
+    let url = await GetPayment(1, order.order.id);
+    url = url.replaceAll("https", "http");
+    url = url.replaceAll("bank-frontend", "localhost:8002");
+    window.location.href = url;
 }
 
-async function GetPayment(count:number, orderID) {
+async function GetShippingCost(count:number, orderID, correlationKey) :Promise<string> {
+    try {
+        request_label.textContent = `In attesa del costo di spedizione. Tentativo ${count}`;
+        const res = await fetch(`${PUBLIC_RECIVE_SHIPPING_COST}`, {
+            method: "POST",
+            body : JSON.stringify({correlationKey : correlationKey, shippingCost: 6.90}),
+            headers :{
+                "Content-Type":"application/json"
+            }
+        });
+        //const jres = await res.json();
+        //console.log(jres);
+
+
+        if(res.ok){
+            return "Prezzo spedizione 6.90";
+        }else{
+            throw new Error("Errore durante GetShippingCost "+res.statusText);
+        }
+        
+    } catch (error) {
+        console.log(error);
+        if(count > 100)
+            throw new Error("GetShippingCost failed");
+
+        return (await GetShippingCost(count+1, orderID, correlationKey));
+    }
+    //return "Errore durante la richiesta del costo di spedizione";
+}
+
+async function GetPayment(count:number, orderID) : Promise<string> {
     try {
         request_label.textContent = `In attesa dei dati di pagamento. Tentativo ${count}`;
         const res = await fetch(`${PUBLIC_PAYMENT_REDIRECT}?orderId=${orderID}`);
         const jres = await res.json();
         console.log(jres);
+
+        if(res.ok){
+            return jres.redirectUrl;
+        }else{
+            throw new Error("GetPayment error "+res.statusText);
+        }
         
     } catch (error) {
         console.log(error);
-        GetPayment(count+1, orderID);
+        return (await GetPayment(count+1, orderID));
     }
     
 }

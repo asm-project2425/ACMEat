@@ -170,7 +170,7 @@ services:
       PGPASSWORD: shippingcompanypassword
       PGHOST: shipping_company_db
     ports:
-      - "5004:3000"
+      - "5001:3000"
     container_name: shipping_management
     depends_on:
       - shipping_company_db
@@ -188,7 +188,7 @@ services:
       PGPASSWORD: shippingcompanypassword
       PGHOST: shipping_company_db
     ports:
-      - "5001:3000"
+      - "5002:3000"
     container_name: vehicle_assigner
     depends_on:
       - shipping_company_db
@@ -202,7 +202,7 @@ services:
       PGPASSWORD: shippingcompanypassword
       PGHOST: shipping_company_db
     ports:
-      - "5002:3000"
+      - "5003:3000"
     container_name: vehicle_tracker
     depends_on:
       - shipping_company_db
@@ -216,7 +216,7 @@ services:
       POSTGRES_USER: shippingcompanyuser
       POSTGRES_PASSWORD: shippingcompanypassword
     ports:
-      - "5003:5432"
+      - "5004:5432"
     volumes:
       - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_shipping_company:/var/lib/postgresql/data

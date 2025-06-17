@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TinySOA="http:///schemas/TinySOA/_c3UCcLIeEealFoL0yAyV8Q/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/TinySOA/_c3UCcLIeEealFoL0yAyV8Q/1 TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q">
+  <uml:Model xmi:id="_mVNvsPOaEe-W-ahkEj0fIA" name="TinySOA-ACMEat">
+    <packageImport xmi:type="uml:PackageImport" xmi:id="_mdPqUPOaEe-W-ahkEj0fIA">
+      <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+    </packageImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_bN-gEPObEe-W-ahkEj0fIA" name="ACMEatTask">
+      <packagedElement xmi:type="uml:Interface" xmi:id="_DlYosPOcEe-W-ahkEj0fIA" name="CustomerInterface">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_vmUpYPU0Ee-LWbhnnhttZw" name="retrieveCities"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_xtVZMPU0Ee-LWbhnnhttZw" name="retrieveRestaurants"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_sPZpgPU3Ee-LWbhnnhttZw" name="retrieveRestaurantDetails"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_WIoxQPU4Ee-LWbhnnhttZw" name="createOrder"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_JeA38ErbEfCc3ZhsKsoJMg" name="paymentRedirect"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_M6RuAErcEfCc3ZhsKsoJMg" name="verifyPayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_VYSbIErnEfCc3ZhsKsoJMg" name="cancelOrderRequest"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_EXQ4EPSNEe-LWbhnnhttZw" name="OrderManagement">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_weJ7YErKEfCc3ZhsKsoJMg" name="retrieveRestaurantDetails"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_weXWwErKEfCc3ZhsKsoJMg" name="retrieveCities"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_weboMErKEfCc3ZhsKsoJMg" name="retrieveRestaurants"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wefSkErKEfCc3ZhsKsoJMg" name="createOrder"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wehu0ErKEfCc3ZhsKsoJMg" name="cancelOrderRequest"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_USl5AErUEfCc3ZhsKsoJMg" name="receiveShippingCost"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Edkc4ErbEfCc3ZhsKsoJMg" name="paymentRedirect"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SN3kAErbEfCc3ZhsKsoJMg" name="verifyPaymentToken"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_exxJcErbEfCc3ZhsKsoJMg" name="orderDelivered"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Lw40UErtEfCc3ZhsKsoJMg" name="orderCancellation"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_OuOIIErtEfCc3ZhsKsoJMg" name="retrieveShippingCompanies"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_TSsY4ErtEfCc3ZhsKsoJMg" name="selectLowestShippingService"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_gU3OsErtEfCc3ZhsKsoJMg" name="savePayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_jq2TEErtEfCc3ZhsKsoJMg" name="orderActive"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_odnegErtEfCc3ZhsKsoJMg" name="orderCancellationRejected"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_rQhrAErtEfCc3ZhsKsoJMg" name="orderCompleted"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_-HLgMPUzEe-LWbhnnhttZw" name="ShippingCompanyInterface">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_1nyUYEraEfCc3ZhsKsoJMg" name="receiveShippingCost"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hxzzAErbEfCc3ZhsKsoJMg" name="orderDelivered"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_Fu9RoEruEfCc3ZhsKsoJMg" client="_-HLgMPUzEe-LWbhnnhttZw" supplier="_EXQ4EPSNEe-LWbhnnhttZw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_N0KeMEruEfCc3ZhsKsoJMg" client="_DlYosPOcEe-W-ahkEj0fIA" supplier="_EXQ4EPSNEe-LWbhnnhttZw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_-gQZ0EruEfCc3ZhsKsoJMg" client="_EXQ4EPSNEe-LWbhnnhttZw" supplier="_xh4k4PU5Ee-LWbhnnhttZw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_Cff2kErvEfCc3ZhsKsoJMg" client="_EXQ4EPSNEe-LWbhnnhttZw" supplier="_uy4NoPOcEe-W-ahkEj0fIA"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_SWjZYErwEfCc3ZhsKsoJMg" name="RestaurantManagement">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZYUrwEfCc3ZhsKsoJMg" name="retrieveRestaurantDetails"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZYkrwEfCc3ZhsKsoJMg" name="retrieveCities"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZY0rwEfCc3ZhsKsoJMg" name="retrieveRestaurants"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZZErwEfCc3ZhsKsoJMg" name="createOrder"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZZUrwEfCc3ZhsKsoJMg" name="cancelOrderRequest"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZZkrwEfCc3ZhsKsoJMg" name="receiveShippingCost"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZZ0rwEfCc3ZhsKsoJMg" name="paymentRedirect"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZaErwEfCc3ZhsKsoJMg" name="verifyPaymentToken"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZaUrwEfCc3ZhsKsoJMg" name="orderDelivered"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZakrwEfCc3ZhsKsoJMg" name="orderCancellation"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZa0rwEfCc3ZhsKsoJMg" name="retrieveShippingCompanies"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZbErwEfCc3ZhsKsoJMg" name="selectLowestShippingService"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZbUrwEfCc3ZhsKsoJMg" name="savePayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZbkrwEfCc3ZhsKsoJMg" name="orderActive"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZb0rwEfCc3ZhsKsoJMg" name="orderCancellationRejected"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_SWjZcErwEfCc3ZhsKsoJMg" name="orderCompleted"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ZbolsErwEfCc3ZhsKsoJMg" name="retrieveRestaurantInformation"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ZcBAMErwEfCc3ZhsKsoJMg" name="updateRestaurantInformation"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_wiP78ErwEfCc3ZhsKsoJMg" name="RestaurantInterface">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wiP78UrwEfCc3ZhsKsoJMg" name="receiveShippingCost"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wiP78krwEfCc3ZhsKsoJMg" name="orderDelivered"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8JRCYErwEfCc3ZhsKsoJMg" name="updateRestaurantInformation"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8JmZkErwEfCc3ZhsKsoJMg" name="retrieveRestaurantInformation"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_GLi_oErxEfCc3ZhsKsoJMg" client="_wiP78ErwEfCc3ZhsKsoJMg" supplier="_SWjZYErwEfCc3ZhsKsoJMg"/>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_zMqt0PObEe-W-ahkEj0fIA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_zM9owPObEe-W-ahkEj0fIA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+      </profileApplication>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_cB2NAPObEe-W-ahkEj0fIA" name="ACMEatUtilities">
+      <packagedElement xmi:type="uml:Class" xmi:id="_eJKv4PSNEe-LWbhnnhttZw" name="GIS">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ogGGYErPEfCc3ZhsKsoJMg" name="calculateDistance"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_ogPQUErPEfCc3ZhsKsoJMg" name="getCoordinates"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_gZqL0PSNEe-LWbhnnhttZw" name="GIS">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hHY5oPU_Ee-LWbhnnhttZw" name="calculateDistance"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hHlt8PU_Ee-LWbhnnhttZw" name="getCoordinates"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_uDCQsPU_Ee-LWbhnnhttZw" client="_gZqL0PSNEe-LWbhnnhttZw" supplier="_eJKv4PSNEe-LWbhnnhttZw"/>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1gApcPObEe-W-ahkEj0fIA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1gCeoPObEe-W-ahkEj0fIA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+      </profileApplication>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_dcOgUPObEe-W-ahkEj0fIA" name="ACMEatEntities">
+      <packagedElement xmi:type="uml:Class" xmi:id="_JnvMsPOcEe-W-ahkEj0fIA" name="Restaurant">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Y7ZCYErPEfCc3ZhsKsoJMg" name="checkRestaurantAvailability"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_Y8cyUErPEfCc3ZhsKsoJMg" name="cancelOrderInRestaurant"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_uy4NoPOcEe-W-ahkEj0fIA" name="Restaurant">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_nwk_4ErNEfCc3ZhsKsoJMg" name="checkRestaurantAvailability"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_qzBdMErNEfCc3ZhsKsoJMg" name="cancelOrderInRestaurant"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_GbmV8POeEe-wpoo3CYAL_A" name="Bank">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_nPNiwErOEfCc3ZhsKsoJMg" name="verifyToken"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_nPmkUErOEfCc3ZhsKsoJMg" name="refundPayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_nPrc0ErOEfCc3ZhsKsoJMg" name="confirmPayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_nPsq8ErOEfCc3ZhsKsoJMg" name="createPayment"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_GcAloPOeEe-wpoo3CYAL_A" name="Bank">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wGJxQPU6Ee-LWbhnnhttZw" name="createPayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_DjCnwPU7Ee-LWbhnnhttZw" name="verifyToken"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_js8jcPU7Ee-LWbhnnhttZw" name="confirmPayment"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_no3q0ErMEfCc3ZhsKsoJMg" name="refundPayment"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_28qUIPSMEe-LWbhnnhttZw" client="_uy4NoPOcEe-W-ahkEj0fIA" supplier="_JnvMsPOcEe-W-ahkEj0fIA"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="__O_9wPSMEe-LWbhnnhttZw" client="_GcAloPOeEe-wpoo3CYAL_A" supplier="_GbmV8POeEe-wpoo3CYAL_A"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_ssOdgPU5Ee-LWbhnnhttZw" name="ShippingCompany">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_sCvjMErOEfCc3ZhsKsoJMg" name="checkShippingCompanyAvailability"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_sC57QErOEfCc3ZhsKsoJMg" name="shippingConfirmation"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_sC8-kErOEfCc3ZhsKsoJMg" name="shippingCancellation"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_xh4k4PU5Ee-LWbhnnhttZw" name="ShippingCompany">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_B0zZwPU6Ee-LWbhnnhttZw" name="checkShippingCompanyAvailability"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_WIQ2cPU7Ee-LWbhnnhttZw" name="shippingCancellation"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_JnJRsErOEfCc3ZhsKsoJMg" name="shippingConfirmation"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_8tCOsPU5Ee-LWbhnnhttZw" client="_xh4k4PU5Ee-LWbhnnhttZw" supplier="_ssOdgPU5Ee-LWbhnnhttZw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_REWRkEtnEfCyN8OR1Fu6iQ" client="_ssOdgPU5Ee-LWbhnnhttZw" supplier="_gZqL0PSNEe-LWbhnnhttZw"/>
+      <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_0j-fAPObEe-W-ahkEj0fIA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0kA7QPObEe-W-ahkEj0fIA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+          <references xmi:type="ecore:EPackage" href="TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+        </eAnnotations>
+        <appliedProfile xmi:type="uml:Profile" href="TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+      </profileApplication>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_SwPWoEruEfCc3ZhsKsoJMg" client="_EXQ4EPSNEe-LWbhnnhttZw" supplier="_wGJxQPU6Ee-LWbhnnhttZw _GcAloPOeEe-wpoo3CYAL_A"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_X6pmAEruEfCc3ZhsKsoJMg" client="_EXQ4EPSNEe-LWbhnnhttZw" supplier="_gZqL0PSNEe-LWbhnnhttZw"/>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_KGvSUPObEe-W-ahkEj0fIA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_KG_xAPObEe-W-ahkEj0fIA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="TinySOA.profile.uml#_eL5hsLIcEealFoL0yAyV8Q"/>
+    </profileApplication>
+  </uml:Model>
+  <TinySOA:Tasks xmi:id="_9Ll1EPObEe-W-ahkEj0fIA" base_Package="_bN-gEPObEe-W-ahkEj0fIA"/>
+  <TinySOA:Entities xmi:id="_-8nGwPObEe-W-ahkEj0fIA" base_Package="_dcOgUPObEe-W-ahkEj0fIA"/>
+  <TinySOA:Utilities xmi:id="_AH51MPOcEe-W-ahkEj0fIA" base_Package="_cB2NAPObEe-W-ahkEj0fIA"/>
+  <TinySOA:ServiceInterface xmi:id="_GllqUPOcEe-W-ahkEj0fIA" base_Interface="_DlYosPOcEe-W-ahkEj0fIA"/>
+  <TinySOA:Capability xmi:id="_K00q4POcEe-W-ahkEj0fIA" base_Class="_JnvMsPOcEe-W-ahkEj0fIA"/>
+  <TinySOA:Capability xmi:id="_GdqLcPOeEe-wpoo3CYAL_A" base_Class="_GbmV8POeEe-wpoo3CYAL_A"/>
+  <TinySOA:Expose xmi:id="_5NAmIPSMEe-LWbhnnhttZw" base_Dependency="_28qUIPSMEe-LWbhnnhttZw"/>
+  <TinySOA:Expose xmi:id="_BDidgPSNEe-LWbhnnhttZw" base_Dependency="__O_9wPSMEe-LWbhnnhttZw"/>
+  <TinySOA:Capability xmi:id="_GK3jsPSNEe-LWbhnnhttZw" base_Class="_EXQ4EPSNEe-LWbhnnhttZw"/>
+  <TinySOA:ServiceInterface xmi:id="_-HWfUPUzEe-LWbhnnhttZw" base_Interface="_-HLgMPUzEe-LWbhnnhttZw"/>
+  <TinySOA:Capability xmi:id="_wAcnUPU5Ee-LWbhnnhttZw" base_Class="_ssOdgPU5Ee-LWbhnnhttZw"/>
+  <TinySOA:ServiceInterface xmi:id="_0PmvYPU5Ee-LWbhnnhttZw" base_Interface="_xh4k4PU5Ee-LWbhnnhttZw"/>
+  <TinySOA:Expose xmi:id="_-pSgAPU5Ee-LWbhnnhttZw" base_Dependency="_8tCOsPU5Ee-LWbhnnhttZw"/>
+  <TinySOA:Capability xmi:id="_lQUd4PU_Ee-LWbhnnhttZw" base_Class="_eJKv4PSNEe-LWbhnnhttZw"/>
+  <TinySOA:ServiceInterface xmi:id="_mgiIkPU_Ee-LWbhnnhttZw" base_Interface="_gZqL0PSNEe-LWbhnnhttZw"/>
+  <TinySOA:Expose xmi:id="_vjaeUPU_Ee-LWbhnnhttZw" base_Dependency="_uDCQsPU_Ee-LWbhnnhttZw"/>
+  <TinySOA:ServiceInterface xmi:id="_rsvDsEreEfCc3ZhsKsoJMg" base_Interface="_uy4NoPOcEe-W-ahkEj0fIA"/>
+  <TinySOA:ServiceInterface xmi:id="_tj2WUEreEfCc3ZhsKsoJMg" base_Interface="_GcAloPOeEe-wpoo3CYAL_A"/>
+  <TinySOA:Expose xmi:id="_FwC2wEruEfCc3ZhsKsoJMg" base_Dependency="_Fu9RoEruEfCc3ZhsKsoJMg"/>
+  <TinySOA:Expose xmi:id="_N0lU8EruEfCc3ZhsKsoJMg" base_Dependency="_N0KeMEruEfCc3ZhsKsoJMg"/>
+  <TinySOA:Capability xmi:id="_SW4wkErwEfCc3ZhsKsoJMg" base_Class="_SWjZYErwEfCc3ZhsKsoJMg"/>
+  <TinySOA:ServiceInterface xmi:id="_wifzkErwEfCc3ZhsKsoJMg" base_Interface="_wiP78ErwEfCc3ZhsKsoJMg"/>
+  <TinySOA:Expose xmi:id="_IWE9gErxEfCc3ZhsKsoJMg" base_Dependency="_GLi_oErxEfCc3ZhsKsoJMg"/>
+</xmi:XMI>

@@ -1,5 +1,7 @@
 # Relazione progetto ACMEat  
-_Architetture Software a Microservizi – A.A. 2024/2025_
+_Corso di Architetture Software a Microservizi – A.A. 2024/2025_
+
+**Progetto realizzato da**: Orazio Andrea Capone (Mat. 1170818) | Matteo Cardellini (Mat. 1186864) | Francesco Goretti (Mat. XXXXXXX)
 
 ## Indice
 1. [Descrizione del dominio](#1-descrizione-del-dominio)  
@@ -8,7 +10,6 @@ _Architetture Software a Microservizi – A.A. 2024/2025_
    2.2. [Coreografia secondaria – Aggiornamento informazioni ristorante](#22-coreografia-secondaria--aggiornamento-informazioni-ristorante)  
 3. [Modellazione BPMN](#3-modellazione-bpmn)  
 4. [Diagramma SOA](#4-diagramma-soa)  
-5. [Struttura del progetto](#5-struttura-del-progetto)  
 
 ---
 
@@ -349,4 +350,6 @@ Il seguente diagramma SOA, modellato secondo lo stile TinySOA, rappresenta le ca
 
 ![SOA Diagram](./tiny_soa-acmeat.png)
 
-> *Il progetto Papyrus originale è disponibile qui : [`TinySOA_ACMEat`](./TinySOA-ACMEat.zip)*
+> *Il progetto Papyrus originale è disponibile qui : [`TinySOA_ACMEat`](./TinySOA-ACMEat)*
+
+---

@@ -36,7 +36,9 @@ export interface Order{
     items? : any[],
     timeSlotId? : number,
     deliveryAddress? : string,
-    correlationKey?:string
+    correlationKey?:string,
+    deliveryTime? : string,
+    price?:string,
 }
 
 
@@ -58,7 +60,4 @@ export interface restaurantDetailsResponse{
 
 export interface orderCreationResponse{
     order?: Order,
-    price?:string,
-    deliveryAddress? : string,
-    deliveryTime? : string
 }

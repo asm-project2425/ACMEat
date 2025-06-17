@@ -47,8 +47,24 @@ import "./index.css"
 			</div>
 
 		</div>
+		
+		<div id="order_accepted" class = "closed">
+			<label>Ordine accettato, presto sarai reinderizzato al pagamento!</label>
+            <div>
+				<label id="order_id">  </label>
+				<label id="restaurant">  </label>
+				<label id="address">  </label>
+				<label id="time">  </label>
+				<label id="price">  </label>
+				
+            </div>
+			<div class = "loading">
+				<label id="request_label"> In attesa dei dati di pagamento. Tentativo 1 </label>
+			</div>
+		</div>
 	</div>
 </body>
 
 <script src="../scripts/index.ts"></script>
+<script src="../scripts/order_accepted.ts"></script>
 

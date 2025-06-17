@@ -6,6 +6,7 @@ const PUBLIC_RETRIVE_RESTAURANTS = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RET
 const PUBLIC_RETRIVE_RESTAURANT_DETAILS = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RETRIVE_RESTAURANT_DETAILS;
 const PUBLIC_CREATE_ORDER = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_CREATE_ORDER;
 
+let div = document.getElementById("main_card") as HTMLDivElement;
 let comune :HTMLDivElement = document.getElementById("comune") as HTMLDivElement;;
 let locale :HTMLDivElement = document.getElementById("locale") as HTMLDivElement;
 let menu :HTMLDivElement = document.getElementById("menu") as HTMLDivElement;
@@ -151,10 +152,18 @@ async function On_Ordina() {
         }
     });
 
+    
     const jres : orderCreationResponse = await res.json();
 
-    console.log(jres);
-    alert(JSON.stringify(jres, null, 2))
+    if(res.ok){
+        div.parentElement.removeChild(div);
+        //@ts-ignore
+        window.On_order_accepted(jres);
+    }else{
+
+        console.log(jres);
+        alert(JSON.stringify(jres, null, 2));
+    }
 }
 
 

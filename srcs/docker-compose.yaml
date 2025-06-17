@@ -117,6 +117,16 @@ services:
     depends_on:
       - bank_db
 
+  bank_frontend:
+    build:
+      context: ./Bank/frontend
+    platform: linux/amd64 # for compatibility with arm64
+    container_name: bank_frontend
+    volumes:
+      - "./Bank/frontend/service/:/app/"
+    ports:
+      - "8002:80"
+
   acmeat_db:
     image: postgres:17
     restart: always

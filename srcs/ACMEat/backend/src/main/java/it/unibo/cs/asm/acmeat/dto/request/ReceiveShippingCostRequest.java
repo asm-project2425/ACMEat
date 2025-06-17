@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record ReceiveShippingCostRequest(
         @NotBlank String correlationKey,
-        @Min(0) double shippingCost
+        @Min(0) double shippingCost,
+        @Min(0) int deliveryId
 ) {
 }

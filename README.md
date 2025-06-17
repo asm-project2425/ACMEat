@@ -6,7 +6,7 @@ ACMEat is a distributed microservices architecture designed to manage food deliv
 > A full technical report with choreography, BPMN models, SOA diagrams, and further details is available here: [REPORT_ASM.md](./docs/REPORT_ASM.md).
 
 ## Deployment
-The full system can be launched locally using Docker Compose. The `docker-compose.yml` file, located in the `src` directory, defines all the required services, including microservices, databases, and infrastructure components such as the BPMS (Camunda).
+The full system can be launched locally using Docker Compose. The `docker-compose.yml` file, located in the `srcs` directory, defines all the required services, including microservices, databases, and infrastructure components such as the BPMS (Camunda).
 
 To start the system, run the following command from the `srcs` folder:
 
@@ -16,7 +16,8 @@ docker-compose up --build
 
 Once all services are up and running, you can access the main interfaces at:
 - **ACMEat frontend** -> [http://localhost:8080](http://localhost:8080)
-- **Camunda Operate** -> [http://localhost:8081](http://localhost:8081)
+- **Camunda Operate** -> [http://localhost:8081](http://localhost:8081) (default credentials: `demo/demo`)
+- **Bank frontend** -> [http://localhost:8082](http://localhost:8082) (default credentials: `demo/demo` - customer, `acmeat/acmeat` - acmeat)
 
 ## Structure
 - `/docs`: Contains the final report and project documentation.

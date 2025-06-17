@@ -15,6 +15,7 @@ public final class ProcessConstants {
     public static final String VAR_SHIPPING_INFO = "shippingInfo";
     public static final String VAR_SHIPPING_COST = "shippingCost";
     public static final String VAR_SHIPPING_COMAPNY_BASE_URL = "shippingCompanyBaseUrl";
+    public static final String VAR_DELIVERY_ID = "deliveryId";
     public static final String VAR_PAYMENT_ID = "paymentId";
     public static final String VAR_PAYMENT_TOKEN = "paymentToken";
     public static final String VAR_VALID_PAYMENT = "validPayment";

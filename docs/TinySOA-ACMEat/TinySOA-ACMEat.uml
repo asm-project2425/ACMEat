@@ -84,6 +84,34 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="_hHlt8PU_Ee-LWbhnnhttZw" name="getCoordinates"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_uDCQsPU_Ee-LWbhnnhttZw" client="_gZqL0PSNEe-LWbhnnhttZw" supplier="_eJKv4PSNEe-LWbhnnhttZw"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_vzxp8EuAEfCB0dxYvXIJIg" name="VehicleTracker">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_vzyRAEuAEfCB0dxYvXIJIg" name="calculateDistance"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_vzyRAUuAEfCB0dxYvXIJIg" name="getCoordinates"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_FgOS0EuCEfCB0dxYvXIJIg" name="endDelivery"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_FgWOoEuCEfCB0dxYvXIJIg" name="startDelivery"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_wq--wEuAEfCB0dxYvXIJIg" name="VehicleTracker">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wrAM4EuAEfCB0dxYvXIJIg" name="calculateDistance"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_wrAM4UuAEfCB0dxYvXIJIg" name="getCoordinates"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_HeFjIEuBEfCB0dxYvXIJIg" name="startDelivery"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_PjYPQEuBEfCB0dxYvXIJIg" name="endDelivery"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_ktgDoEuBEfCB0dxYvXIJIg" client="_wq--wEuAEfCB0dxYvXIJIg" supplier="_vzxp8EuAEfCB0dxYvXIJIg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_pd9h8EuBEfCB0dxYvXIJIg" client="_hzEvUEuAEfCB0dxYvXIJIg" supplier="_i24VsEuAEfCB0dxYvXIJIg"/>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_hzEvUEuAEfCB0dxYvXIJIg" name="VehicleAssigner">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hzEvUUuAEfCB0dxYvXIJIg" name="calculateDistance"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_hzEvUkuAEfCB0dxYvXIJIg" name="getCoordinates"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8dj_gEuBEfCB0dxYvXIJIg" name="reserveVehicle"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8d4voEuBEfCB0dxYvXIJIg" name="confirmVehicle"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_8d8aAEuBEfCB0dxYvXIJIg" name="releaseVehicle"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_i24VsEuAEfCB0dxYvXIJIg" name="VehicleAssigner">
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_i25j0EuAEfCB0dxYvXIJIg" name="calculateDistance"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_i25j0UuAEfCB0dxYvXIJIg" name="getCoordinates"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_838OYEuBEfCB0dxYvXIJIg" name="confirmVehicle"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_839cgEuBEfCB0dxYvXIJIg" name="reserveVehicle"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_83-DkEuBEfCB0dxYvXIJIg" name="releaseVehicle"/>
+      </packagedElement>
       <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_1gApcPObEe-W-ahkEj0fIA">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1gCeoPObEe-W-ahkEj0fIA" source="http://www.eclipse.org/uml2/2.0.0/UML">
           <references xmi:type="ecore:EPackage" href="TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
@@ -126,6 +154,8 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_8tCOsPU5Ee-LWbhnnhttZw" client="_xh4k4PU5Ee-LWbhnnhttZw" supplier="_ssOdgPU5Ee-LWbhnnhttZw"/>
       <packagedElement xmi:type="uml:Dependency" xmi:id="_REWRkEtnEfCyN8OR1Fu6iQ" client="_ssOdgPU5Ee-LWbhnnhttZw" supplier="_gZqL0PSNEe-LWbhnnhttZw"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_NmIqAEuCEfCB0dxYvXIJIg" client="_ssOdgPU5Ee-LWbhnnhttZw" supplier="_hzEvUEuAEfCB0dxYvXIJIg"/>
+      <packagedElement xmi:type="uml:Dependency" xmi:id="_Wih9QEuCEfCB0dxYvXIJIg" client="_ssOdgPU5Ee-LWbhnnhttZw" supplier="_wq--wEuAEfCB0dxYvXIJIg"/>
       <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_0j-fAPObEe-W-ahkEj0fIA">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0kA7QPObEe-W-ahkEj0fIA" source="http://www.eclipse.org/uml2/2.0.0/UML">
           <references xmi:type="ecore:EPackage" href="TinySOA.profile.uml#_c3UpgLIeEealFoL0yAyV8Q"/>
@@ -165,4 +195,10 @@
   <TinySOA:Capability xmi:id="_SW4wkErwEfCc3ZhsKsoJMg" base_Class="_SWjZYErwEfCc3ZhsKsoJMg"/>
   <TinySOA:ServiceInterface xmi:id="_wifzkErwEfCc3ZhsKsoJMg" base_Interface="_wiP78ErwEfCc3ZhsKsoJMg"/>
   <TinySOA:Expose xmi:id="_IWE9gErxEfCc3ZhsKsoJMg" base_Dependency="_GLi_oErxEfCc3ZhsKsoJMg"/>
+  <TinySOA:ServiceInterface xmi:id="_hzZfcEuAEfCB0dxYvXIJIg" base_Interface="_hzEvUEuAEfCB0dxYvXIJIg"/>
+  <TinySOA:Capability xmi:id="_i3fZsEuAEfCB0dxYvXIJIg" base_Class="_i24VsEuAEfCB0dxYvXIJIg"/>
+  <TinySOA:Capability xmi:id="_v0ajIEuAEfCB0dxYvXIJIg" base_Class="_vzxp8EuAEfCB0dxYvXIJIg"/>
+  <TinySOA:ServiceInterface xmi:id="_wrofAEuAEfCB0dxYvXIJIg" base_Interface="_wq--wEuAEfCB0dxYvXIJIg"/>
+  <TinySOA:Expose xmi:id="_mrZTsEuBEfCB0dxYvXIJIg" base_Dependency="_ktgDoEuBEfCB0dxYvXIJIg"/>
+  <TinySOA:Expose xmi:id="_rIP5gEuBEfCB0dxYvXIJIg" base_Dependency="_pd9h8EuBEfCB0dxYvXIJIg"/>
 </xmi:XMI>

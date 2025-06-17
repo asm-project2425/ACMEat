@@ -97,12 +97,12 @@ public class AcmeOMWorkers {
                 .lastIndexOf('+') + 1));
         String shippingBaseUrl = shippingCompanyService.getShippingCompanyById(shippingCompanyId).getBaseUrl();
         ShippingCompanyInfo shippingInfo = new ShippingCompanyInfo(shippingCompanyId, request.shippingCost(),
-                shippingBaseUrl);
+                shippingBaseUrl, request.deliveryId());
         zeebeService.sendMessage(MSG_SEND_SHIPPING_COST, request.correlationKey(), Map.of(VAR_SHIPPING_INFO,
                 shippingInfo));
     }
 
-    private record ShippingCompanyInfo(int id, double shippingCost, String baseUrl) {}
+    private record ShippingCompanyInfo(int id, double shippingCost, String baseUrl, int deliveryId) {}
 
     @JobWorker(type = JOB_LOWEST_SHIPPING_SERVICE)
     public Map<String, Object> selectLowestShippingService(@Variable int orderId,
@@ -117,7 +117,8 @@ public class AcmeOMWorkers {
         orderService.setShippingCompany(orderId, shippingCompanyService.getShippingCompanyById(shippingCompanyId));
         orderService.updateOrderStatus(orderId, OrderStatus.SHIPPING_COMPANY_CHOSEN);
 
-        return Map.of(VAR_SHIPPING_COST, shippingCost, VAR_SHIPPING_COMAPNY_BASE_URL, selected.get("baseUrl"));
+        return Map.of(VAR_SHIPPING_COST, shippingCost, VAR_SHIPPING_COMAPNY_BASE_URL, selected.get("baseUrl"),
+                VAR_DELIVERY_ID, selected.get("deliveryId"));
     }
 
     @JobWorker(type = JOB_SAVE_PAYMENT)

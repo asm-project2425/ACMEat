@@ -66,7 +66,7 @@
 </main>
 
 <script>
-    const vehicleTrackerURL = 'http://localhost:5002/api/v1/vehicles';
+    const vehicleTrackerURL = window.location.origin + '/api/v1/vehicles';
 
     const vehiclesRow = document.getElementById("vehicles");
     const vehiclesTemplate = document.getElementById("vehicleTemplate");

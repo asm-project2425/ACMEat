@@ -85,6 +85,7 @@ app.post('/api/v1/availability', async function (req, res) {
             body: JSON.stringify({
                 correlationKey: req.body.correlationKey,
                 shippingCost: cost,
+                deliveryId,
             })
         });
         if (!response.ok) {

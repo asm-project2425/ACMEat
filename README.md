@@ -3,7 +3,7 @@
 ## Overview
 ACMEat is a distributed microservices architecture designed to manage food delivery orders from restaurants to customers. The system orchestrates the entire process (from order placement to delivery) ensuring a seamless and modular coordination among all services.
 
-> A full technical report with choreography, BPMN models, SOA diagrams, and further details is available here: [REPORT_ASM](./docs/README.md).
+> A full technical report with choreography, BPMN models, SOA diagrams, and further details is available here: [REPORT_ASM.md](./docs/REPORT_ASM.md).
 
 ## Deployment
 The full system can be launched locally using Docker Compose. The `docker-compose.yml` file, located in the `src` directory, defines all the required services, including microservices, databases, and infrastructure components such as the BPMS (Camunda).

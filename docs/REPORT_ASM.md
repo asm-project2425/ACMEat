@@ -339,7 +339,7 @@ proj(C, ACMEat) =
 ## 3. Modellazione BPMN
 Il processo è stato modellato utilizzando il linguaggio BPMN 2.0 con una notazione collaborativa. Ogni partecipante al sistema (cliente, ACMEat, ristorante, compagnia di spedizione, banca) è rappresentato da una pool distinta, evidenziando i messaggi scambiati e i diversi flussi decisionali.
 
-![BPMN Diagram](./bpmn_image.png)
+![BPMN Diagram](./img/bpmn_image.png)
 
 > *Il file originale in formato BPMN è disponibile qui: [`acmeat.bpmn`](../srcs/ACMEat/backend/src/main/resources/acmeat.bpmn)*
 
@@ -348,7 +348,7 @@ Il processo è stato modellato utilizzando il linguaggio BPMN 2.0 con una notazi
 ## 4. Diagramma SOA
 Il seguente diagramma SOA, modellato secondo lo stile TinySOA, rappresenta le capability offerte dal sistema ACMEat e le relative interfacce esposte, oltre alle dipendenze verso i servizi esterni coinvolti nel processo (banca, ristoranti, compagnie di spedizione, GIS).
 
-![SOA Diagram](./tiny_soa-acmeat.png)
+![SOA Diagram](./img/tiny_soa-acmeat.png)
 
 > *Il progetto Papyrus originale è disponibile qui : [`TinySOA_ACMEat`](./TinySOA-ACMEat)*
 

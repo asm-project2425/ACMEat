@@ -8,7 +8,7 @@ ACMEat is a distributed microservices architecture designed to manage food deliv
 ## Deployment
 The full system can be launched locally using Docker Compose. The `docker-compose.yml` file, located in the `src` directory, defines all the required services, including microservices, databases, and infrastructure components such as the BPMS (Camunda).
 
-To start the system, run the following command from the `src` folder:
+To start the system, run the following command from the `srcs` folder:
 
 ```bash
 docker-compose up --build

@@ -17,7 +17,7 @@ docker-compose up --build
 Once all services are up and running, you can access the main interfaces at:
 - **ACMEat frontend** -> [http://localhost:8080](http://localhost:8080)
 - **Camunda Operate** -> [http://localhost:8081](http://localhost:8081) (default credentials: `demo/demo`)
-- **Bank frontend** -> [http://localhost:8082](http://localhost:8082) (default credentials: `demo/demo` - customer, `acmeat/acmeat` - acmeat)
+- **Bank frontend** -> [http://localhost:8082](http://localhost:8082) (default credentials: `demo/demo` - customer, `acme/acme` - acmeat)
 
 ## Structure
 - `/docs`: Contains the final report and project documentation.
@@ -31,3 +31,5 @@ Once all services are up and running, you can access the main interfaces at:
         - `/VehicleAssigner`: Manages vehicle slot allocation for deliveries.
         - `/VehicleTracker`: Tracks vehicle usage, including start and return events.
     - `docker-compose.yaml`: Configuration file used to orchestrate and launch the entire system via Docker Compose.
+
+> Each subdirectory (e.g., ACMEat, Bank, GIS, etc.) contains its own README.md file with full API documentation and usage instructions specific to that service.

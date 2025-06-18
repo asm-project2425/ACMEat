@@ -121,14 +121,14 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
 )
 ```
 
-### Discussione sulla connectedness
+#### Discussione sulla connectedness
 La coreografia principale è connessa:
 - Ogni sequenza rispetta la condizione di *connectedness for sequence*: i partecipanti nelle interazioni successive sono legati da un ruolo in commune.
 - Le scelte condizionali (+) sono strutturate correttamente e coinvolgono ruoli coerenti nei rami alternativi (*connectedness for choice*).
 - Le iterazioni (richieste alle società di consegna) sono rappresentate con (*) e non violano la correttezza.
 La proiezione è dunque sintatticamente corretta e realizzabile nei singoli ruoli.
 
-### Proiezione sui ruoli
+#### Proiezione sui ruoli
 ```text
 proj(C, customer) = 
     retrieveCities^@ACMEat ;
@@ -303,13 +303,13 @@ checkTime: ACMEat -> ACMEat ;
 )
 ```
 
-### Discussione sulla connectedness
+#### Discussione sulla connectedness
 La coreografia è connessa e correttamente strutturata:
 - La sequenza di messaggi rispetta la condizione di *connectedness for sequence*.
 - La scelta condizionale (+) avviene dopo una valutaziona interna (`checkTime`) e coinvolge gli stessi ruoli nei due rami.
 - Non ci sono interazioni isolate né ruoli che compaiono in un solo ramo.
 
-### Proiezione sui ruoli
+#### Proiezione sui ruoli
 ```text
 proj(C, restaurant) =
     requestCurrentInfo@ACMEat ;

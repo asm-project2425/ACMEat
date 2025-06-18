@@ -178,7 +178,7 @@ These endpoints interact directly with the ACMEat domain model and services.
 
   * `orderId`: ID of the order to check the status
 * **Description**: Retrieves the current status of the specified order.
-* **Response**: Order ID and status (`CREATED`, `CANCELLED`, `RESTAURANT_CONFIRMED`, `SHIPPING_COMPANY_CHOSEN`, `PAID`, `CANCELLATION_REJECTED`, `DELIVERED`).
+* **Response**: Order ID and status (`CREATED`, `CANCELLED`, `RESTAURANT_CONFIRMED`, `SHIPPING_COMPANY_CHOSEN`, `PAYMENT_REQUESTED`, `PAID`, `CANCELLATION_REJECTED`, `DELIVERED`).
 
 #### `addMenu`
 

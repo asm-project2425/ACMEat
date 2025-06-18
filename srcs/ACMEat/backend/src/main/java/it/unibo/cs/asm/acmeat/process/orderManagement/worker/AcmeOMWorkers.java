@@ -124,6 +124,7 @@ public class AcmeOMWorkers {
     @JobWorker(type = JOB_SAVE_PAYMENT)
     public void savePayment(@Variable int orderId, @Variable int paymentId) {
         orderService.savePaymentId(orderId, paymentId);
+        orderService.updateOrderStatus(orderId, OrderStatus.PAYMENT_REQUESTED);
     }
 
     public PaymentRedirectResponse paymentRedirectManually(Integer orderId) {

@@ -17,7 +17,7 @@ the `confirm` API &ndash; the reservation will be cancelled.
 - **Body**:
 ```json
 {
-  "correlationKey": 0,
+  "correlationKey": "abcabc+1",
   "orderId": 5,
   "deliveryTime": "2025-06-16T16:10:00.000Z",
   "restaurantAddress": "address 1",

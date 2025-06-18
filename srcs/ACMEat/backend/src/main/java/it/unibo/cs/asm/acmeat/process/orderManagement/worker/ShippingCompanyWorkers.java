@@ -20,9 +20,9 @@ import static it.unibo.cs.asm.acmeat.process.common.ProcessConstants.*;
 public class ShippingCompanyWorkers {
     private final RestClient.Builder restClientBuilder;
 
-    private static final String AVAILABLE_PATH = "/api/v1/available";
-    private static final String CANCELLATION_PATH = "/api/v1/cancel";
+    private static final String AVAILABLE_PATH = "/api/v1/availability";
     private static final String CONFIRMATION_PATH = "/api/v1/confirm";
+    private static final String CANCELLATION_PATH = "/api/v1/cancel";
 
     @JobWorker(type = JOB_SHIPPING_SERVICE_AVAILABILITY_REQUEST)
     public Map<String, String> shippingCompanyAvailabilityRequest(@Variable String correlationKey,
@@ -48,14 +48,14 @@ public class ShippingCompanyWorkers {
     }
 
     private String convertToUtc(String deliveryTime) {
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        LocalTime localTime = LocalTime.parse(deliveryTime, timeFormatter);
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime localTime = LocalTime.parse(deliveryTime, inputFormatter);
         LocalDate today = LocalDate.now();
-        ZoneId zoneRome = ZoneId.of("Europe/Rome");
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(today, localTime, zoneRome);
+        ZoneId romeZone = ZoneId.of("Europe/Rome");
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(today, localTime, romeZone);
         ZonedDateTime utcDateTime = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
 
-        return utcDateTime.format(timeFormatter);
+        return utcDateTime.format(DateTimeFormatter.ISO_INSTANT);
     }
 
     private record ShippingAvailabilityRequest(String correlationKey, int orderId, String deliveryTime,
@@ -67,8 +67,7 @@ public class ShippingCompanyWorkers {
         ShippingConfirmationRequest confirmationRequest = new ShippingConfirmationRequest(deliveryId);
 
         try {
-            restClient.post()
-                    .uri(CONFIRMATION_PATH).body(confirmationRequest).retrieve().toBodilessEntity();
+            restClient.post().uri(CONFIRMATION_PATH).body(confirmationRequest).retrieve().toBodilessEntity();
         } catch (Exception e) {
             log.warn("Failed to confirm shipping for deliveryId {}: {}", deliveryId, e.getMessage());
         }

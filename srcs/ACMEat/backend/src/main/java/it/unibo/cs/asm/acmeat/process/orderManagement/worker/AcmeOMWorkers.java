@@ -114,7 +114,7 @@ public class AcmeOMWorkers {
         int shippingCompanyId = (int) selected.get("id");
         double shippingCost = (double) selected.get("shippingCost");
 
-        orderService.setShippingCompany(orderId, shippingCompanyService.getShippingCompanyById(shippingCompanyId));
+        orderService.setShippingCompany(orderId, shippingCost, shippingCompanyService.getShippingCompanyById(shippingCompanyId));
         orderService.updateOrderStatus(orderId, OrderStatus.SHIPPING_COMPANY_CHOSEN);
 
         return Map.of(VAR_SHIPPING_COST, shippingCost, VAR_SHIPPING_COMAPNY_BASE_URL, selected.get("baseUrl"),

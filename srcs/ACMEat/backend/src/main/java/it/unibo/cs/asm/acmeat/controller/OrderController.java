@@ -1,5 +1,6 @@
 package it.unibo.cs.asm.acmeat.controller;
 
+import it.unibo.cs.asm.acmeat.dto.entities.OrderDTO;
 import it.unibo.cs.asm.acmeat.dto.response.GetOrderStatusResponse;
 import it.unibo.cs.asm.acmeat.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,11 @@ public class OrderController {
     public ResponseEntity<GetOrderStatusResponse> getOrderStatus(@PathVariable int orderId) {
         String orderStatus = String.valueOf(orderService.getOrderById(orderId).getStatus());
         return ResponseEntity.ok(new GetOrderStatusResponse(orderId, orderStatus));
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable int orderId) {
+        OrderDTO order = new OrderDTO(orderService.getOrderById(orderId));
+        return ResponseEntity.ok(order);
     }
 }

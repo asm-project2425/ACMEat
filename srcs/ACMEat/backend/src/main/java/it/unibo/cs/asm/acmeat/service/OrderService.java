@@ -33,9 +33,10 @@ public interface OrderService {
      * Sets the shipping company for the specified order.
      *
      * @param orderId         the ID of the order
+     * @param shippingPrice   the shipping price to set
      * @param shippingCompany the shipping company to set
      */
-    void setShippingCompany(int orderId, ShippingCompany shippingCompany);
+    void setShippingCompany(int orderId, double shippingPrice, ShippingCompany shippingCompany);
 
     /**
      * Updates the status of the specified order.

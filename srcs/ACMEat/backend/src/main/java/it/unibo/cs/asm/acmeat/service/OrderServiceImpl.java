@@ -8,6 +8,7 @@ import it.unibo.cs.asm.acmeat.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -70,8 +71,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void setShippingCompany(int orderId, ShippingCompany shippingCompany) {
+    public void setShippingCompany(int orderId, double shippingPrice, ShippingCompany shippingCompany) {
         Order order = getOrderById(orderId);
+        order.setShippingPrice(BigDecimal.valueOf(shippingPrice));
         order.setShippingCompany(shippingCompany);
         orderRepository.save(order);
     }

@@ -29,6 +29,9 @@ public class Order {
     @Column(precision = 12, scale = 2)
     private BigDecimal price;
     @Setter
+    @Column(precision = 12, scale = 2)
+    private BigDecimal shippingPrice;
+    @Setter
     private OrderStatus status;
     @Setter
     @ManyToOne

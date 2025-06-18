@@ -21,7 +21,7 @@ public class OrderDTO {
         this.restaurantName = order.getRestaurant().getName();
         this.items = order.getItems().stream().map(OrderedItemDTO::new).toList();
         this.price = order.getPrice().toString();
-        this.shippingPrice = order.getShippingPrice().toString();
+        this.shippingPrice = order.getShippingPrice() != null ? order.getShippingPrice().toString() : "";
         this.deliveryAddress = order.getDeliveryAddress();
         this.deliveryTime = order.getDeliveryDateTime().format(DateTimeFormatter.ofPattern("HH:mm"));
     }

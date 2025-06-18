@@ -1,7 +1,7 @@
 # Relazione progetto ACMEat  
 _Corso di Architetture Software a Microservizi – A.A. 2024/2025_
 
-**Progetto realizzato da**: Orazio Andrea Capone (Mat. 1170818) | Matteo Cardellini (Mat. 1186864) | Francesco Goretti (Mat. XXXXXXX)
+**Progetto realizzato da**: Orazio Andrea Capone (Mat. 1170818) | Matteo Cardellini (Mat. 1186864) | Francesco Goretti (Mat. 1186611)
 
 ## Indice
 1. [Descrizione del dominio](#1-descrizione-del-dominio)  

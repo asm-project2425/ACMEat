@@ -135,6 +135,10 @@
                         ];
                         $response = $client->login($params);
                         echo '✅ WSDL funziona correttamente <br>';
+
+                        $total = $_GET["total"];
+                        echo 'Totale da pagare '.$total;
+
                         //print_r($response); 
                     } catch (Exception $e) {
                         echo '❌ errore WSDL <br>';

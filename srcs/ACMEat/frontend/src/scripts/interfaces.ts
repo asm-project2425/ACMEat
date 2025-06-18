@@ -39,6 +39,7 @@ export interface Order{
     correlationKey?:string,
     deliveryTime? : string,
     price?:string,
+    shippingPrice?:string
 }
 
 

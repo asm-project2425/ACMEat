@@ -1,4 +1,5 @@
-import type { orderCreationResponse } from "./interfaces";
+import type { Order, orderCreationResponse } from "./interfaces";
+import { GetOrderDetails } from "./order_utils";
 const PUBLIC_SELF_HOST = import.meta.env.PUBLIC_SELF_HOST
 const PUBLIC_RECIVE_SHIPPING_COST = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RECIVE_SHIPPING_COST;
 const PUBLIC_PAYMENT_REDIRECT = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_PAYMENT_REDIRECT;
@@ -24,33 +25,29 @@ async function On_order_accepted(order: orderCreationResponse, correlationKey:st
     time.textContent = `Orario previsto : ${order.order.deliveryTime}`;
     price.textContent = `Prezzo : ${order.order.price}`;
 
-    const s_cost:string = await GetShippingCost(1, order_id, correlationKey+"+1");
-    shipping_price.textContent = s_cost;
+    const s_cost:string = await GetShippingCost(1, order.order.id, correlationKey+"+1");
+
+
+    //const s_cost = "0.0";
+    shipping_price.textContent = `Prezzo di spedizione ${s_cost}`;
     let url = await GetPayment(1, order.order.id);
     url = url.replaceAll("https", "http");
     url = url.replaceAll("bank-frontend", "localhost:8002");
-    url += `&orderId=${order.order.id}`;
+    //console.log(s_cost, order.order.price);
+    //console.log(parseFloat(order.order.price), parseFloat(s_cost), parseFloat(order.order.price) + parseFloat(s_cost))
+    const total :string=  (parseFloat(order.order.price) + parseFloat(s_cost)).toFixed(2);
+    url += `&orderId=${order.order.id}&total=${total}`;
     window.location.href = url;
 }
 
 async function GetShippingCost(count:number, orderID, correlationKey) :Promise<string> {
     try {
-        request_label.textContent = `In attesa del costo di spedizione. Tentativo ${count}`;
-        const res = await fetch(`${PUBLIC_RECIVE_SHIPPING_COST}`, {
-            method: "POST",
-            body : JSON.stringify({correlationKey : correlationKey, shippingCost: 6.90}),
-            headers :{
-                "Content-Type":"application/json"
-            }
-        });
-        //const jres = await res.json();
-        //console.log(jres);
-
-
-        if(res.ok){
-            return "Prezzo spedizione 6.90";
+        const order : Order = await GetOrderDetails(orderID);
+        if(order && order.shippingPrice?.length > 0){
+            return order.shippingPrice;
         }else{
-            throw new Error("Errore durante GetShippingCost "+res.statusText);
+            console.log(order);
+            throw new Error("Errore durante GetShippingCost ");
         }
         
     } catch (error) {

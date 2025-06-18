@@ -6,7 +6,7 @@ ACMEat is a distributed microservices architecture designed to manage food deliv
 > A full technical report with choreography, BPMN models, SOA diagrams, and further details is available here: [REPORT_ASM.md](./docs/REPORT_ASM.md).
 
 ## Deployment
-The full system can be launched locally using Docker Compose. The `docker-compose.yml` file, located in the `srcs` directory, defines all the required services, including microservices, databases, and infrastructure components such as the BPMS (Camunda).
+The full system can be launched locally using Docker Compose. The `docker-compose.yaml` file, located in the `srcs` directory, defines all the required services, including microservices, databases, and infrastructure components such as the BPMS (Camunda).
 
 To start the system, run the following command from the `srcs` folder:
 
@@ -30,4 +30,4 @@ Once all services are up and running, you can access the main interfaces at:
         - `/ShippingManagement`: Main service handling order acceptance, confirmation, and delivery updates.
         - `/VehicleAssigner`: Manages vehicle slot allocation for deliveries.
         - `/VehicleTracker`: Tracks vehicle usage, including start and return events.
-    - `docker-compose.yml`: Configuration file used to orchestrate and launch the entire system via Docker Compose.
+    - `docker-compose.yaml`: Configuration file used to orchestrate and launch the entire system via Docker Compose.

@@ -7,7 +7,14 @@ Returns the latitude and longitude of a location.
 - **Method**: `GET`
 - **URL**: `http://localhost:6002/api/v1/locate?{query}`
 - **Query Parameters**:
-    - `query`: city name, street, address
+    - `query`: city name, street, address, etc.
+- **Response**:
+```json
+{
+  "lat": 44.4938203,
+  "lon": 11.3426327
+}
+```
 
 ### `locateCity`
 Returns the latitude and longitude of a city.
@@ -15,6 +22,13 @@ Returns the latitude and longitude of a city.
 - **URL**: `http://localhost:6002/api/v1/locateCity?{city}`
 - **Query Parameters**:
     - `city`: city name
+- **Response**:
+```json
+{
+  "lat": 44.4938203,
+  "lon": 11.3426327
+}
+```
 
 ### `distance`
 Returns the distance in meters between two locations.
@@ -25,3 +39,9 @@ Returns the distance in meters between two locations.
     - `lon1`: longitude of first location
     - `lat2`: latitude of second location
     - `lon2`: longitude of second location
+- **Response**:
+```json
+{
+  "distance": 1632
+}
+```

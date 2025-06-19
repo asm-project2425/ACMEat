@@ -160,6 +160,11 @@ services:
       - gis
       - restaurant1
       - bank_backend
+  
+  acmeat_frontend:
+    build: ./ACMEat/frontend
+    ports:
+      - "4321:4321"
 
   shipping_management:
     build:

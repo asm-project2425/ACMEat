@@ -1,8 +1,6 @@
 # Shipping Company
 
-The public API of the shipping company is exposed by the shipping management service.
-
-The vehicle tracker service exposes a frontend to track the company's vehicles.
+The public API and the frontend of the shipping company is exposed by the shipping management service.
 
 ## API Documentation
 

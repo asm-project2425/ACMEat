@@ -1,5 +1,6 @@
 import express from "express";
 import { Pool } from 'pg';
+import { router as backendRouter } from "./backend.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,11 +11,13 @@ const gis_url = "http://gis:6002/api/v1";
 
 app.use(express.json());
 
-const pool = new Pool();
+export const pool = new Pool();
 pool.on('error', (err, client) => {
     console.error('Unexpected error on idle client', err);
     process.exit(-1);
 });
+
+app.use(backendRouter);
 
 app.post('/api/v1/availability', async function (req, res) {
     if (!req.body || req.body.correlationKey == null || req.body.orderId == null ||

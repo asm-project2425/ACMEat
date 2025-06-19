@@ -159,9 +159,10 @@ async function On_Ordina() {
     const jres : orderCreationResponse = await res.json();
 
     if(res.ok){
-        div.parentElement.removeChild(div);
-        //@ts-ignore
-        window.On_order_accepted(jres, correlationKey);
+        const params = new URLSearchParams(window.location.search);
+        params.set("orderId", `${jres.order.id}`);
+        window.location.search = params.toString();
+        await NextPhase(jres, correlationKey);
     }else{
 
         console.log(jres);
@@ -169,9 +170,20 @@ async function On_Ordina() {
     }
 }
 
-
+async function NextPhase(jres, correlationKey, orderId : string = undefined) {
+    div.parentElement.removeChild(div);
+    //@ts-ignore
+    window.On_order_accepted(jres, correlationKey, orderId);
+}
 
 async function main() {
+    const params = new URLSearchParams(window.location.search);
+    const par_orderId = params.get("orderId");
+    if(par_orderId){
+        await NextPhase(undefined, undefined, par_orderId);
+        return;
+    }
+
     console.log("hi");
 
     comune_select = comune.getElementsByTagName("select")[0] as HTMLSelectElement;

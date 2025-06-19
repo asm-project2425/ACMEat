@@ -1,5 +1,5 @@
-import type { Order, orderCreationResponse } from "./interfaces";
-import { GetOrderDetails } from "./order_utils";
+import type { Order, orderCreationResponse, orderStatus } from "./interfaces";
+import { GetOrderDetails, GetOrderStatus, sleep_ms } from "./order_utils";
 const PUBLIC_SELF_HOST = import.meta.env.PUBLIC_SELF_HOST
 const PUBLIC_RECIVE_SHIPPING_COST = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_RECIVE_SHIPPING_COST;
 const PUBLIC_PAYMENT_REDIRECT = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_PAYMENT_REDIRECT;
@@ -14,7 +14,11 @@ const request_label = document.getElementById("request_label") as HTMLLabelEleme
 const shipping_price = document.getElementById("shipping_price") as HTMLLabelElement;
 
 
-async function On_order_accepted(order: orderCreationResponse, correlationKey:string) {
+async function On_order_accepted(order: orderCreationResponse, correlationKey:string, orderId : string = undefined) {
+    if(!order){
+        order = {order : await GetOrderDetails(orderId)};
+    }
+
     console.log(`%c Ordine accettato`, `color: green`);
     console.log(order);
     div.className = "";
@@ -37,24 +41,35 @@ async function On_order_accepted(order: orderCreationResponse, correlationKey:st
     //console.log(parseFloat(order.order.price), parseFloat(s_cost), parseFloat(order.order.price) + parseFloat(s_cost))
     const total :string=  (parseFloat(order.order.price) + parseFloat(s_cost)).toFixed(2);
     url += `&orderId=${order.order.id}&total=${total}`;
+    await sleep_ms(2000);
     window.location.href = url;
 }
 
-async function GetShippingCost(count:number, orderID, correlationKey) :Promise<string> {
+async function GetShippingCost(count:number, orderID:number, correlationKey) :Promise<string> {
+    request_label.textContent = `In attesa del costo di spedizione. Tentativo ${count}`;
     try {
-        const order : Order = await GetOrderDetails(orderID);
+        const order : Order = await GetOrderDetails(`${orderID}`);
         if(order && order.shippingPrice?.length > 0){
             return order.shippingPrice;
         }else{
-            console.log(order);
+            //console.log(order);
             throw new Error("Errore durante GetShippingCost ");
         }
         
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         if(count > 100)
             throw new Error("GetShippingCost failed");
 
+        if(count >10){
+            const orderStatus: orderStatus = await GetOrderStatus(`${orderID}`);
+            if(orderStatus.status == "CANCELLED"){
+
+                window.location.href = `/payment_confirm?orderId=${orderID}`;
+            }
+        }
+
+        await sleep_ms(1000);
         return (await GetShippingCost(count+1, orderID, correlationKey));
     }
     //return "Errore durante la richiesta del costo di spedizione";
@@ -75,6 +90,7 @@ async function GetPayment(count:number, orderID) : Promise<string> {
         
     } catch (error) {
         console.log(error);
+        await sleep_ms(1000);
         return (await GetPayment(count+1, orderID));
     }
     
@@ -84,6 +100,8 @@ async function GetPayment(count:number, orderID) : Promise<string> {
 async function main() {
     //@ts-ignore
     window.On_order_accepted = On_order_accepted;
+
+    
 }
 
 

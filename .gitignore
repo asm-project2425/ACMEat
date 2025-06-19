@@ -24,3 +24,5 @@ dist/
 # Dependency lock files
 *.lock
 *lock.json
+
+**/lib/data/orders.json

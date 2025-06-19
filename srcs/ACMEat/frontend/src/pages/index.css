@@ -70,3 +70,12 @@ body>div>div{
 .loading {
   animation: flashAnimation 1.8s ease-in-out infinite;
 }
+
+#commit_div{
+  background-color: green !important;
+}
+
+#commit_btn{
+  background-color: transparent;
+  border: transparent;
+}

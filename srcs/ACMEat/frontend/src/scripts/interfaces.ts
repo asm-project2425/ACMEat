@@ -26,7 +26,8 @@ export interface TimeSlot{
     id? : number,
     startTime? : string,
     endTime? : string,
-    correlationKey?:string
+    correlationKey?:string,
+    active? : boolean
 }
 
 export interface Order{

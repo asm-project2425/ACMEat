@@ -67,6 +67,7 @@ async function GetShippingCost(count:number, orderID:number, correlationKey) :Pr
 
                 window.location.href = `/payment_confirm?orderId=${orderID}`;
             }
+            console.log(orderStatus);
         }
 
         await sleep_ms(1000);

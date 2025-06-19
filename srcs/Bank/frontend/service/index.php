@@ -168,7 +168,36 @@
         </div>
 
 
+        <script>
+            let orderId = undefined;
+            <?php
+                $orderId = $_GET["orderId"];
+                if(isset($orderId)){
+                    echo 'orderId ='.$orderId;
+                }
+            ?>
 
+            async function main() {
+                if(!orderId)
+                    throw new Error("orderId is undefined");
+                while(true){
+                    const res = await fetch(`/api.php?orderId=${orderId}`);
+                    if(res.ok){
+                        const jres = await res.json();
+                        console.log("Order status ", jres);
+
+                        if(jres.status != "PAYMENT_REQUESTED"){
+                            alert("Payment no longer requested");
+                            window.location.href = `http://localhost:4321/payment_confirm?orderId=${orderId}`;
+                            throw new Error("Payment no longer requested");
+                        }
+                    }
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+            }
+
+            main();
+        </script>
 
 
 

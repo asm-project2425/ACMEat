@@ -15,6 +15,6 @@ ENV PHP_MEMORY_LIMIT=256M \
     PHP_POST_MAX_SIZE=50M
 
 # La porta 80 è già esposta dall'immagine base
-# EXPOSE 80
+EXPOSE 80
 
 # Il CMD è già definito nell'immagine base

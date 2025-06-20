@@ -223,7 +223,7 @@ async function startTracking(vehicleId, deliveryId) {
     }
 }
 
-async function endTracking(vehicleId) {
+export async function endTracking(vehicleId) {
     try {
         const response = await fetch(`${vehicle_tracker_url}/deliveryEnded`, {
             method: 'POST',
@@ -242,7 +242,7 @@ async function endTracking(vehicleId) {
     }
 }
 
-async function notifyOrderDelivered(orderId) {
+export async function notifyOrderDelivered(orderId) {
     try {
         const response = await fetch(`${acmeat_backend_url}/orders/delivered?orderId=${orderId}`, {
             method: 'POST'

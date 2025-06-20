@@ -51,26 +51,108 @@
         </div>
     </div>
 
-    <div class="row mt-4" id="vehicles">
+    <div class="row mt-3" id="vehicles">
         <template id="vehicleTemplate">
             <div class="col-3 mb-4">
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title text-center">Veicolo <span class="vehicleId"></span></h3>
                         <p class="card-text"><strong>Stato: </strong><span class="vehicleStatus"></span></p>
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#deliveryModal"></button>
+                        <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#deliveryModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle align-text-bottom" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                            </svg>
+                            <span class="ms-1">Visualizza consegna</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </template>
     </div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h1>Consegne da effettuare</h1>
+        </div>
+    </div>
+
+    <div class="alert alert-success alert-dismissible d-none" role="alert" id="successAlert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill align-text-top" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg>
+        <span class="ms-1">Consegna effettuata con successo</span>
+        <button type="button" class="btn-close" aria-label="Close" onclick="this.parentElement.classList.add('d-none');"></button>
+    </div>
+    <div class="alert alert-danger alert-dismissible d-none" role="alert" id="errorAlert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill align-text-top" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+        </svg>
+        <span class="ms-1">Errore durante l'esecuzione dell'azione</span>
+        <button type="button" class="btn-close" aria-label="Close" onclick="this.parentElement.classList.add('d-none');"></button>
+    </div>
+    <div class="alert alert-warning alert-dismissible d-none" role="alert" id="notFoundAlert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill align-text-top" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+        </svg>
+        <span class="ms-1">Consegna non trovata</span>
+        <button type="button" class="btn-close" aria-label="Close" onclick="this.parentElement.classList.add('d-none');"></button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover mt-2">
+            <thead>
+            <tr class="d-flex justify-content-between">
+                <th scope="col" class="col-1">Id</th>
+                <th scope="col" class="col">Stato</th>
+                <th scope="col" class="col">Ordine</th>
+                <th scope="col" class="col">Costo</th>
+                <th scope="col" class="col-3">Orario</th>
+                <th scope="col" class="col-3">Azioni</th>
+            </tr>
+            </thead>
+            <tbody id="deliveries">
+            <template id="deliveryTemplate">
+                <tr class="d-flex justify-content-between">
+                    <th scope="row" class="col-1 deliveryId"></th>
+                    <td class="col deliveryStatus"></td>
+                    <td class="col deliveryOrderId"></td>
+                    <td class="col"><span class="deliveryCost"></span>&euro;</td>
+                    <td class="col-3 deliveryTime"></td>
+                    <td class="col-3">
+                        <button type="button" class="btn btn-warning btn-sm deliveryNow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill align-text-bottom" viewBox="0 0 16 16">
+                                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+                            </svg>
+                            <span>Consegna ora</span>
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm deliveryInfo" data-bs-toggle="modal" data-bs-target="#deliveryModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle align-text-bottom" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                            </svg>
+                            <span class="ms-1">Visualizza</span>
+                        </button>
+                    </td>
+                </tr>
+            </template>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <script>
-    const vehicleTrackerURL = window.location.origin + '/api/v1/vehicles';
+    const fetchURL = window.location.origin + '/backend/';
 
     const vehiclesRow = document.getElementById("vehicles");
     const vehiclesTemplate = document.getElementById("vehicleTemplate");
+
+    const deliveriesTable = document.getElementById("deliveries");
+    const deliveriesTemplate = document.getElementById("deliveryTemplate");
+
+    const successAlert = document.getElementById("successAlert");
+    const errorAlert = document.getElementById("errorAlert");
+    const notFoundAlert = document.getElementById("notFoundAlert");
 
     const deliveryModal = document.getElementById('deliveryModal');
     const deliveryId = document.getElementById('deliveryId');
@@ -97,44 +179,168 @@
 
     async function fetchVehicles() {
         try {
-            const res = await fetch(vehicleTrackerURL);
+            const res = await fetch(fetchURL + 'vehicles');
             if (!res.ok) {
                 throw await res.text();
             }
             const vehicles = await res.json();
 
-            vehiclesRow.replaceChildren(); // Clear vehicles
+            if (!vehicles.length) {
+                printPMsg(vehiclesRow, 'Nessun veicolo trovato');
+            } else {
+                vehiclesRow.replaceChildren(); // Clear vehicles
 
-            for (const vehicle of vehicles) {
-                const cloned = vehiclesTemplate.content.cloneNode(true);
-                cloned.querySelector('.vehicleId').textContent = vehicle.id;
-                cloned.querySelector('.vehicleStatus').textContent = prettifyVehicleStatus(vehicle.status);
-                const button = cloned.querySelector('button');
-                if (vehicle.current_delivery == null) {
-                    button.disabled = true;
-                    button.textContent = 'Nessuna consegna';
-                } else {
-                    button.textContent = 'Visualizza consegna';
-                    button.setAttribute('data-bs-delivery-id', vehicle.current_delivery.delivery_id);
-                    button.setAttribute('data-bs-vehicle-id', vehicle.current_delivery.vehicle_id);
-                    button.setAttribute('data-bs-order-id', vehicle.current_delivery.order_id);
-                    button.setAttribute('data-bs-status', prettifyDeliveryStatus(vehicle.current_delivery.status));
-                    button.setAttribute('data-bs-cost', vehicle.current_delivery.cost);
-                    button.setAttribute('data-bs-time', new Date(vehicle.current_delivery.time).toLocaleString());
-                    button.setAttribute('data-bs-local-address', vehicle.current_delivery.local_address);
-                    button.setAttribute('data-bs-client-address', vehicle.current_delivery.client_address);
+                for (const vehicle of vehicles) {
+                    const cloned = vehiclesTemplate.content.cloneNode(true);
+                    cloned.querySelector('.vehicleId').textContent = vehicle.id;
+                    cloned.querySelector('.vehicleStatus').textContent = prettifyVehicleStatus(vehicle.status);
+                    const button = cloned.querySelector('button');
+                    if (vehicle.current_delivery == null) {
+                        button.disabled = true;
+                        button.classList.add('btn-secondary');
+                        button.textContent = 'Nessuna consegna';
+                    } else {
+                        button.classList.add('btn-info');
+                        button.setAttribute('data-bs-delivery-id', vehicle.current_delivery.delivery_id);
+                        button.setAttribute('data-bs-vehicle-id', vehicle.current_delivery.vehicle_id);
+                        button.setAttribute('data-bs-order-id', vehicle.current_delivery.order_id);
+                        button.setAttribute('data-bs-status', prettifyDeliveryStatus(vehicle.current_delivery.status));
+                        button.setAttribute('data-bs-cost', vehicle.current_delivery.cost);
+                        button.setAttribute('data-bs-time', new Date(vehicle.current_delivery.time).toLocaleString());
+                        button.setAttribute('data-bs-local-address', vehicle.current_delivery.local_address);
+                        button.setAttribute('data-bs-client-address', vehicle.current_delivery.client_address);
+                    }
+                    vehiclesRow.appendChild(cloned);
                 }
-                vehiclesRow.appendChild(cloned);
             }
         } catch (e) {
+            printPMsg(vehiclesRow, 'Errore durante il caricamento dei veicoli');
             console.error('Error fetching vehicles:');
             console.error(e);
         }
-
-        setTimeout(fetchVehicles, 1000 * 5); // Every five seconds
     }
 
-    fetchVehicles();
+    async function fetchDeliveries() {
+        try {
+            const res = await fetch(fetchURL + 'deliveries');
+            if (!res.ok) {
+                throw await res.text();
+            }
+            const deliveries = await res.json();
+
+            if (!deliveries.length) {
+                printTableMsg(deliveriesTable, 'Nessuna consegna da effettuare');
+            } else {
+                deliveriesTable.replaceChildren(); // Clear vehicles
+
+                for (const delivery of deliveries) {
+                    const cloned = deliveriesTemplate.content.cloneNode(true);
+                    const time = new Date(delivery.time).toLocaleString();
+                    const status = prettifyDeliveryStatus(delivery.status);
+                    cloned.querySelector('.deliveryId').textContent = delivery.delivery_id;
+                    cloned.querySelector('.deliveryStatus').textContent = status;
+                    cloned.querySelector('.deliveryOrderId').textContent = delivery.order_id;
+                    cloned.querySelector('.deliveryCost').textContent = delivery.cost;
+                    cloned.querySelector('.deliveryTime').textContent = time;
+
+                    const buttonInfo = cloned.querySelector('.deliveryInfo');
+                    buttonInfo.setAttribute('data-bs-delivery-id', delivery.delivery_id);
+                    buttonInfo.setAttribute('data-bs-vehicle-id', delivery.vehicle_id);
+                    buttonInfo.setAttribute('data-bs-order-id', delivery.order_id);
+                    buttonInfo.setAttribute('data-bs-status', status);
+                    buttonInfo.setAttribute('data-bs-cost', delivery.cost);
+                    buttonInfo.setAttribute('data-bs-time', time);
+                    buttonInfo.setAttribute('data-bs-local-address', delivery.local_address);
+                    buttonInfo.setAttribute('data-bs-client-address', delivery.client_address);
+
+                    const buttonDeliveryNow = cloned.querySelector('.deliveryNow');
+                    buttonDeliveryNow.setAttribute('data-bs-delivery-id', delivery.delivery_id);
+                    buttonDeliveryNow.addEventListener('click', simulateDelivery);
+
+                    deliveriesTable.appendChild(cloned);
+                }
+            }
+        } catch (e) {
+            printTableMsg(deliveriesTable, 'Errore durante il caricamento delle consegne');
+            console.error('Error fetching deliveries:');
+            console.error(e);
+        }
+    }
+
+    let fetchDataTimeoutId = null;
+    async function fetchData() {
+        fetchDataTimeoutId = null;
+
+        await fetchVehicles();
+        await fetchDeliveries();
+
+        fetchDataTimeoutId = setTimeout(fetchData, 1000 * 5); // Every five seconds
+    }
+    fetchData();
+
+    async function simulateDelivery() {
+        const id = this.getAttribute('data-bs-delivery-id');
+
+        successAlert.classList.add('d-none');
+        errorAlert.classList.add('d-none');
+        notFoundAlert.classList.add('d-none');
+
+        let res;
+        try {
+            res = await fetch(fetchURL + 'simulateDelivery', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    deliveryId: id,
+                })
+            });
+            if (!res.ok) {
+                if (res.status === 404) {
+                    notFoundAlert.classList.remove('d-none');
+                    console.error(`Delivery ${id} not found`);
+                } else {
+                    throw await res.text();
+                }
+            } else {
+                successAlert.classList.remove('d-none');
+            }
+        } catch (e) {
+            errorAlert.classList.remove('d-none');
+            console.error('Error simulating delivery:');
+            console.error(e);
+        } finally {
+            if (fetchDataTimeoutId != null) {
+                clearTimeout(fetchDataTimeoutId);
+                fetchDataTimeoutId = null;
+                await fetchData();
+            }
+        }
+    }
+
+    function printPMsg(parentNode, msg) {
+        // <span class="text-center">msg</span>
+        parentNode.replaceChildren(); // Clear node
+        const p = document.createElement("p");
+        p.classList.add("text-center");
+        p.textContent = msg;
+        parentNode.appendChild(p);
+    }
+
+    function printTableMsg(parentNode, msg) {
+        //<tr>
+        //    <td colSpan="6" class="col text-center">msg</td>
+        //</tr>;
+        parentNode.replaceChildren(); // Clear node
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.classList.add("col", "text-center");
+        td.colSpan = 6;
+        td.textContent = msg;
+        tr.appendChild(td);
+        parentNode.appendChild(tr);
+    }
 
     function prettifyVehicleStatus(status) {
         switch (status) {

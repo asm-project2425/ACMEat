@@ -13,7 +13,7 @@ pool.on('error', (err, client) => {
 });
 
 app.post('/api/v1/deliveryStarted', async function (req, res) {
-    if (!req.body || !req.body.vehicleId || !req.body.deliveryId) {
+    if (!req.body || req.body.vehicleId == null || req.body.deliveryId == null) {
         res.sendStatus(400);
         return;
     }
@@ -34,7 +34,7 @@ app.post('/api/v1/deliveryStarted', async function (req, res) {
 });
 
 app.post('/api/v1/deliveryEnded', async function (req, res) {
-    if (!req.body || !req.body.vehicleId) {
+    if (!req.body || req.body.vehicleId == null) {
         res.sendStatus(400);
         return;
     }

@@ -71,7 +71,7 @@ app.post('/api/v1/reserve', async function (req, res) {
 });
 
 app.post('/api/v1/confirmDelivery', async function (req, res) {
-    if (!req.body || !req.body.deliveryId) {
+    if (!req.body || req.body.deliveryId == null) {
         res.sendStatus(400);
         return;
     }
@@ -89,7 +89,7 @@ app.post('/api/v1/confirmDelivery', async function (req, res) {
 });
 
 app.post('/api/v1/cancelDelivery', async function (req, res) {
-    if (!req.body || !req.body.deliveryId) {
+    if (!req.body || req.body.deliveryId == null) {
         res.sendStatus(400);
         return;
     }

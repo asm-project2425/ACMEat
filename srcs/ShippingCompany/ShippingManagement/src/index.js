@@ -100,7 +100,7 @@ app.post('/api/v1/availability', async function (req, res) {
 });
 
 app.post('/api/v1/confirm', async function (req, res) {
-    if (!req.body || !req.body.deliveryId) {
+    if (!req.body || req.body.deliveryId == null) {
         res.sendStatus(400);
         return;
     }
@@ -125,7 +125,7 @@ app.post('/api/v1/confirm', async function (req, res) {
 });
 
 app.post('/api/v1/cancel', async function (req, res) {
-    if (!req.body || !req.body.deliveryId) {
+    if (!req.body || req.body.deliveryId == null) {
         res.sendStatus(400);
         return;
     }

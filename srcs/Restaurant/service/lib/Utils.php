@@ -113,6 +113,19 @@ class Utils {
         $orders = Utils::readOrdersFromFile();
         $deleted =false;
 
+        $new_orders = [];
+
+        foreach($orders as $o){
+            if($o["id"] == $id_ordine){
+                $deleted=true;
+            }else{
+                $new_orders[] = $o;
+            }
+
+        }
+
+        Utils::saveOrdersToFile($new_orders);
+
         return $deleted;
     }
 

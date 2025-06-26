@@ -17,15 +17,16 @@ try {
     $id_ordine = $_GET['id_ordine'] ?? null;
     error_log("\n\nCancel request id_ordine=". $id_ordine ."");
     
+    $r = Utils::removeOrder($id_ordine);
 
     // Imposta codice risposta
-    if ($result['status'] === 'error') {
+    if (!$r) {
         http_response_code(400);
     } else {
-        http_response_code(200);
+        http_response_code(response_code: 200);
     }    
     // Restituisci JSON
-    echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    echo json_encode($r, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     
 } catch (Exception $e) {
     http_response_code(500);

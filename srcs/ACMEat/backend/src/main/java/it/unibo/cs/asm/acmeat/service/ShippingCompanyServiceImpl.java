@@ -28,7 +28,7 @@ public class ShippingCompanyServiceImpl implements ShippingCompanyService {
     @Override
     public List<ShippingCompanyDTO> getShippingCompanies(String restaurantAddress) {
         List<ShippingCompanyDTO> result = new ArrayList<>();
-        Coordinate restaurantPosition = GISService.getCoordinates(restaurantAddress);
+        Coordinate restaurantPosition = GISService.getCoordinates(restaurantAddress, null, null);
         for (ShippingCompany company : shippingCompanyRepository.findAll()) {
             double distance = GISService.calculateDistance(restaurantPosition, company.getPosition());
             if (distance <= MAX_DISTANCE_METERS) {

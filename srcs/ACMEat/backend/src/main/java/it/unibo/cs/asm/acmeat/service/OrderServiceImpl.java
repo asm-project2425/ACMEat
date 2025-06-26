@@ -39,8 +39,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void validateAddress(String address, String cityName) {
-        Coordinate addressCoordinate = gisService.getCoordinates(address);
-        Coordinate cityCoordinate = gisService.getCoordinates(cityName);
+        Coordinate cityCoordinate = gisService.getCoordinates(cityName, null, null);
+        Coordinate addressCoordinate = gisService.getCoordinates(address, cityCoordinate.latitude(),
+                cityCoordinate.longitude());
 
         double distance = gisService.calculateDistance(addressCoordinate, cityCoordinate);
 

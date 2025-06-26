@@ -37,15 +37,22 @@ public class GISServiceImpl implements GISService {
     private record DistanceResponse(double distance) {}
 
     @Override
-    public Coordinate getCoordinates(String address) {
-        return Optional.ofNullable(restClient.get().uri(uriBuilder -> uriBuilder
-                                .path(LOCATE_PATH)
-                                .queryParam("query", address)
-                                .build())
-                        .retrieve()
-                        .body(GeocodeResponse.class)
+    public Coordinate getCoordinates(String address, Double lat, Double lon) {
+        return Optional.ofNullable(
+                        restClient.get().uri(uriBuilder -> {
+                                    var builder = uriBuilder.path(LOCATE_PATH)
+                                            .queryParam("query", address);
+                                    if (lat != null && lon != null) {
+                                        builder.queryParam("lat", lat)
+                                                .queryParam("lon", lon);
+                                    }
+                                    return builder.build();
+                                })
+                                .retrieve()
+                                .body(GeocodeResponse.class)
                 ).map(response -> new Coordinate(response.lat(), response.lon()))
-                .orElseThrow(() -> new IllegalStateException("Failed to geocode address: " + address));
+                .orElseThrow(() -> new IllegalStateException("Failed to geocode address: " + address +
+                        (lat != null && lon != null ? " near [" + lat + ", " + lon + "]" : "")));
     }
 
     private record GeocodeResponse(double lat, double lon) {}

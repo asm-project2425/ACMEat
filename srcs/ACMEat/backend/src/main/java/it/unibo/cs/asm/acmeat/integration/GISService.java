@@ -13,10 +13,15 @@ public interface GISService {
     double calculateDistance(Coordinate a, Coordinate b);
 
     /**
-     * Geocodes an address to its coordinates
+     * Geocodes an address to its coordinates. If latitude and longitude are provided,
+     * they are used to prioritize the closest match to the specified location.
      *
      * @param address the address to geocode
-     * @return the coordinates of the address
+     * @param lat optional latitude used to disambiguate results (can be null)
+     * @param lon optional longitude used to disambiguate results (can be null)
+     * @return the coordinates of the address, possibly the closest match to the given location
+     * @throws IllegalStateException if the address cannot be geocoded
      */
-    Coordinate getCoordinates(String address);
+    Coordinate getCoordinates(String address, Double lat, Double lon);
+
 }

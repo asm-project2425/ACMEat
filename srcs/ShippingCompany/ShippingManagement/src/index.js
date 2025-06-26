@@ -37,7 +37,7 @@ app.post('/api/v1/availability', async function (req, res) {
 
     const { lat: restaurantLat, lon: restaurantLon } = await restaurantAddr.json();
 
-    const deliveryAddr = await fetch(`${gis_url}/locate?query=${req.body.deliveryAddress}`);
+    const deliveryAddr = await fetch(`${gis_url}/locate?query=${req.body.deliveryAddress}&lat=${restaurantLat}&lon=${restaurantLon}`);
     if (!deliveryAddr.ok) {
         console.error('Internal error locating delivery address');
         return;

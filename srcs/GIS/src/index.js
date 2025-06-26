@@ -41,10 +41,39 @@ function validateNumParam(num, name, res) {
     return false;
 }
 
-async function locate(query, paramName, cache, res) {
+function closest(req, locations) {
+    const lat = req.query.lat;
+    const lon = req.query.lon;
+
+    if (!lat || !lon) { // No closest parameters
+        return locations[0];
+    }
+
+    let closest_loc = locations[0];
+    let closest_dist = getDistance(
+        { latitude: lat, longitude: lon },
+        { latitude: closest_loc.lat, longitude: closest_loc.lon }
+    );
+
+    for (let i = 1; i < locations.length; i++) {
+        const dist = getDistance(
+            { latitude: lat, longitude: lon },
+            { latitude: locations[i].lat, longitude: locations[i].lon }
+        );
+
+        if (dist < closest_dist) {
+            closest_loc = locations[i];
+            closest_dist = dist;
+        }
+    }
+
+    return closest_loc;
+}
+
+async function locate(query, paramName, cache, req, res) {
     const cached = cache.get(query);
     if (cached) {
-        res.status(200).json(cached);
+        res.status(200).json(closest(req, cached));
         return;
     }
 
@@ -52,7 +81,7 @@ async function locate(query, paramName, cache, res) {
     const url = urls[current_url];
     const limiter = limiters[current_url];
     current_url = (current_url + 1) % urls.length;
-    const response = await limiter.schedule(() => fetch(`${url}/search?format=json&limit=1&${paramName}=${query}`, {
+    const response = await limiter.schedule(() => fetch(`${url}/search?format=json&${paramName}=${query}`, {
         headers: {
             'User-Agent': 'ACMEat',
         }
@@ -62,30 +91,38 @@ async function locate(query, paramName, cache, res) {
         res.status(500).send('Internal error');
         return;
     }
-    const data = (await response.json())[0];
 
-    if (!data || !data.lat || !data.lon) {
+    const data = await response.json();
+
+    if (!data || data.length == null || data.length === 0) {
         res.status(500).send('Internal error');
         return;
     }
 
-    let lat = Number(data.lat);
-    let lon = Number(data.lon);
+    const locations = [];
+    for (const loc of data) {
+        if (!loc.lat || !loc.lon) {
+            res.status(500).send('Internal error');
+            return;
+        }
 
-    if (!validateNum(lat) || !validateNum(lon)) {
-        res.status(500).send('Internal error');
-        return;
+        let lat = Number(loc.lat);
+        let lon = Number(loc.lon);
+
+        if (!validateNum(lat) || !validateNum(lon)) {
+            res.status(500).send('Internal error');
+            return;
+        }
+
+        locations.push({
+            lat,
+            lon
+        });
     }
 
-    cache.set(query, {
-        lat: lat,
-        lon: lon
-    });
+    cache.set(query, locations);
 
-    res.status(200).json({
-        lat: lat,
-        lon: lon
-    });
+    res.status(200).json(closest(req, locations));
 }
 
 app.get('/api/v1/locate', async function (req, res) {
@@ -93,7 +130,7 @@ app.get('/api/v1/locate', async function (req, res) {
         return;
     }
 
-    await locate(req.query.query, 'q', queryCache, res);
+    await locate(req.query.query, 'q', queryCache, req, res);
 });
 
 app.get('/api/v1/locateCity', async function (req, res) {
@@ -101,7 +138,7 @@ app.get('/api/v1/locateCity', async function (req, res) {
         return;
     }
 
-    await locate(req.query.city, 'city', cityCache, res);
+    await locate(req.query.city, 'city', cityCache, req, res);
 });
 
 app.get('/api/v1/distance', async function (req, res) {

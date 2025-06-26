@@ -8,6 +8,7 @@ Returns the latitude and longitude of a location.
 - **URL**: `http://localhost:6002/api/v1/locate?{query}`
 - **Query Parameters**:
     - `query`: city name, street, address, etc.
+    - `lat`, `lon` (*optionals*): if present, returns the closest location found to the provided coordinates
 - **Response**:
 ```json
 {
@@ -22,6 +23,7 @@ Returns the latitude and longitude of a city.
 - **URL**: `http://localhost:6002/api/v1/locateCity?{city}`
 - **Query Parameters**:
     - `city`: city name
+    - `lat`, `lon` (*optionals*): if present, returns the closest location found to the provided coordinates
 - **Response**:
 ```json
 {

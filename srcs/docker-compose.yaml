@@ -75,6 +75,10 @@ services:
     volumes:
       - elastic:/usr/share/elasticsearch/data
 
+######################################################################
+#                                GIS                                 #
+######################################################################
+
   gis:
     build:
       context: ./GIS
@@ -82,15 +86,33 @@ services:
     ports:
       - "6002:6002"
 
-  restaurant1:
+######################################################################
+#                            Restaurants                             #
+######################################################################
+
+  restaurant_1:
     build:
       context: ./Restaurant
     platform: linux/amd64 # for compatibility with arm64
-    container_name: restaurant1
+    container_name: restaurant_1
     volumes:
       - "./Restaurant/service/:/app/"
     ports:
       - "9001:80"
+
+  restaurant_2:
+    build:
+      context: ./Restaurant
+    platform: linux/amd64 # for compatibility with arm64
+    container_name: restaurant_2
+    volumes:
+      - "./Restaurant/service/:/app/"
+    ports:
+      - "9002:80"
+
+######################################################################
+#                                Bank                                #
+######################################################################
 
   bank_db:
     image: postgres:17
@@ -134,6 +156,10 @@ services:
     depends_on:
       - bank_backend
 
+######################################################################
+#                               ACMEat                               #
+######################################################################
+
   acmeat_db:
     image: postgres:17
     restart: always
@@ -161,10 +187,12 @@ services:
     environment:
       - ACMEAT_DB_URL=jdbc:postgresql://acmeat_db:5432/acmeatdb
       - ZEEBE_GATEWAY_ADDRESS=http://zeebe:26500
-      - RESTAURANT1_BASE_URL=http://restaurant1:80
+      - RESTAURANT1_BASE_URL=http://restaurant_1:80
+      - RESTAURANT2_BASE_URL=http://restaurant_2:80
       - GIS_BASE_URL=http://gis:6002
       - BANK_BASE_URL=http://bank:8000
-      - SHIPPING_SERVICE1_BASE_URL=http://shipping_management:3000
+      - SHIPPING_SERVICE1_BASE_URL=http://shipping_management_1:3000
+      - SHIPPING_SERVICE2_BASE_URL=http://shipping_management_2:3000
     depends_on:
       acmeat_db:
         condition: service_healthy
@@ -172,7 +200,9 @@ services:
         condition: service_started
       gis:
         condition: service_started
-      restaurant1:
+      restaurant_1:
+        condition: service_started
+      restaurant_2:
         condition: service_started
       bank_backend:
         condition: service_started
@@ -185,57 +215,63 @@ services:
     depends_on:
       - acmeat_backend
 
-  shipping_management:
+######################################################################
+#                         Shipping Company 1                         #
+######################################################################
+
+  shipping_management_1:
     build:
       context: ./ShippingCompany/ShippingManagement
     environment:
       PGDATABASE: shippingcompanydb
       PGUSER: shippingcompanyuser
       PGPASSWORD: shippingcompanypassword
-      PGHOST: shipping_company_db
+      PGHOST: shipping_company_db_1
+      VEHICLE_ASSIGNER_BASE_URL: http://vehicle_assigner_1:3000
+      VEHICLE_TRACKER_BASE_URL: http://vehicle_tracker_1:3000
     ports:
       - "5001:3000"
-    container_name: shipping_management
+    container_name: shipping_management_1
     depends_on:
-      - vehicle_assigner
-      - vehicle_tracker
+      - vehicle_assigner_1
+      - vehicle_tracker_1
       - gis
       - acmeat_backend
 
-  vehicle_assigner:
+  vehicle_assigner_1:
     build:
       context: ./ShippingCompany/VehicleAssigner
     environment:
       PGDATABASE: shippingcompanydb
       PGUSER: shippingcompanyuser
       PGPASSWORD: shippingcompanypassword
-      PGHOST: shipping_company_db
+      PGHOST: shipping_company_db_1
     ports:
       - "5002:3000"
-    container_name: vehicle_assigner
+    container_name: vehicle_assigner_1
     depends_on:
-      shipping_company_db:
+      shipping_company_db_1:
         condition: service_healthy
 
-  vehicle_tracker:
+  vehicle_tracker_1:
     build:
       context: ./ShippingCompany/VehicleTracker
     environment:
       PGDATABASE: shippingcompanydb
       PGUSER: shippingcompanyuser
       PGPASSWORD: shippingcompanypassword
-      PGHOST: shipping_company_db
+      PGHOST: shipping_company_db_1
     ports:
       - "5003:3000"
-    container_name: vehicle_tracker
+    container_name: vehicle_tracker_1
     depends_on:
-      shipping_company_db:
+      shipping_company_db_1:
         condition: service_healthy
 
-  shipping_company_db:
+  shipping_company_db_1:
     image: postgres:17
     restart: always
-    container_name: shipping_company_db
+    container_name: shipping_company_db_1
     environment:
       POSTGRES_DB: shippingcompanydb
       POSTGRES_USER: shippingcompanyuser
@@ -244,7 +280,79 @@ services:
       - "5004:5432"
     volumes:
       - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata_shipping_company:/var/lib/postgresql/data
+      - pgdata_shipping_company_1:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shippingcompanyuser -d shippingcompanydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+######################################################################
+#                         Shipping Company 2                         #
+######################################################################
+
+  shipping_management_2:
+    build:
+      context: ./ShippingCompany/ShippingManagement
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db_2
+      VEHICLE_ASSIGNER_BASE_URL: http://vehicle_assigner_2:3000
+      VEHICLE_TRACKER_BASE_URL: http://vehicle_tracker_2:3000
+    ports:
+      - "5005:3000"
+    container_name: shipping_management_2
+    depends_on:
+      - vehicle_assigner_2
+      - vehicle_tracker_2
+      - gis
+      - acmeat_backend
+
+  vehicle_assigner_2:
+    build:
+      context: ./ShippingCompany/VehicleAssigner
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db_2
+    ports:
+      - "5006:3000"
+    container_name: vehicle_assigner_2
+    depends_on:
+      shipping_company_db_2:
+        condition: service_healthy
+
+  vehicle_tracker_2:
+    build:
+      context: ./ShippingCompany/VehicleTracker
+    environment:
+      PGDATABASE: shippingcompanydb
+      PGUSER: shippingcompanyuser
+      PGPASSWORD: shippingcompanypassword
+      PGHOST: shipping_company_db_2
+    ports:
+      - "5007:3000"
+    container_name: vehicle_tracker_2
+    depends_on:
+      shipping_company_db_2:
+        condition: service_healthy
+
+  shipping_company_db_2:
+    image: postgres:17
+    restart: always
+    container_name: shipping_company_db_2
+    environment:
+      POSTGRES_DB: shippingcompanydb
+      POSTGRES_USER: shippingcompanyuser
+      POSTGRES_PASSWORD: shippingcompanypassword
+    ports:
+      - "5008:5432"
+    volumes:
+      - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata_shipping_company_2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U shippingcompanyuser -d shippingcompanydb"]
       interval: 5s
@@ -256,4 +364,5 @@ volumes:
   elastic:
   pgdata_bank:
   pgdata_acme:
-  pgdata_shipping_company:
+  pgdata_shipping_company_1:
+  pgdata_shipping_company_2:

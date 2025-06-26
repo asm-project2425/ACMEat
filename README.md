@@ -18,8 +18,10 @@ Once all services are up and running, you can access the main interfaces at:
 - **ACMEat frontend** -> [http://localhost:4321](http://localhost:4321)
 - **Camunda Operate** -> [http://localhost:8081](http://localhost:8081) (default credentials: `demo/demo`)
 - **Bank frontend** -> [http://localhost:8082](http://localhost:8082) (default credentials: `demo/demo` - customer, `acme/acme` - acmeat)
-- **Restaurant frontend** -> [http://localhost:9001](http://localhost:9001)
-- **Shipping Management frontend** -> [http://localhost:5001](http://localhost:5001)
+- **Restaurant 1 frontend** -> [http://localhost:9001](http://localhost:9001)
+- **Restaurant 2 frontend** -> [http://localhost:9002](http://localhost:9002)
+- **Shipping Company 1 frontend** -> [http://localhost:5001](http://localhost:5001)
+- **Shipping Company 2 frontend** -> [http://localhost:5005](http://localhost:5005)
 
 ## Structure
 - `/docs`: Contains the final report and project documentation.

@@ -51,7 +51,7 @@ app.post('/api/v1/availability', async function (req, res) {
     }
     const { distance } = await responseDistance.json();
 
-    const cost = round(Math.random() + 0.00015 * distance);
+    const cost = round(1 + Math.random() + 0.00015 * distance);
 
     const assignerRes = await fetch(`${vehicle_assigner_url}/reserve`, {
         method: 'POST',

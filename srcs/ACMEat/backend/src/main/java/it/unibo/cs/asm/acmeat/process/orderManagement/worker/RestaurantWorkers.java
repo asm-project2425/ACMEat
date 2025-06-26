@@ -20,7 +20,7 @@ public class RestaurantWorkers {
     private final RestClient.Builder restClientBuilder;
 
     private static final String AVAIBLE_PATH = "/avaible.php";
-    public static final String CANCEL_ORDER_PATH = "/cancel_order.php";
+    public static final String CANCEL_ORDER_PATH = "/cancel.php";
 
     @JobWorker(type = JOB_CHECK_RESTAURANT_AVAILABILITY)
     public void checkRestaurantAvailability(@Variable String restaurantBaseUrl, @Variable int orderId,

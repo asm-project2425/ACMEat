@@ -45,7 +45,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.findById(restaurantId)
                 .map(restaurant -> restaurant.getTimeSlots().stream()
                         .filter(TimeSlot::isActive)
-                        // .filter(slot -> slot.getStartTime().isAfter(now.plusMinutes(15)))
+                         .filter(slot -> slot.getStartTime().isAfter(now.plusMinutes(15)))
                         .sorted(Comparator.comparing(TimeSlot::getStartTime))
                         .map(TimeSlotDTO::new)
                         .toList())

@@ -50,19 +50,17 @@
     <bpmn:messageFlow id="Flow_0hu1yjn" sourceRef="Activity_0wo710n" targetRef="Event_16hw0sb" />
     <bpmn:messageFlow id="Flow_0oybpv1" sourceRef="Activity_1q39k81" targetRef="Event_0frdvzz" />
     <bpmn:textAnnotation id="TextAnnotation_1wgcjoa">
-      <bpmn:text>aggiornare con
-"currentTime": time(currentDateTime)</bpmn:text>
+      <bpmn:text>"currentTime": time(currentDateTime)</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0b4vbp0" associationDirection="None" sourceRef="TextAnnotation_1wgcjoa" targetRef="Flow_126wsvm" />
-    <bpmn:textAnnotation id="TextAnnotation_1v15x5c">
-      <bpmn:text>aggiornare con PT15S</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0z8nagj" associationDirection="None" sourceRef="Event_1a2ru7c" targetRef="TextAnnotation_1v15x5c" />
     <bpmn:textAnnotation id="TextAnnotation_1xsen36">
-      <bpmn:text>aggiornare con
-"currentTime": time(currentDateTime)</bpmn:text>
+      <bpmn:text>"currentTime": time(currentDateTime)</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0q90gsq" associationDirection="None" sourceRef="TextAnnotation_1xsen36" targetRef="Flow_18zfpa2" />
+    <bpmn:textAnnotation id="TextAnnotation_1v15x5c">
+      <bpmn:text>PT15S</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0z8nagj" associationDirection="None" sourceRef="Event_1a2ru7c" targetRef="TextAnnotation_1v15x5c" />
   </bpmn:collaboration>
   <bpmn:process id="customer-process" isExecutable="false">
     <bpmn:intermediateThrowEvent id="Event_02blmr9" name="Request redirect to payment">
@@ -575,7 +573,7 @@
       <bpmn:boundaryEvent id="Event_1a2ru7c" name="15s" attachedToRef="Activity_0shtfpu">
         <bpmn:outgoing>Flow_1xqc2rs</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0u8xsvy">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
       <bpmn:endEvent id="Event_1thjlbl">
@@ -623,7 +621,7 @@
     <bpmn:sequenceFlow id="Flow_18zfpa2" name="True" sourceRef="Gateway_0tpz3x3" targetRef="Activity_019585e">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">={ 
   "currentDateTime": now(),
-  "currentTime": time("13:00"), 
+  "currentTime": time(currentDateTime), 
   "isBeforeDelivery": currentTime &lt; time(deliveryTime) - duration("PT1H") }.isBeforeDelivery</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1hl4e4d" name="False" sourceRef="Gateway_0tpz3x3" targetRef="Event_1xfw818" />
@@ -646,7 +644,7 @@
     <bpmn:sequenceFlow id="Flow_126wsvm" name="True" sourceRef="Gateway_0kg4tw9" targetRef="Activity_0ml7iie">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">={ 
   "currentDateTime": now(),
-  "currentTime": time("09:59:00"),
+  "currentTime": time(currentDateTime),
   "isBetween22And10": currentTime &gt; time("22:00:00") or currentTime &lt; time("10:00:00") 
 }.isBetween22And10</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -1747,9 +1745,6 @@
           <dc:Bounds x="685" y="940" width="89" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_11nk073_di" bpmnElement="Event_11nk073">
-        <dc:Bounds x="452" y="1032" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1iteg68_di" bpmnElement="Activity_1qtbxm1" isExpanded="true">
         <dc:Bounds x="1450" y="630" width="340" height="240" />
         <bpmndi:BPMNLabel />
@@ -1851,6 +1846,9 @@
       <bpmndi:BPMNShape id="Activity_072nahb_di" bpmnElement="Activity_14x8yfi">
         <dc:Bounds x="1920" y="710" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11nk073_di" bpmnElement="Event_11nk073">
+        <dc:Bounds x="452" y="1032" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1bowp3s_di" bpmnElement="Flow_1bowp3s">
         <di:waypoint x="308" y="770" />
@@ -2541,15 +2539,15 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="TextAnnotation_1wgcjoa_di" bpmnElement="TextAnnotation_1wgcjoa">
-        <dc:Bounds x="510" y="830" width="220" height="40" />
+        <dc:Bounds x="510" y="830" width="220" height="26" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1v15x5c_di" bpmnElement="TextAnnotation_1v15x5c">
-        <dc:Bounds x="1710" y="580" width="99.99656781987919" height="40.637012630422845" />
+        <dc:Bounds x="1710" y="580" width="100" height="26" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1k8m59o" bpmnElement="TextAnnotation_1xsen36">
-        <dc:Bounds x="3866" y="770" width="220" height="40" />
+        <dc:Bounds x="3866" y="770" width="220" height="26" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_0b4vbp0_di" bpmnElement="Association_0b4vbp0">

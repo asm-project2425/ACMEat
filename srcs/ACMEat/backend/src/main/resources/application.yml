@@ -14,7 +14,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update # update to "validate" in production
-    show-sql: true
+    show-sql: false
 
 camunda:
   client:

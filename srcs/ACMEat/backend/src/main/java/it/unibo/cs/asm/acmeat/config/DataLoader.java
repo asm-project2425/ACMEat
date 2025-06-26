@@ -22,9 +22,13 @@ public class DataLoader implements ApplicationRunner {
     private final ShippingCompanyRepository shippingCompanyRepository;
 
     @Value("${rest.restaurant.base-urls.1}")
-    private String restaurantBaseUrl;
+    private String restaurantBaseUrl1;
+    @Value("${rest.restaurant.base-urls.2}")
+    private String restaurantBaseUrl2;
     @Value("${rest.shipping-company.base-urls.1}")
-    private String shippingBaseUrl;
+    private String shippingBaseUrl1;
+    @Value("${rest.shipping-company.base-urls.2}")
+    private String shippingBaseUrl2;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -36,7 +40,7 @@ public class DataLoader implements ApplicationRunner {
         if (cityRepository.count() == 0) {
             City bologna = cityRepository.save(new City("Bologna"));
 
-            Restaurant restaurant1 = new Restaurant("Ristorante Bolognese", restaurantBaseUrl,
+            Restaurant restaurant1 = new Restaurant("Ristorante Bolognese", restaurantBaseUrl1,
                     "Via S. Donato, 17d, 40127 Bologna BO", bologna);
             // Menu
             restaurant1.addMenu(new Menu("Pasta", new BigDecimal("12.50")));
@@ -45,12 +49,25 @@ public class DataLoader implements ApplicationRunner {
             generateTimeSlots(restaurant1, LocalTime.of(12, 0), LocalTime.of(14, 0));
             generateTimeSlots(restaurant1, LocalTime.of(19, 0), LocalTime.of(21, 0));
             restaurantRepository.save(restaurant1);
+
+            Restaurant restaurant2 = new Restaurant("Pizzeria Italiana", restaurantBaseUrl2,
+                    "Via Indipendenza, 1, 40121 Bologna BO", bologna);
+            // Menu
+            restaurant2.addMenu(new Menu("Margherita", new BigDecimal("7.00")));
+            restaurant2.addMenu(new Menu("Capricciosa", new BigDecimal("9.00")));
+            // Time Slots (9-12 e 19-21 ogni 15 minuti)
+            generateTimeSlots(restaurant2, LocalTime.of(12, 0), LocalTime.of(14, 0));
+            generateTimeSlots(restaurant2, LocalTime.of(19, 0), LocalTime.of(21, 0));
+            restaurantRepository.save(restaurant2);
         }
 
         if (shippingCompanyRepository.count() == 0) {
-            ShippingCompany shipping1 = new ShippingCompany("Corriere Espresso",
-                    new Coordinate(44.502000, 11.351000), shippingBaseUrl);
+            ShippingCompany shipping1 = new ShippingCompany("Shipping Company 1",
+                    new Coordinate(44.502000, 11.351000), shippingBaseUrl1);
             shippingCompanyRepository.save(shipping1);
+            ShippingCompany shipping2 = new ShippingCompany("Shipping Company 2", new Coordinate(
+                    44.503000, 11.352000), shippingBaseUrl2);
+            shippingCompanyRepository.save(shipping2);
         }
     }
 

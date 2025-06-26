@@ -111,7 +111,7 @@ public class AcmeOMWorkers {
     public Map<String, Object> selectLowestShippingService(@Variable int orderId,
                                                            @Variable List<Map<String, Object>> availableCompanies) {
         Map<String, Object> selected = availableCompanies.stream()
-                .filter(c -> c.get("shippingCost") != null)
+                .filter(c -> c != null && c.get("shippingCost") != null)
                 .min(Comparator.comparingDouble(c -> (double) c.get("shippingCost")))
                 .orElseThrow(() -> new RuntimeException("No shipping companies available"));
 

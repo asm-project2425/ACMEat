@@ -76,7 +76,6 @@ services:
       - elastic:/usr/share/elasticsearch/data
 
   gis:
-    image: gis:latest
     build:
       context: ./GIS
     container_name: gis
@@ -141,7 +140,6 @@ services:
       - pgdata_acme:/var/lib/postgresql/data
 
   acmeat_backend:
-    image: acmeat:latest
     build:
       context: ./ACMEat/backend
     container_name: acmeat
@@ -163,6 +161,7 @@ services:
   
   acmeat_frontend:
     build: ./ACMEat/frontend
+    container_name: acmeat_frontend
     ports:
       - "4321:4321"
 

@@ -18,6 +18,8 @@ public class OrderServiceImpl implements OrderService {
     private final RestaurantService restaurantService;
     private final GISService gisService;
 
+    private static final double MAX_DISTANCE_METERS = 10000; // 10 km
+
     @Override
     public Order getOrderById(int orderId) {
         return orderRepository.findById(orderId)
@@ -35,8 +37,6 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         return new OrderDTO(order);
     }
-
-    private static final double MAX_DISTANCE_METERS = 15000; // 15 km
 
     private void validateAddress(String address, String cityName) {
         Coordinate addressCoordinate = gisService.getCoordinates(address);

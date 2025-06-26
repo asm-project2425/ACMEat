@@ -105,6 +105,11 @@ services:
     volumes:
       - ./Bank/backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_bank:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bankuser -d bankdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   bank_backend:
     build:
@@ -114,7 +119,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - bank_db
+      bank_db:
+        condition: service_healthy
 
   bank_frontend:
     build:
@@ -125,6 +131,8 @@ services:
       - "./Bank/frontend/service/:/app/"
     ports:
       - "8002:80"
+    depends_on:
+      - bank_backend
 
   acmeat_db:
     image: postgres:17
@@ -138,6 +146,11 @@ services:
       - "5432:5432"
     volumes:
       - pgdata_acme:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U acmeuser -d acmeatdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   acmeat_backend:
     build:
@@ -153,17 +166,24 @@ services:
       - BANK_BASE_URL=http://bank:8000
       - SHIPPING_SERVICE1_BASE_URL=http://shipping_management:3000
     depends_on:
-      - acmeat_db
-      - operate
-      - gis
-      - restaurant1
-      - bank_backend
+      acmeat_db:
+        condition: service_healthy
+      operate:
+        condition: service_started
+      gis:
+        condition: service_started
+      restaurant1:
+        condition: service_started
+      bank_backend:
+        condition: service_started
   
   acmeat_frontend:
     build: ./ACMEat/frontend
     container_name: acmeat_frontend
     ports:
       - "4321:4321"
+    depends_on:
+      - acmeat_backend
 
   shipping_management:
     build:
@@ -177,7 +197,6 @@ services:
       - "5001:3000"
     container_name: shipping_management
     depends_on:
-      - shipping_company_db
       - vehicle_assigner
       - vehicle_tracker
       - gis
@@ -195,7 +214,8 @@ services:
       - "5002:3000"
     container_name: vehicle_assigner
     depends_on:
-      - shipping_company_db
+      shipping_company_db:
+        condition: service_healthy
 
   vehicle_tracker:
     build:
@@ -209,7 +229,8 @@ services:
       - "5003:3000"
     container_name: vehicle_tracker
     depends_on:
-      - shipping_company_db
+      shipping_company_db:
+        condition: service_healthy
 
   shipping_company_db:
     image: postgres:17
@@ -224,6 +245,11 @@ services:
     volumes:
       - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_shipping_company:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shippingcompanyuser -d shippingcompanydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   zeebe:

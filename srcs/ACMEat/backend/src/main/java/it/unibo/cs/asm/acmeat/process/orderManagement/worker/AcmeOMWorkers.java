@@ -75,6 +75,9 @@ public class AcmeOMWorkers {
 
     @JobWorker(type = JOB_CANCEL_ORDER)
     public void orderCancellation(@Variable int orderId) {
+        if (orderService.getOrderById(orderId).getStatus() == OrderStatus.DELIVERED) {
+            throw new IllegalStateException("Cannot cancel an order that has already been delivered.");
+        }
         orderService.updateOrderStatus(orderId, OrderStatus.CANCELLED);
         log.info("Order cancellation completed for order {}", orderId);
     }

@@ -11,13 +11,14 @@ let comune :HTMLDivElement = document.getElementById("comune") as HTMLDivElement
 let locale :HTMLDivElement = document.getElementById("locale") as HTMLDivElement;
 let menu :HTMLDivElement = document.getElementById("menu") as HTMLDivElement;
 let orario :HTMLDivElement = document.getElementById("orario") as HTMLDivElement;
-let indirizzo : HTMLButtonElement= document.getElementById("indirizzo") as HTMLButtonElement;
+let indirizzo : HTMLDivElement= document.getElementById("indirizzo") as HTMLDivElement;
 let ordina : HTMLButtonElement= document.getElementById("ordina") as HTMLButtonElement;
 
 let comune_select : HTMLSelectElement;
 let locale_select : HTMLSelectElement;
 let menu_select : HTMLSelectElement;
 let orario_select : HTMLSelectElement;
+let quantita_select : HTMLSelectElement;
 let indirizzo_input : HTMLInputElement;
 
 
@@ -80,6 +81,7 @@ async function On_Comune_Change() {
     }
 
     locale.style.visibility = "visible";
+    comune_select.disabled = true;
 
 }
 
@@ -112,11 +114,13 @@ async function On_Locale_Change() {
 
 
     menu.style.visibility = "visible";
+    locale_select.disabled = true;
 }
 
 async function On_Menu_Change(){
 
     orario.style.visibility = "visible";
+    indirizzo.style.visibility = "visible";
 }
 
 async function On_Orario_Change() {
@@ -128,6 +132,7 @@ async function On_Orario_Change() {
 async function On_Ordina() {
     const resId : number = Number.parseInt(locale_select.value); 
     const menuId : number = Number.parseInt(menu_select.value);
+    const quantita : number = Number.parseInt(quantita_select.value);
     const timeSlotId : number = Number.parseInt(orario_select.value);
     const indirizzo : string = indirizzo_input.value;
 
@@ -140,7 +145,7 @@ async function On_Ordina() {
         restaurantId : resId,
         items : [{
             menuId : menuId,
-            quantity : 1
+            quantity : quantita
         }],
         timeSlotId: timeSlotId,
         deliveryAddress : indirizzo
@@ -189,6 +194,7 @@ async function main() {
     comune_select = comune.getElementsByTagName("select")[0] as HTMLSelectElement;
     locale_select = locale.getElementsByTagName("select")[0] as HTMLSelectElement;
     menu_select = menu.getElementsByTagName("select")[0] as HTMLSelectElement;
+    quantita_select = menu.getElementsByTagName("select")[1] as HTMLSelectElement;
     orario_select = orario.getElementsByTagName("select")[0] as HTMLSelectElement;
     indirizzo_input = indirizzo.getElementsByTagName("input")[0] as HTMLInputElement;
     
@@ -204,6 +210,7 @@ async function main() {
     menu.style.visibility = "collapse";
     orario.style.visibility = "collapse";
     ordina.style.visibility = "collapse";
+    indirizzo.style.visibility = "collapse";
     Set_Comuni();
 }
 

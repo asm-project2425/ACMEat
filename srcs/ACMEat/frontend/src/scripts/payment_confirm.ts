@@ -70,10 +70,14 @@ async function Loop(details :paymentToken) {
         else if(orderStatus.status == "DELIVERED"){
             mess_label.className = "";
             mess_label.textContent = `Ordine consegnato 📦✅`;
+            cancel_btn.disabled = true;
+            cancel_btn.parentElement.removeChild(cancel_btn);
             return;
         }else if(orderStatus.status == "CANCELLED"){
             mess_label.className = "";
             mess_label.textContent = `Ordine annullato ❌`;
+            cancel_btn.disabled = true;
+            cancel_btn.parentElement.removeChild(cancel_btn);
             return;
         }
 
@@ -93,6 +97,7 @@ async function On_Cancel_btn() {
 
     
     if(res.ok){
+        cancel_btn.parentElement.removeChild(cancel_btn);
         alert("Ordine annullato");
         return;
     }

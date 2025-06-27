@@ -607,7 +607,7 @@
     <bpmn:sequenceFlow id="Flow_02wdkx4" sourceRef="Event_16o9r3k" targetRef="Event_1n5ixc4" />
     <bpmn:sequenceFlow id="Flow_0o7i0i0" sourceRef="Event_1n5ixc4" targetRef="Activity_1chnbkk" />
     <bpmn:sequenceFlow id="Flow_18zfpa2" name="True" sourceRef="Gateway_0tpz3x3" targetRef="Activity_019585e">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isOneHourBeforeDelivery</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=atLeastOneHourBeforeDelivery</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1hl4e4d" name="False" sourceRef="Gateway_0tpz3x3" targetRef="Event_1xfw818" />
     <bpmn:sequenceFlow id="Flow_1jrrcof" sourceRef="Activity_019585e" targetRef="Event_1fte7qy" />

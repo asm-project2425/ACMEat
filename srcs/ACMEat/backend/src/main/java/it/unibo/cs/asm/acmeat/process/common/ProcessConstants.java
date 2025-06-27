@@ -20,7 +20,7 @@ public final class ProcessConstants {
     public static final String VAR_PAYMENT_ID = "paymentId";
     public static final String VAR_PAYMENT_TOKEN = "paymentToken";
     public static final String VAR_VALID_PAYMENT = "validPayment";
-    public static final String VAR_IS_ONE_HOUR_BEFORE = "isOneHourBeforeDelivery";
+    public static final String VAR_IS_ONE_HOUR_BEFORE = "atLeastOneHourBeforeDelivery";
 
     // JOBS: Order Management
     public static final String JOB_RETRIEVE_CITIES = "retrieve-cities";

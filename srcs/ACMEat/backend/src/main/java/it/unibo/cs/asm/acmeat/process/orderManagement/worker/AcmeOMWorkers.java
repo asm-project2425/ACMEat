@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -166,13 +167,14 @@ public class AcmeOMWorkers {
     }
 
     public void cancelOrderManually(int orderId) {
-        OffsetDateTime deliveryDateTime = orderService.getOrderById(orderId).getDeliveryDateTime();
-        OffsetDateTime oneHourBeforeDelivery = deliveryDateTime.minusHours(1);
-        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Europe/Rome"));
-        boolean isOneHourBeforeDelivery = now.isBefore(oneHourBeforeDelivery);
+        String oneHourBeforeDelivery = orderService.getOrderById(orderId).getDeliveryDateTime().minusHours(1)
+                .format(DateTimeFormatter.ofPattern("HH:mm"));;
+        LocalTime currentTime = LocalTime.now(ZoneId.of("Europe/Rome"));
+        boolean atLeastOneHourBeforeDelivery = currentTime.isBefore(LocalTime.parse(oneHourBeforeDelivery));
+        log.info("Order {} will be cancelled at {} (now: {})", orderId, oneHourBeforeDelivery, currentTime);
 
         zeebeService.sendMessage(MSG_REQUEST_ORDER_CANCELLATION, String.valueOf(orderId), Map.of(
-                VAR_IS_ONE_HOUR_BEFORE, isOneHourBeforeDelivery));
+                VAR_IS_ONE_HOUR_BEFORE, atLeastOneHourBeforeDelivery));
     }
 
     @JobWorker(type = JOB_CANCELLATION_REJECTED)

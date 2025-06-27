@@ -96,7 +96,7 @@ services:
     platform: linux/amd64 # for compatibility with arm64
     container_name: restaurant_1
     volumes:
-      - "./Restaurant/service/:/app/"
+      - "restaurant1_data:/app/lib/data"
     ports:
       - "9001:80"
 
@@ -106,7 +106,7 @@ services:
     platform: linux/amd64 # for compatibility with arm64
     container_name: restaurant_2
     volumes:
-      - "./Restaurant/service/:/app/"
+      - "restaurant2_data:/app/lib/data"
     ports:
       - "9002:80"
 
@@ -366,3 +366,5 @@ volumes:
   pgdata_acme:
   pgdata_shipping_company_1:
   pgdata_shipping_company_2:
+  restaurant1_data:
+  restaurant2_data:

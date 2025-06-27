@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -41,11 +42,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<TimeSlotDTO> getActiveTimeSlotsByRestaurantId(int restaurantId) {
-        LocalTime now = LocalTime.now();
+        LocalTime now = LocalTime.now(ZoneId.of("Europe/Rome"));
         return restaurantRepository.findById(restaurantId)
                 .map(restaurant -> restaurant.getTimeSlots().stream()
                         .filter(TimeSlot::isActive)
-                         .filter(slot -> slot.getStartTime().isAfter(now.plusMinutes(30)))
+                         .filter(slot -> slot.getStartTime().isAfter(now.plusMinutes(15)))
                         .sorted(Comparator.comparing(TimeSlot::getStartTime))
                         .map(TimeSlotDTO::new)
                         .toList())

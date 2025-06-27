@@ -49,18 +49,6 @@
     <bpmn:messageFlow id="Flow_0kg7ril" sourceRef="Activity_0142v9d" targetRef="Event_0ks7ruo" />
     <bpmn:messageFlow id="Flow_0hu1yjn" sourceRef="Activity_0wo710n" targetRef="Event_16hw0sb" />
     <bpmn:messageFlow id="Flow_0oybpv1" sourceRef="Activity_1q39k81" targetRef="Event_0frdvzz" />
-    <bpmn:textAnnotation id="TextAnnotation_1wgcjoa">
-      <bpmn:text>"currentTime": time(currentDateTime)</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0b4vbp0" associationDirection="None" sourceRef="TextAnnotation_1wgcjoa" targetRef="Flow_126wsvm" />
-    <bpmn:textAnnotation id="TextAnnotation_1xsen36">
-      <bpmn:text>"currentTime": time(currentDateTime)</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0q90gsq" associationDirection="None" sourceRef="TextAnnotation_1xsen36" targetRef="Flow_18zfpa2" />
-    <bpmn:textAnnotation id="TextAnnotation_1v15x5c">
-      <bpmn:text>PT15S</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0z8nagj" associationDirection="None" sourceRef="Event_1a2ru7c" targetRef="TextAnnotation_1v15x5c" />
   </bpmn:collaboration>
   <bpmn:process id="customer-process" isExecutable="false">
     <bpmn:intermediateThrowEvent id="Event_02blmr9" name="Request redirect to payment">
@@ -439,7 +427,7 @@
       <bpmn:outgoing>Flow_0o7i0i0</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0xhw71o" />
     </bpmn:intermediateThrowEvent>
-    <bpmn:exclusiveGateway id="Gateway_0tpz3x3" name="At leat one hour before delivery" default="Flow_1hl4e4d">
+    <bpmn:exclusiveGateway id="Gateway_0tpz3x3" name="At least one hour before delivery" default="Flow_1hl4e4d">
       <bpmn:incoming>Flow_12kfr5w</bpmn:incoming>
       <bpmn:outgoing>Flow_18zfpa2</bpmn:outgoing>
       <bpmn:outgoing>Flow_1hl4e4d</bpmn:outgoing>
@@ -526,7 +514,7 @@
       <bpmn:outgoing>Flow_1bj1qwa</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_042vkz0" messageRef="Message_2ja6ppq" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:exclusiveGateway id="Gateway_0kg4tw9" name="Is the time between 22:00 and 10:00?" default="Flow_0y6en2u">
+    <bpmn:exclusiveGateway id="Gateway_0kg4tw9" name="Is the time between 21:00 and 10:00?" default="Flow_0y6en2u">
       <bpmn:incoming>Flow_18a7vvg</bpmn:incoming>
       <bpmn:outgoing>Flow_126wsvm</bpmn:outgoing>
       <bpmn:outgoing>Flow_0y6en2u</bpmn:outgoing>
@@ -619,10 +607,7 @@
     <bpmn:sequenceFlow id="Flow_02wdkx4" sourceRef="Event_16o9r3k" targetRef="Event_1n5ixc4" />
     <bpmn:sequenceFlow id="Flow_0o7i0i0" sourceRef="Event_1n5ixc4" targetRef="Activity_1chnbkk" />
     <bpmn:sequenceFlow id="Flow_18zfpa2" name="True" sourceRef="Gateway_0tpz3x3" targetRef="Activity_019585e">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">={ 
-  "currentDateTime": now(),
-  "currentTime": time(currentDateTime), 
-  "isBeforeDelivery": currentTime &lt; time(deliveryTime) - duration("PT1H") }.isBeforeDelivery</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isOneHourBeforeDelivery</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1hl4e4d" name="False" sourceRef="Gateway_0tpz3x3" targetRef="Event_1xfw818" />
     <bpmn:sequenceFlow id="Flow_1jrrcof" sourceRef="Activity_019585e" targetRef="Event_1fte7qy" />
@@ -642,11 +627,7 @@
     <bpmn:sequenceFlow id="Flow_1acrh2t" sourceRef="Activity_1rtpg00" targetRef="Event_10hqqq8" />
     <bpmn:sequenceFlow id="Flow_0g1z1ed" sourceRef="Activity_0ml7iie" targetRef="Event_16hw0sb" />
     <bpmn:sequenceFlow id="Flow_126wsvm" name="True" sourceRef="Gateway_0kg4tw9" targetRef="Activity_0ml7iie">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">={ 
-  "currentDateTime": now(),
-  "currentTime": time(currentDateTime),
-  "isBetween22And10": currentTime &gt; time("22:00:00") or currentTime &lt; time("10:00:00") 
-}.isBetween22And10</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isBetween22And10</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0y6en2u" name="False" sourceRef="Gateway_0kg4tw9" targetRef="Event_11nk073" />
     <bpmn:sendTask id="Activity_1l8ikvg" name="Order cancellation">
@@ -1660,7 +1641,7 @@
       <bpmndi:BPMNShape id="Gateway_0tpz3x3_di" bpmnElement="Gateway_0tpz3x3" isMarkerVisible="true">
         <dc:Bounds x="3885" y="625" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3871" y="681" width="78" height="27" />
+          <dc:Bounds x="3868" y="681" width="84" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1a8rqdr_di" bpmnElement="Activity_019585e">
@@ -2537,32 +2518,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3336" y="2113" width="27" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1wgcjoa_di" bpmnElement="TextAnnotation_1wgcjoa">
-        <dc:Bounds x="510" y="830" width="220" height="26" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1v15x5c_di" bpmnElement="TextAnnotation_1v15x5c">
-        <dc:Bounds x="1710" y="580" width="100" height="26" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1k8m59o" bpmnElement="TextAnnotation_1xsen36">
-        <dc:Bounds x="3866" y="770" width="220" height="26" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_0b4vbp0_di" bpmnElement="Association_0b4vbp0">
-        <di:waypoint x="510" y="850" />
-        <di:waypoint x="475" y="850" />
-        <di:waypoint x="475" y="964" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0z8nagj_di" bpmnElement="Association_0z8nagj">
-        <di:waypoint x="1670" y="712" />
-        <di:waypoint x="1670" y="601" />
-        <di:waypoint x="1710" y="601" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0q90gsq_di" bpmnElement="Association_0q90gsq">
-        <di:waypoint x="3976" y="770" />
-        <di:waypoint x="3977" y="650" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1acercz_di" bpmnElement="Flow_1acercz">
         <di:waypoint x="290" y="192" />

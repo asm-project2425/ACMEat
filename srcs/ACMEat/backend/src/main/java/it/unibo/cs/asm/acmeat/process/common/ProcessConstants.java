@@ -3,6 +3,7 @@ package it.unibo.cs.asm.acmeat.process.common;
 public final class ProcessConstants {
     // Process Variables
     public static final String VAR_CORRELATION_KEY = "correlationKey";
+    public static final String VAR_IS_BETWEEN_22_AND_10 = "isBetween22And10";
     public static final String VAR_RESTAURANT_BASE_URL = "restaurantBaseUrl";
     public static final String VAR_RESTAURANT_ADDRESS = "restaurantAddress";
     public static final String VAR_ORDER_ID = "orderId";
@@ -14,11 +15,12 @@ public final class ProcessConstants {
     public static final String VAR_SHIPPING_COMPANY_CORRELATION_KEY = "shippingCompanyCorrelationKey";
     public static final String VAR_SHIPPING_INFO = "shippingInfo";
     public static final String VAR_SHIPPING_COST = "shippingCost";
-    public static final String VAR_SHIPPING_COMAPNY_BASE_URL = "shippingCompanyBaseUrl";
+    public static final String VAR_SHIPPING_COMPANY_BASE_URL = "shippingCompanyBaseUrl";
     public static final String VAR_DELIVERY_ID = "deliveryId";
     public static final String VAR_PAYMENT_ID = "paymentId";
     public static final String VAR_PAYMENT_TOKEN = "paymentToken";
     public static final String VAR_VALID_PAYMENT = "validPayment";
+    public static final String VAR_IS_ONE_HOUR_BEFORE = "isOneHourBeforeDelivery";
 
     // JOBS: Order Management
     public static final String JOB_RETRIEVE_CITIES = "retrieve-cities";

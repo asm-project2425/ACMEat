@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,16 @@ public class AcmeOMWorkers {
 
     public RequestCitiesResponse retrieveCitiesManually() {
         String correlationKey = UUID.randomUUID().toString();
+
+        LocalTime currentTime = LocalTime.now(ZoneId.of("Europe/Rome"));
+        boolean isBetween10And21 = currentTime.isAfter(LocalTime.of(10, 0))
+                && currentTime.isBefore(LocalTime.of(21, 0));
+
+        if (!isBetween10And21) {
+            throw new IllegalStateException("Operation not allowed at this time. " +
+                    "Time available: 10:00 - 21:00 (current time: " + currentTime + ")");
+        }
+
         zeebeService.sendMessage(MSG_CITIES_REQUEST, correlationKey, Map.of(VAR_CORRELATION_KEY, correlationKey));
         List<CityDTO> cities = cityService.getCities();
         zeebeService.completeJob(JOB_RETRIEVE_CITIES, VAR_CORRELATION_KEY, correlationKey, Map.of());
@@ -121,7 +134,7 @@ public class AcmeOMWorkers {
         orderService.setShippingCompany(orderId, shippingCost, shippingCompanyService.getShippingCompanyById(shippingCompanyId));
         orderService.updateOrderStatus(orderId, OrderStatus.SHIPPING_COMPANY_CHOSEN);
 
-        return Map.of(VAR_SHIPPING_COST, shippingCost, VAR_SHIPPING_COMAPNY_BASE_URL, selected.get("baseUrl"),
+        return Map.of(VAR_SHIPPING_COST, shippingCost, VAR_SHIPPING_COMPANY_BASE_URL, selected.get("baseUrl"),
                 VAR_DELIVERY_ID, selected.get("deliveryId"));
     }
 
@@ -153,7 +166,13 @@ public class AcmeOMWorkers {
     }
 
     public void cancelOrderManually(int orderId) {
-        zeebeService.sendMessage(MSG_REQUEST_ORDER_CANCELLATION, String.valueOf(orderId), Map.of());
+        OffsetDateTime deliveryDateTime = orderService.getOrderById(orderId).getDeliveryDateTime();
+        OffsetDateTime oneHourBeforeDelivery = deliveryDateTime.minusHours(1);
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Europe/Rome"));
+        boolean isOneHourBeforeDelivery = now.isBefore(oneHourBeforeDelivery);
+
+        zeebeService.sendMessage(MSG_REQUEST_ORDER_CANCELLATION, String.valueOf(orderId), Map.of(
+                VAR_IS_ONE_HOUR_BEFORE, isOneHourBeforeDelivery));
     }
 
     @JobWorker(type = JOB_CANCELLATION_REJECTED)

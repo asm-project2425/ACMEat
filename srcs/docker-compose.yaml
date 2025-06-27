@@ -196,7 +196,7 @@ services:
     depends_on:
       acmeat_db:
         condition: service_healthy
-      operate:
+      zeebe:
         condition: service_started
       gis:
         condition: service_started
@@ -206,6 +206,12 @@ services:
         condition: service_started
       bank_backend:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
   
   acmeat_frontend:
     build: ./ACMEat/frontend
@@ -213,7 +219,8 @@ services:
     ports:
       - "4321:4321"
     depends_on:
-      - acmeat_backend
+      acmeat_backend:
+        condition: service_healthy
 
 ######################################################################
 #                         Shipping Company 1                         #

@@ -11,18 +11,27 @@ The full system can be launched locally using Docker Compose. The `docker-compos
 To start the system, run the following command from the `srcs` folder:
 
 ```bash
-docker-compose up --build
+docker-compose up --build -d
 ```
 
-Once all services are up and running, you can access the main interfaces at:
-- **Camunda Operate** -> [http://localhost:8081](http://localhost:8081) (default credentials: `demo/demo`)
-- **ACMEat OrderManagement frontend** -> [http://localhost:4321](http://localhost:4321) (default bank user credentials: `demo/demo`)
-- **ACMEat RestaurantManagement 1 frontend** -> [http://localhost:4321/manager?id=1](http://localhost:4321/manager?id=1)
-- **ACMEat RestaurantManagement 2 frontend** -> [http://localhost:4321/manager?id=2](http://localhost:4321/manager?id=2)
-- **Restaurant 1 frontend** -> [http://localhost:9001](http://localhost:9001)
-- **Restaurant 2 frontend** -> [http://localhost:9002](http://localhost:9002)
-- **Shipping Company 1 frontend** -> [http://localhost:5001](http://localhost:5001)
-- **Shipping Company 2 frontend** -> [http://localhost:5005](http://localhost:5005)
+Once all services are up and running, you can access the following interfaces:
+
+- **Camunda Operate**  
+  [http://localhost:8081](http://localhost:8081) *(default credentials: demo/demo)*
+
+- **ACMEat**  
+  - **Order Management frontend** [http://localhost:4321](http://localhost:4321) *(default bank user credentials: demo/demo)*
+  - **Restaurant Management frontend**  
+    - Restaurant 1 → [http://localhost:4321/manager?id=1](http://localhost:4321/manager?id=1)  
+    - Restaurant 2 → [http://localhost:4321/manager?id=2](http://localhost:4321/manager?id=2)
+
+- **Restaurants**  
+  - Restaurant 1 → [http://localhost:9001](http://localhost:9001)  
+  - Restaurant 2 → [http://localhost:9002](http://localhost:9002)
+
+- **Delivery companies**  
+  - Shipping Company 1 → [http://localhost:5001](http://localhost:5001)  
+  - Shipping Company 2 → [http://localhost:5005](http://localhost:5005)
 
 ## Structure
 - `/docs`: Contains the final report and project documentation.

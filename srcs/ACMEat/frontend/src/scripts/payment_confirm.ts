@@ -79,6 +79,12 @@ async function Loop(details :paymentToken) {
             cancel_btn.disabled = true;
             cancel_btn.parentElement.removeChild(cancel_btn);
             return;
+        }else if(orderStatus.status == "CANCELLATION_REJECTED"){
+            mess_label.className = "";
+            mess_label.textContent = `Pagamento verificato ✅\nNon puoi annullare l'ordine se manca meno di un ora`;
+            cancel_btn.disabled = true;
+            cancel_btn.parentElement.removeChild(cancel_btn);
+            return;
         }
 
         
@@ -98,7 +104,7 @@ async function On_Cancel_btn() {
     
     if(res.ok){
         cancel_btn.parentElement.removeChild(cancel_btn);
-        alert("Ordine annullato");
+        //alert("Ordine annullato");
         return;
     }
     

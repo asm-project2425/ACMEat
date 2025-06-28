@@ -4,7 +4,7 @@ import { Append_Menu_Card, Append_Time_Card, Get_Restaurant_informations, InitVa
 const PUBLIC_SELF_HOST = import.meta.env.PUBLIC_SELF_HOST;
 const PUBLIC_ADD_MENU = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_ADD_MENU;
 const PUBLIC_CONFIRM_CHANGES = PUBLIC_SELF_HOST + import.meta.env.PUBLIC_CONFIRM_CHANGES;
-
+const main_card = document.getElementById("main_card") as HTMLDivElement;
 const menu_div = document.getElementById("menu_div") as HTMLDivElement;
 const menu_table = document.getElementById("menu_table") as HTMLTableElement;
 const add_menu_btn = document.getElementById("add_menu_btn") as HTMLButtonElement;
@@ -65,13 +65,20 @@ async function main() {
     add_menu_btn.onclick = On_Add_Menu_btn.bind(this, id);
     commit_btn.onclick = On_Commit_btn.bind(this, id);
 
-    const rest : restaurantDetailsResponse= await Get_Restaurant_informations(id);
-    correlationKey = rest.correlationKey;
-    console.log("Modificando ristorante",1);
-    console.log(rest);
+    try {
+        const rest : restaurantDetailsResponse= await Get_Restaurant_informations(id);
+        correlationKey = rest.correlationKey;
+        console.log("Modificando ristorante",1);
+        console.log(rest);
 
-    InitValues(id, correlationKey);
-    Init(rest);
+        InitValues(id, correlationKey);
+        Init(rest);
+    } catch (error) {
+        console.log(error);
+        main_card.innerHTML="";
+        main_card.textContent="Puoi modificare le informazioni solo tra le 21 e le 10";
+    }
+    
 }
 
 main();

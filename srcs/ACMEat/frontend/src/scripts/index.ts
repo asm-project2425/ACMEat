@@ -51,7 +51,10 @@ async function Set_Comuni(){
     correlationKey = cRes.correlationKey;
 
     if(!comuni || comuni.length<1){
-        alert(`Nessun comune trovato`);
+        //alert(`Nessun comune trovato`);
+        div.innerHTML="";
+        div.textContent = "Puoi ordinare solo tra le 10 e le 21";
+        return;
     }
 
     for(const c of comuni){

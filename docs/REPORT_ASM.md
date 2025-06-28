@@ -123,7 +123,7 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
 
 #### Discussione sulla connectedness
 La coreografia principale è connessa:
-- Ogni sequenza rispetta la condizione di *connectedness for sequence*: i partecipanti nelle interazioni successive sono legati da un ruolo in commune.
+- Ogni sequenza rispetta la condizione di *connectedness for sequence*: i partecipanti nelle interazioni successive sono legati da un ruolo in comune.
 - Le scelte condizionali (+) sono strutturate correttamente e coinvolgono ruoli coerenti nei rami alternativi (*connectedness for choice*).
 - Le iterazioni (richieste alle società di consegna) sono rappresentate con (*) e non violano la correttezza.
 La proiezione è dunque sintatticamente corretta e realizzabile nei singoli ruoli.

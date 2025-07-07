@@ -39,6 +39,7 @@ services:
       - CAMUNDA_OPERATE_CSRFPREVENTIONENABLED=false
       - management.endpoints.web.exposure.include=health
       - management.endpoint.health.probes.enabled=true
+    restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "wget -O - -q 'http://localhost:9600/actuator/health/readiness'" ]
       interval: 30s
@@ -85,6 +86,7 @@ services:
     container_name: gis
     ports:
       - "6002:6002"
+    restart: unless-stopped
 
 ######################################################################
 #                            Restaurants                             #
@@ -99,6 +101,7 @@ services:
       - "restaurant1_data:/app/lib/data"
     ports:
       - "9001:80"
+    restart: unless-stopped
 
   restaurant_2:
     build:
@@ -109,6 +112,7 @@ services:
       - "restaurant2_data:/app/lib/data"
     ports:
       - "9002:80"
+    restart: unless-stopped
 
 ######################################################################
 #                                Bank                                #
@@ -116,7 +120,6 @@ services:
 
   bank_db:
     image: postgres:17
-    restart: always
     container_name: bank_db
     environment:
       POSTGRES_DB: bankdb
@@ -127,6 +130,7 @@ services:
     volumes:
       - ./Bank/backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_bank:/var/lib/postgresql/data
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bankuser -d bankdb"]
       interval: 5s
@@ -143,6 +147,7 @@ services:
     depends_on:
       bank_db:
         condition: service_healthy
+    restart: unless-stopped
 
   bank_frontend:
     build:
@@ -155,6 +160,7 @@ services:
       - "8002:80"
     depends_on:
       - bank_backend
+    restart: unless-stopped
 
 ######################################################################
 #                               ACMEat                               #
@@ -162,7 +168,6 @@ services:
 
   acmeat_db:
     image: postgres:17
-    restart: always
     container_name: acmeat_db
     environment:
       POSTGRES_DB: acmeatdb
@@ -172,6 +177,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata_acme:/var/lib/postgresql/data
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U acmeuser -d acmeatdb"]
       interval: 5s
@@ -206,6 +212,7 @@ services:
         condition: service_started
       bank_backend:
         condition: service_started
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
       interval: 30s
@@ -221,6 +228,7 @@ services:
     depends_on:
       acmeat_backend:
         condition: service_healthy
+    restart: unless-stopped
 
 ######################################################################
 #                         Shipping Company 1                         #
@@ -244,6 +252,7 @@ services:
       - vehicle_tracker_1
       - gis
       - acmeat_backend
+    restart: unless-stopped
 
   vehicle_assigner_1:
     build:
@@ -259,6 +268,7 @@ services:
     depends_on:
       shipping_company_db_1:
         condition: service_healthy
+    restart: unless-stopped
 
   vehicle_tracker_1:
     build:
@@ -274,10 +284,10 @@ services:
     depends_on:
       shipping_company_db_1:
         condition: service_healthy
+    restart: unless-stopped
 
   shipping_company_db_1:
     image: postgres:17
-    restart: always
     container_name: shipping_company_db_1
     environment:
       POSTGRES_DB: shippingcompanydb
@@ -288,6 +298,7 @@ services:
     volumes:
       - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_shipping_company_1:/var/lib/postgresql/data
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U shippingcompanyuser -d shippingcompanydb"]
       interval: 5s
@@ -316,6 +327,7 @@ services:
       - vehicle_tracker_2
       - gis
       - acmeat_backend
+    restart: unless-stopped
 
   vehicle_assigner_2:
     build:
@@ -331,6 +343,7 @@ services:
     depends_on:
       shipping_company_db_2:
         condition: service_healthy
+    restart: unless-stopped
 
   vehicle_tracker_2:
     build:
@@ -346,10 +359,10 @@ services:
     depends_on:
       shipping_company_db_2:
         condition: service_healthy
+    restart: unless-stopped
 
   shipping_company_db_2:
     image: postgres:17
-    restart: always
     container_name: shipping_company_db_2
     environment:
       POSTGRES_DB: shippingcompanydb
@@ -360,6 +373,7 @@ services:
     volumes:
       - ./ShippingCompany/init.sql:/docker-entrypoint-initdb.d/init.sql
       - pgdata_shipping_company_2:/var/lib/postgresql/data
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U shippingcompanyuser -d shippingcompanydb"]
       interval: 5s

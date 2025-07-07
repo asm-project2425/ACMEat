@@ -3,7 +3,7 @@ package it.unibo.cs.asm.acmeat.process.common;
 public final class ProcessConstants {
     // Process Variables
     public static final String VAR_CORRELATION_KEY = "correlationKey";
-    public static final String VAR_IS_BETWEEN_22_AND_10 = "isBetween22And10";
+    public static final String VAR_IS_BETWEEN_21_AND_10 = "isBetween21And10";
     public static final String VAR_RESTAURANT_BASE_URL = "restaurantBaseUrl";
     public static final String VAR_RESTAURANT_ADDRESS = "restaurantAddress";
     public static final String VAR_ORDER_ID = "orderId";

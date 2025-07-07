@@ -16,9 +16,9 @@ docker-compose up -d
 
 Once all services are up and running, you can access the following interfaces:
 
-- **Camunda Operate**: [http://localhost:8081](http://localhost:8081) *(default credentials: demo/demo)*
-
-- **ACMEat**:  
+- **ACMEat**:
+  - **Camunda Operate**: 
+    - [http://localhost:8081](http://localhost:8081) *(default credentials: demo/demo)*
   - **Order Management frontend** 
     - [http://localhost:4321](http://localhost:4321) *(default bank user credentials: demo/demo)*
   - **Restaurant Management frontend**  

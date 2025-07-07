@@ -627,7 +627,7 @@
     <bpmn:sequenceFlow id="Flow_1acrh2t" sourceRef="Activity_1rtpg00" targetRef="Event_10hqqq8" />
     <bpmn:sequenceFlow id="Flow_0g1z1ed" sourceRef="Activity_0ml7iie" targetRef="Event_16hw0sb" />
     <bpmn:sequenceFlow id="Flow_126wsvm" name="True" sourceRef="Gateway_0kg4tw9" targetRef="Activity_0ml7iie">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isBetween22And10</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isBetween21And10</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0y6en2u" name="False" sourceRef="Gateway_0kg4tw9" targetRef="Event_11nk073" />
     <bpmn:sendTask id="Activity_1l8ikvg" name="Order cancellation">

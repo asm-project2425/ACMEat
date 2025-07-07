@@ -4,7 +4,7 @@
 
 All SOAP operations are available at: **http://localhost:8000**
 
-> WSDL file: [`src/BankService.wsdl`](src/BankService.wsdl)  
+> WSDL file: [`BankService.wsdl`](backend/src/BankService.wsdl)  
 > Target namespace: `jolie.bank.soap.wsdl.wsdl`  
 > Schema namespace: `jolie.bank.soap.wsdl.xsd`
 

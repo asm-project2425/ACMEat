@@ -56,7 +56,6 @@ retrieveMenusAndTimeSlots: ACMEat -> customer ;
 selectMenu: customer -> ACMEat ;
 selectTimeSlot: customer -> ACMEat ;
 enterDeliveryAddress: customer -> ACMEat ;
-createOrder: ACMEat -> ACMEat ;
 checkRestaurantAvailability: ACMEat -> restaurant ;
 (
     confirmRestaurantAvailability: restaurant -> ACMEat ;
@@ -64,30 +63,28 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
         requestShippingCompany: ACMEat -> shippingCompany ;
         sendShippingCost: shippingCompany -> ACMEat
     )* ;
-    selectCheapestShippingCompany: ACMEat -> shippingCompany ;
-    initilizePayment: ACMEat -> bank ;
-    sendPaymentRedirect: bank -> ACMEat ;
-    redirectToBank: ACMEat -> customer ;
-    makePayment: customer -> bank ;
-    sendPaymentToken: bank -> customer ;
-    sendPaymentTokenToAcme: customer -> ACMEat ;
-    verifyPayment: ACMEat -> bank ;
     (
-        confirmPayment: bank -> ACMEat ;
-        activateOrder: ACMEat -> customer ;
+        confirmShippingCompany: ACMEat -> shippingCompany ;
+        initilizePayment: ACMEat -> bank ;
+        sendPaymentRedirect: bank -> ACMEat ;
+        redirectToBank: ACMEat -> customer ;
+        makePayment: customer -> bank ;
+        sendPaymentToken: bank -> customer ;
+        sendPaymentTokenToAcme: customer -> ACMEat ;
+        verifyPayment: ACMEat -> bank ;
         (
-            requestOrderCancellation: customer -> ACMEat ;
-            cancelOrder: customer -> ACMEat ;
-            checkCancellationTime: ACMEat -> ACMEat ;
+            acceptPayment: bank -> ACMEat ;
+            activateOrder: ACMEat -> customer ;
             (
-                cancelOrder: ACMEat -> customer ;
+                requestOrderCancellation: customer -> ACMEat ;
                 cancelOrderInRestaurant: ACMEat -> restaurant ;
+                cancelOrderInShippingCompany: ACMEat -> shippingCompany ;
                 paymentRefund: ACMEat -> bank ;
-                cancelOrderInShippingCompany: ACMEat -> shippingCompany
+                cancelOrder: ACMEat -> customer
             )
             +
             (
-                rejectCancellation: ACMEat -> customer ;
+                confirmOrder: customer -> ACMEat ;
                 orderDelivered: shippingCompany -> ACMEat ;
                 confirmPayment: ACMEat -> bank ;
                 orderCompleted: ACMEat -> customer
@@ -95,24 +92,18 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
         )
         +
         (
-            orderDelivered: shippingCompany -> ACMEat ;
-            confirmPayment: ACMEat -> bank ;
-            orderCompleted: ACMEat -> customer
+            rejectPayment: bank -> ACMEat ;
+            cancelOrderInRestaurant: ACMEat -> restaurant ;
+            cancelOrderInShippingCompany: ACMEat -> shippingCompany ;
+            cancelOrder: ACMEat -> customer
         )
     )
     +
     (
-        rejectPayment: bank -> ACMEat ;
+        rejectShippingCompany: ACMEat -> shippingCompany ;
         cancelOrder: ACMEat -> customer ;
-        cancelOrderInRestaurant: ACMEat -> restaurant ;
-        cancelOrderInShippingCompany: ACMEat -> shippingCompany
+        cancelOrderInRestaurant: ACMEat -> restaurant
     )
-)
-+
-(
-    rejectShippingCompany: shippingCompany -> ACMEat ;
-    cancelOrder: ACMEat -> customer ;
-    cancelOrderInRestaurant: ACMEat -> restaurant
 )
 +
 (

@@ -130,18 +130,6 @@
       <bpmn:outgoing>Flow_1k5pjkb</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0e0q0ao" />
     </bpmn:intermediateThrowEvent>
-    <bpmn:exclusiveGateway id="Gateway_0lvvb83" name="Want to cancel the order?" default="Flow_0wr02mr">
-      <bpmn:incoming>Flow_17dol3a</bpmn:incoming>
-      <bpmn:outgoing>Flow_02xtdxx</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0wr02mr</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Activity_1xbhlas" name="Confirm or cancel order">
-      <bpmn:extensionElements>
-        <zeebe:formDefinition formId="cancel-order" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1xsz2bs</bpmn:incoming>
-      <bpmn:outgoing>Flow_17dol3a</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:intermediateCatchEvent id="Event_1r3nj16" name="Order is now active">
       <bpmn:incoming>Flow_03fuixq</bpmn:incoming>
       <bpmn:outgoing>Flow_1xsz2bs</bpmn:outgoing>
@@ -168,15 +156,9 @@
     <bpmn:sequenceFlow id="Flow_03fuixq" sourceRef="Event_1fllrjx" targetRef="Event_1r3nj16" />
     <bpmn:sequenceFlow id="Flow_0og5jb3" sourceRef="Event_1sfx8p1" targetRef="Event_10z2tba" />
     <bpmn:sequenceFlow id="Flow_0wr02mr" name="False" sourceRef="Gateway_0lvvb83" targetRef="Event_1sfx8p1" />
-    <bpmn:sequenceFlow id="Flow_0h200sn" sourceRef="Event_1hjy42a" targetRef="Event_1sfx8p1" />
     <bpmn:sequenceFlow id="Flow_1av0l2s" sourceRef="Gateway_0ll7gil" targetRef="Event_09u3uw7" />
     <bpmn:sequenceFlow id="Flow_1k3oj15" sourceRef="Event_09u3uw7" targetRef="Event_0o3dupe" />
-    <bpmn:sequenceFlow id="Flow_02xtdxx" name="True" sourceRef="Gateway_0lvvb83" targetRef="Event_0plvi1m">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cancel</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1k5pjkb" sourceRef="Event_0plvi1m" targetRef="Gateway_0ll7gil" />
-    <bpmn:sequenceFlow id="Flow_17dol3a" sourceRef="Activity_1xbhlas" targetRef="Gateway_0lvvb83" />
-    <bpmn:sequenceFlow id="Flow_1xsz2bs" sourceRef="Event_1r3nj16" targetRef="Activity_1xbhlas" />
     <bpmn:sequenceFlow id="Flow_0d67f2n" sourceRef="Gateway_0ll7gil" targetRef="Event_1hjy42a" />
     <bpmn:sequenceFlow id="Flow_10wowr8" sourceRef="StartEvent_1" targetRef="Event_0rswmuh" />
     <bpmn:sequenceFlow id="Flow_0sb92fk" sourceRef="Event_0ze08dw" targetRef="Activity_0142v9d" />
@@ -239,6 +221,24 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_01l58kx" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_09yf5k7" sourceRef="Event_0frdvzz" targetRef="Event_02blmr9" />
+    <bpmn:sequenceFlow id="Flow_02xtdxx" name="True" sourceRef="Gateway_0lvvb83" targetRef="Event_0plvi1m">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cancel</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0h200sn" sourceRef="Event_1hjy42a" targetRef="Event_1sfx8p1" />
+    <bpmn:exclusiveGateway id="Gateway_0lvvb83" name="Want to cancel the order?" default="Flow_0wr02mr">
+      <bpmn:incoming>Flow_17dol3a</bpmn:incoming>
+      <bpmn:outgoing>Flow_02xtdxx</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0wr02mr</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Activity_1xbhlas" name="Cancel order">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formId="cancel-order" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1xsz2bs</bpmn:incoming>
+      <bpmn:outgoing>Flow_17dol3a</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1xsz2bs" sourceRef="Event_1r3nj16" targetRef="Activity_1xbhlas" />
+    <bpmn:sequenceFlow id="Flow_17dol3a" sourceRef="Activity_1xbhlas" targetRef="Gateway_0lvvb83" />
   </bpmn:process>
   <bpmn:process id="acmeat-process" isExecutable="true">
     <bpmn:laneSet id="LaneSet_0tdk9xr">
@@ -1953,8 +1953,8 @@
         <di:waypoint x="3998" y="550" />
         <di:waypoint x="4010" y="550" />
         <di:waypoint x="4010" y="510" />
-        <di:waypoint x="3750" y="510" />
-        <di:waypoint x="3750" y="725" />
+        <di:waypoint x="3740" y="510" />
+        <di:waypoint x="3740" y="735" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08yg0d5_di" bpmnElement="Flow_08yg0d5">
         <di:waypoint x="3470" y="750" />

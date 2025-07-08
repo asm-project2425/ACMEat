@@ -130,6 +130,7 @@ proj(C, customer) =
     enterDeliveryAddress^@ACMEat ;
     (
         (
+            confirmedOrder@ACMEat ;
             redirectToBank@ACMEat ;
             makePayment^@bank ;
             sendPaymentToken@bank;
@@ -176,6 +177,7 @@ proj(C, ACMEat) =
     (
         confirmRestaurantAvailability@restaurant ;
         (
+            confirmedOrder^@customer;
             requestShippingCompany^@shippingCompany ;
             sendShippingCost@shippingCompany;
             (

@@ -63,8 +63,12 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
         requestShippingCompany: ACMEat -> shippingCompany ;
         sendShippingCost: shippingCompany -> ACMEat
     )* ;
+    
     (
         confirmShippingCompany: ACMEat -> shippingCompany ;
+        (
+            rejectShippingCompany: ACMEat -> shippingCompany
+        )*;
         initilizePayment: ACMEat -> bank ;
         sendPaymentRedirect: bank -> ACMEat ;
         redirectToBank: ACMEat -> customer ;
@@ -100,10 +104,9 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
     )
     +
     (
-        rejectShippingCompany: ACMEat -> shippingCompany ;
-        cancelOrder: ACMEat -> customer ;
-        cancelOrderInRestaurant: ACMEat -> restaurant
+        cancelOrder: ACMEat -> customer
     )
+    
 )
 +
 (
@@ -282,7 +285,6 @@ proj(C, bank) =
 
 ```text
 requestCurrentInfo: restaurant -> ACMEat ;
-checkTime: ACMEat -> ACMEat ;
 (
     sendCurrentInfo: ACMEat -> restaurant ;
     sendUpdatedInfo: restaurant -> ACMEat ;

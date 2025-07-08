@@ -61,52 +61,54 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
     confirmRestaurantAvailability: restaurant -> ACMEat ;
     (
         requestShippingCompany: ACMEat -> shippingCompany ;
-        sendShippingCost: shippingCompany -> ACMEat
-    )* ;
-    
-    (
-        confirmShippingCompany: ACMEat -> shippingCompany ;
+        sendShippingCost: shippingCompany -> ACMEat;
         (
-            rejectShippingCompany: ACMEat -> shippingCompany
-        )*;
-        initilizePayment: ACMEat -> bank ;
-        sendPaymentRedirect: bank -> ACMEat ;
-        redirectToBank: ACMEat -> customer ;
-        makePayment: customer -> bank ;
-        sendPaymentToken: bank -> customer ;
-        sendPaymentTokenToAcme: customer -> ACMEat ;
-        verifyPayment: ACMEat -> bank ;
-        (
-            acceptPayment: bank -> ACMEat ;
-            activateOrder: ACMEat -> customer ;
+            confirmShippingCompany: ACMEat -> shippingCompany ;
+            initilizePayment: ACMEat -> bank ;
+            sendPaymentRedirect: bank -> ACMEat ;
+            redirectToBank: ACMEat -> customer ;
+            makePayment: customer -> bank ;
+            sendPaymentToken: bank -> customer ;
+            sendPaymentTokenToAcme: customer -> ACMEat ;
+            verifyPayment: ACMEat -> bank ;
             (
-                requestOrderCancellation: customer -> ACMEat ;
-                cancelOrderInRestaurant: ACMEat -> restaurant ;
-                cancelOrderInShippingCompany: ACMEat -> shippingCompany ;
-                paymentRefund: ACMEat -> bank ;
-                cancelOrder: ACMEat -> customer
+                acceptPayment: bank -> ACMEat ;
+                activateOrder: ACMEat -> customer ;
+                orderNotCancelled: ACMEat -> restaurant;
+                (
+                    requestOrderCancellation: customer -> ACMEat ;
+                    cancelOrderInRestaurant: ACMEat -> restaurant ;
+                    cancelOrderInShippingCompany: ACMEat -> shippingCompany ;
+                    paymentRefund: ACMEat -> bank ;
+                    cancelOrder: ACMEat -> customer
+                )
+                +
+                (
+                    orderNotCancelled: customer -> ACMEat ;
+                    orderNotCancelled: ACMEat -> restaurant;
+                    orderDelivered: shippingCompany -> ACMEat ;
+                    confirmPayment: ACMEat -> bank ;
+                    orderCompleted: ACMEat -> customer
+                )
             )
             +
             (
-                confirmOrder: customer -> ACMEat ;
-                orderDelivered: shippingCompany -> ACMEat ;
-                confirmPayment: ACMEat -> bank ;
-                orderCompleted: ACMEat -> customer
+                rejectPayment: bank -> ACMEat ;
+                cancelOrderInRestaurant: ACMEat -> restaurant ;
+                cancelOrderInShippingCompany: ACMEat -> shippingCompany ;
+                cancelOrder: ACMEat -> customer
             )
         )
         +
         (
-            rejectPayment: bank -> ACMEat ;
-            cancelOrderInRestaurant: ACMEat -> restaurant ;
-            cancelOrderInShippingCompany: ACMEat -> shippingCompany ;
-            cancelOrder: ACMEat -> customer
+            rejectShippingCompany: ACMEat -> shippingCompany
         )
-    )
+    )*
     +
     (
-        cancelOrder: ACMEat -> customer
+        cancelOrder: ACMEat -> customer ;
+        cancelOrderInRestaurant: ACMEat -> restaurant
     )
-    
 )
 +
 (
@@ -115,164 +117,203 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
 )
 ```
 
-#### Discussione sulla connectedness
-La coreografia principale è connessa:
-- Ogni sequenza rispetta la condizione di *connectedness for sequence*: i partecipanti nelle interazioni successive sono legati da un ruolo in comune.
-- Le scelte condizionali (+) sono strutturate correttamente e coinvolgono ruoli coerenti nei rami alternativi (*connectedness for choice*).
-- Le iterazioni (richieste alle società di consegna) sono rappresentate con (*) e non violano la correttezza.
-La proiezione è dunque sintatticamente corretta e realizzabile nei singoli ruoli.
-
 #### Proiezione sui ruoli
 ```text
 proj(C, customer) = 
-    retrieveCities^@ACMEat ;
-    selectCity@ACMEat ;
-    retrieveRestaurants^@ACMEat ;
-    selectRestaurant@ACMEat ;
-    retrieveMenusAndTimeSlots^@ACMEat ;
-    selectMenu@ACMEat ;
-    selectTimeSlot@ACMEat ;
-    enterDeliveryAddress@ACMEat ;
-    redirectToBank^@ACMEat ;
-    makePayment@bank ;
-    sendPaymentToken^@bank ;
-    sendPaymentTokenToAcme@ACMEat ;
+    retrieveCities@ACMEat ;
+    selectCity^@ACMEat ;
+    retrieveRestaurants@ACMEat ;
+    selectRestaurant^@ACMEat ;
+    retrieveMenusAndTimeSlots@ACMEat ;
+    selectMenu^@ACMEat ;
+    selectTimeSlot^@ACMEat ;
+    enterDeliveryAddress^@ACMEat ;
     (
-        requestOrderCancellation@ACMEat ;
-        cancelOrder@ACMEat ;
         (
-            cancelOrder^@ACMEat ;
-            orderCompleted^@ACMEat
-        )
-        +
-        (
-            rejectCancellation^@ACMEat ;
-            orderCompleted^@ACMEat
-        )
-    )
-    +
-    orderCompleted^@ACMEat
-```
-
-```text
-proj(C, ACMEat) =
-    retrieveCities@customer ;
-    selectCity^@customer ;
-    retrieveRestaurants@customer ;
-    selectRestaurant^@customer ;
-    retrieveMenusAndTimeSlots@customer ;
-    selectMenu^@customer ;
-    selectTimeSlot^@customer ;
-    enterDeliveryAddress^@customer ;
-    createOrder@ACMEat ;
-    checkRestaurantAvailability@restaurant ;
-    (
-        confirmRestaurantAvailability^@restaurant ;
-        (
-            requestShippingCompany@shippingCompany ;
-            sendShippingCost^@shippingCompany
-        )* ;
-        selectCheapestShippingCompany@shippingCompany ;
-        initilizePayment@bank ;
-        sendPaymentRedirect^@bank ;
-        redirectToBank@customer ;
-        makePayment^@customer ;
-        sendPaymentToken^@bank ;
-        sendPaymentTokenToAcme^@customer ;
-        verifyPayment@bank ;
-        (
-            confirmPayment^@bank ;
-            activateOrder@customer ;
+            redirectToBank@ACMEat ;
+            makePayment^@bank ;
+            sendPaymentToken@bank;
+            sendPaymentTokenToAcme^@ACMEat ;
             (
-                requestOrderCancellation^@customer ;
-                cancelOrder^@customer ;
-                checkCancellationTime@ACMEat ;
+                activateOrder@ACMEat ;
                 (
-                    cancelOrder@customer ;
-                    cancelOrderInRestaurant@restaurant ;
-                    paymentRefund@bank ;
-                    cancelOrderInShippingCompany@shippingCompany
+                    requestOrderCancellation^@ACMEat ;
+                    cancelOrder@ACMEat
                 )
                 +
                 (
-                    rejectCancellation@customer ;
-                    orderDelivered^@shippingCompany ;
-                    confirmPayment@bank ;
-                    orderCompleted@customer
+                    orderNotCancelled^@ACMEat ;
+                    orderCompleted@ACMEat
                 )
             )
             +
             (
-                orderDelivered^@shippingCompany ;
-                confirmPayment@bank ;
-                orderCompleted@customer
+                cancelOrder@ACMEat
             )
         )
         +
         (
-            rejectPayment^@bank ;
-            cancelOrder@customer ;
-            cancelOrderInRestaurant@restaurant ;
-            cancelOrderInShippingCompany@shippingCompany
+            cancelOrder@ACMEat
         )
     )
     +
     (
-        rejectShippingCompany^@shippingCompany ;
-        cancelOrder@customer ;
-        cancelOrderInRestaurant@restaurant
+        cancelOrder@ACMEat
+    )
+```
+
+```text
+proj(C, ACMEat) =
+    retrieveCities^@customer ;
+    selectCity@customer ;
+    retrieveRestaurants^@customer ;
+    selectRestaurant@customer ;
+    retrieveMenusAndTimeSlots^@customer ;
+    selectMenu@customer ;
+    selectTimeSlot@customer ;
+    enterDeliveryAddress@customer ;
+    checkRestaurantAvailability^@restaurant ;
+    (
+        confirmRestaurantAvailability@restaurant ;
+        (
+            requestShippingCompany^@shippingCompany ;
+            sendShippingCost@shippingCompany;
+            (
+                confirmShippingCompany^@shippingCompany ;
+                initilizePayment^@bank ;
+                sendPaymentRedirect@bank ;
+                redirectToBank^@customer ;
+                sendPaymentTokenToAcme@customer ;
+                verifyPayment^@bank ;
+                (
+                    acceptPayment@bank ;
+                    activateOrder^@customer ;
+                    orderNotCancelled^@restaurant;
+                    (
+                        requestOrderCancellation@customer ;
+                        cancelOrderInRestaurant^@restaurant ;
+                        cancelOrderInShippingCompany^@shippingCompany ;
+                        paymentRefund^@bank ;
+                        cancelOrder^@customer
+                    )
+                    +
+                    (
+                        orderNotCancelled@customer ;
+                        orderNotCancelled^@restaurant;
+                        orderDelivered@shippingCompany ;
+                        confirmPayment^@bank ;
+                        orderCompleted^@customer
+                    )
+                )
+                +
+                (
+                    rejectPayment@bank ;
+                    cancelOrderInRestaurant^@restaurant ;
+                    cancelOrderInShippingCompany^@shippingCompany ;
+                    cancelOrder^@customer
+                )
+            )
+            +
+            (
+                rejectShippingCompany^@shippingCompany
+            )
+        )*
+        +
+        (
+            cancelOrder^@customer;
+            cancelOrderInRestaurant^@restaurant
+        )
     )
     +
     (
-        rejectRestaurantAvailability^@restaurant ;
-        cancelOrder@customer
+        rejectRestaurantAvailability@restaurant ;
+        cancelOrder^@customer
     )
 ```
 
 ```text
 proj(C, restaurant) =
-    checkRestaurantAvailability^@ACMEat ;
+    checkRestaurantAvailability@ACMEat ;
     (
-        confirmRestaurantAvailability@ACMEat ;
-        cancelOrderInRestaurant^@ACMEat +
-        cancelOrderInRestaurant^@ACMEat +
-        cancelOrderInRestaurant^@ACMEat
+        confirmRestaurantAvailability^@ACMEat ;
+        (
+            (
+                (
+                    orderNotCancelled@ACMEat ;
+                    (
+                        cancelOrderInRestaurant@ACMEat
+                    )
+                    +
+                    (
+                        orderNotCancelled@ACMEat
+                    )
+                )
+                +
+                (
+                    cancelOrderInRestaurant@ACMEat
+                )
+            )
+            +
+            1
+        )*
+        +
+        (
+            cancelOrderInRestaurant@ACMEat
+        )
     )
     +
     (
-        rejectRestaurantAvailability@ACMEat
+        rejectRestaurantAvailability^@ACMEat
     )
 ```
 
 ```text
 proj(C, shippingCompany) =
+    requestShippingCompany@ACMEat ;
+    sendShippingCost^@ACMEat
     (
-        requestShippingCompany^@ACMEat ;
-        sendShippingCost@ACMEat
-    )* ;
-    selectCheapestShippingCompany^@ACMEat ;
-    (
-        orderDelivered@ACMEat ;
-        cancelOrderInShippingCompany^@ACMEat +
-        cancelOrderInShippingCompany^@ACMEat +
-        cancelOrderInShippingCompany^@ACMEat
+        confirmShippingCompany@ACMEat ;
+        (
+            (
+                cancelOrderInShippingCompany@ACMEat
+            )
+            +
+            (
+                orderDelivered^@ACMEat
+            )
+        )
+        +
+        (
+            cancelOrderInShippingCompany@ACMEat
+        )
     )
     +
-    rejectShippingCompany@ACMEat
+    (
+        rejectShippingCompany@ACMEat
+    )
 ```
 
 ```text
 proj(C, bank) =
-    initilizePayment^@ACMEat ;
-    makePayment^@customer ;
-    sendPaymentRedirect@ACMEat ;
-    sendPaymentToken@customer ;
-    verifyPayment^@ACMEat ;
+    initilizePayment@ACMEat ;
+    sendPaymentRedirect^@ACMEat ;
+    makePayment@customer ;
+    sendPaymentToken^@customer ;
+    verifyPayment@ACMEat ;
     (
-        confirmPayment@ACMEat +
-        rejectPayment@ACMEat
-    ) ;
-    paymentRefund^@ACMEat
+        acceptPayment^@ACMEat ;
+        (
+            paymentRefund@ACMEat
+        )
+        +
+        (
+            confirmPayment@ACMEat
+        )
+    )
+    +
+    (
+        rejectPayment^@ACMEat
+    )
 ```
 
 ### 2.2. Coreografia secondaria – Aggiornamento informazioni ristorante
@@ -296,36 +337,33 @@ requestCurrentInfo: restaurant -> ACMEat ;
 )
 ```
 
-#### Discussione sulla connectedness
-La coreografia è connessa e correttamente strutturata:
-- La sequenza di messaggi rispetta la condizione di *connectedness for sequence*.
-- La scelta condizionale (+) avviene dopo una valutaziona interna (`checkTime`) e coinvolge gli stessi ruoli nei due rami.
-- Non ci sono interazioni isolate né ruoli che compaiono in un solo ramo.
-
 #### Proiezione sui ruoli
 ```text
 proj(C, restaurant) =
-    requestCurrentInfo@ACMEat ;
+    requestCurrentInfo^@ACMEat ;
     (
-        sendCurrentInfo^@ACMEat ;
-        sendUpdatedInfo@ACMEat ;
-        confirmUpdate^@ACMEat
+        sendCurrentInfo@ACMEat ;
+        sendUpdatedInfo^@ACMEat ;
+        confirmUpdate@ACMEat
     )
     +
-    rejectUpdate^@ACMEat
+    (
+        rejectUpdate@ACMEat
+    )
 ```
 
 ```text
 proj(C, ACMEat) =
-    requestCurrentInfo^@restaurant ;
-    checkTime@ACMEat ;
+    requestCurrentInfo@restaurant ;
     (
-        sendCurrentInfo@restaurant ;
-        sendUpdatedInfo^@restaurant ;
-        confirmUpdate@restaurant
+        sendCurrentInfo^@restaurant ;
+        sendUpdatedInfo@restaurant ;
+        confirmUpdate^@restaurant
     )
     +
-    rejectUpdate@restaurant
+    (
+        rejectUpdate^@restaurant
+    )
 ```
 ---
 

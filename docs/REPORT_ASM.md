@@ -60,6 +60,7 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
 (
     confirmRestaurantAvailability: restaurant -> ACMEat ;
     (
+        confirmedOrder : ACMEat -> customer;
         requestShippingCompany: ACMEat -> shippingCompany ;
         sendShippingCost: shippingCompany -> ACMEat;
         (

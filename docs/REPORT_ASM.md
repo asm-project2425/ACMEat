@@ -59,8 +59,8 @@ enterDeliveryAddress: customer -> ACMEat ;
 checkRestaurantAvailability: ACMEat -> restaurant ;
 (
     confirmRestaurantAvailability: restaurant -> ACMEat ;
+    confirmedOrder : ACMEat -> customer;
     (
-        confirmedOrder : ACMEat -> customer;
         requestShippingCompany: ACMEat -> shippingCompany ;
         sendShippingCost: shippingCompany -> ACMEat;
         (

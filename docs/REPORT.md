@@ -1,4 +1,3 @@
-````markdown
 # ACMEat project report
 
 **Project carried out by**: Orazio Andrea Capone | Matteo Cardellini | Francesco Goretti
@@ -387,5 +386,3 @@ The following SOA diagram, modelled in the TinySOA style, represents the capabil
 > *The original Papyrus project is available here: [`TinySOA_ACMEat`](./TinySOA-ACMEat)*
 
 ---
-
-````

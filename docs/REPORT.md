@@ -1,51 +1,51 @@
-# Relazione progetto ACMEat  
-_Corso di Architetture Software a Microservizi – A.A. 2024/2025_
+````markdown
+# ACMEat project report
 
-**Progetto realizzato da**: Orazio Andrea Capone (Mat. 1170818) | Matteo Cardellini (Mat. 1186864) | Francesco Goretti (Mat. 1186611)
+**Project carried out by**: Orazio Andrea Capone | Matteo Cardellini | Francesco Goretti
 
-## Indice
-1. [Descrizione del dominio](#1-descrizione-del-dominio)  
-2. [Modellazione della coreografia](#2-modellazione-della-coreografia)  
-   2.1. [Coreografia principale – Processo di ordinazione](#21-coreografia-principale--processo-di-ordinazione)  
-   2.2. [Coreografia secondaria – Aggiornamento informazioni ristorante](#22-coreografia-secondaria--aggiornamento-informazioni-ristorante)  
-3. [Modellazione BPMN](#3-modellazione-bpmn)  
-4. [Diagramma SOA](#4-diagramma-soa)  
-
----
-
-## 1. Descrizione del dominio
-
-La società **ACMEat** propone ai propri clienti un servizio che permette di selezionare un menu da uno fra un insieme di locali convenzionati e farselo recapitare a domicilio.
-
-Per poter usufruire del servizio, il cliente deve inizialmente selezionare un comune fra quelli nei quali il servizio è attivo. A fronte di questa selezione, ACMEat presenta la lista dei locali convenzionati che operano in quel comune e dei menù che offrono. Il cliente può quindi specificare il locale e il menù di suo interesse, oltre a una fascia oraria per la consegna (si tratta di fasce di 15 minuti tra le 12:00 e le 14:00 e tra le 19:00 e le 21:00).
-
-Segue quindi una fase di pagamento, che viene gestita attraverso un istituto bancario terzo al quale il cliente viene indirizzato. A fronte del pagamento, l’istituto rilascia un token al cliente, il quale lo comunica ad ACMEat, che a sua volta lo usa per verificare con la banca che il pagamento sia stato effettivamente completato. A questo punto, l’ordine diventa operativo.
-
-I clienti possono comunque ancora annullare l’ordine, ma non più tardi di un’ora prima rispetto all’orario di consegna. In tal caso, ACMEat chiede alla banca l’annullamento del pagamento.
-
-ACMEat conosce tutti i locali convenzionati nei vari comuni nei quali opera, inclusi i loro giorni e orari di operatività. Nel caso in cui un locale non sia disponibile in un giorno in cui dovrebbe normalmente essere aperto, è responsabilità del locale stesso contattare ACMEat entro le 10 del mattino comunicando tale indisponibilità. Entro tale orario vanno anche comunicati eventuali cambiamenti dei menù proposti (in mancanza di tale comunicazione si assume che siano disponibili gli stessi del giorno precedente).
-
-I locali vengono inoltre contattati ad ogni ordine per verificare che siano effettivamente in grado di far fronte alla richiesta del cliente. In caso negativo, l’accettazione dell’ordine si interrompe prima che si passi alla fase di pagamento.
-
-Per la consegna, ACMEat si appoggia a più società esterne: per ogni consegna vengono contattate tutte le società che abbiano sede entro 10 chilometri dal comune interessato, specificando indirizzo del locale dove ritirare il pasto, indirizzo del cliente cui recapitarlo e orario previsto di consegna. A fronte di questa richiesta, le società devono rispondere entro 15 secondi specificando la loro disponibilità e il prezzo richiesto. ACMEat sceglierà fra le società disponibili che avranno risposto nel tempo richiesto quella che propone il prezzo più basso.
-
-Nel caso in cui nessuna società di consegna sia disponibile, l’ordine viene annullato prima che si passi alla fase di pagamento.
+## Table of Contents
+1. [Domain description](#1-domain-description)  
+2. [Choreography modelling](#2-choreography-modelling)  
+2.1. [Main choreography – Ordering process](#21-main-choreography--ordering-process)  
+2.2. [Secondary choreography – Updating restaurant information](#22-secondary-choreography--updating-restaurant-information)  
+3. [BPMN modelling](#3-bpmn-modelling)  
+4. [SOA diagram](#4-soa-diagram)  
 
 ---
 
-## 2. Modellazione della coreografia
+## 1. Domain description
 
-### 2.1. Coreografia principale – Processo di ordinazione
+The company **ACMEat** offers customers a service that allows them to select a menu from one of a set of partner restaurants and have it delivered to their home.
 
-#### Partecipanti
+To use the service, the customer must first select a municipality among those where the service is active. Based on this selection, ACMEat displays a list of partner restaurants operating in that municipality and the menus they offer. The customer can then specify the restaurant and the menu they are interested in, as well as a delivery time slot (these are 15-minute slots between 12:00 and 14:00 and between 19:00 and 21:00).
 
-- **Cliente (customer)**
+Next comes a payment phase, which is handled through a third-party banking institution to which the customer is redirected. After the payment, the bank issues a token to the customer, who forwards it to ACMEat; ACMEat then uses the token to verify with the bank that the payment has been successfully completed. At this point the order becomes active.
+
+Customers can still cancel the order, but not later than one hour before the scheduled delivery time. In that case ACMEat requests the bank to cancel/refund the payment.
+
+ACMEat maintains the list of partner restaurants in the municipalities where it operates, including their opening days and hours. If a restaurant is not available on a day it would normally be open, it is the restaurant’s responsibility to inform ACMEat of the unavailability by 10:00 AM. Any menu changes for a given day must also be communicated by that time (if no update is provided, menus from the previous day are assumed to be available).
+
+Restaurants are also contacted for each order to verify that they can actually fulfill the customer’s request. If they cannot, order acceptance stops before the payment phase.
+
+For deliveries, ACMEat relies on multiple external shipping companies: for each delivery, ACMEat contacts all companies whose headquarters are within 10 kilometers of the relevant municipality, providing the pickup address (restaurant), the customer’s delivery address and the expected delivery time. The companies must respond within 15 seconds indicating their availability and the requested price. ACMEat selects, among the companies that replied in time and are available, the one offering the lowest price.
+
+If no delivery company is available, the order is canceled before the payment phase.
+
+---
+
+## 2. Choreography modelling
+
+### 2.1. Main choreography – Ordering process
+
+#### Participants
+
+- **Customer**
 - **ACMEat**
-- **Ristorante (restaurant)**
-- **Banca (bank)**
-- **Servizio di consegna (shippingCompany)**
+- **Restaurant**
+- **Bank**
+- **ShippingCompany**
 
-#### Coreografia
+#### Choreography
 
 ```text
 retrieveCities: ACMEat -> customer ;
@@ -118,7 +118,7 @@ checkRestaurantAvailability: ACMEat -> restaurant ;
 )
 ```
 
-#### Proiezione sui ruoli
+#### Projection on roles
 ```text
 proj(C, customer) = 
     retrieveCities@ACMEat ;
@@ -319,13 +319,13 @@ proj(C, bank) =
     )
 ```
 
-### 2.2. Coreografia secondaria – Aggiornamento informazioni ristorante
+### 2.2. Secondary choreography – Updating restaurant information
 
-#### Partecipanti
-- **Ristorante (restaurant)**
+#### Participants
+- **Restaurant**
 - **ACMEat**
 
-#### Coreografia
+#### Choreography
 
 ```text
 requestCurrentInfo: restaurant -> ACMEat ;
@@ -340,7 +340,7 @@ requestCurrentInfo: restaurant -> ACMEat ;
 )
 ```
 
-#### Proiezione sui ruoli
+#### Projection on roles
 ```text
 proj(C, restaurant) =
     requestCurrentInfo^@ACMEat ;
@@ -370,20 +370,22 @@ proj(C, ACMEat) =
 ```
 ---
 
-## 3. Modellazione BPMN
-Il processo è stato modellato utilizzando il linguaggio BPMN 2.0 con una notazione collaborativa. Ogni partecipante al sistema (cliente, ACMEat, ristorante, compagnia di spedizione, banca) è rappresentato da una pool distinta, evidenziando i messaggi scambiati e i diversi flussi decisionali.
+## 3. BPMN modelling
+The process was modelled using BPMN 2.0 with a collaborative notation. Each participant in the system (customer, ACMEat, restaurant, shipping company, bank) is represented by a separate pool, highlighting the exchanged messages and the different decision flows.
 
 ![BPMN Diagram](./img/bpmn_image.png)
 
-> *Il file originale in formato BPMN è disponibile qui: [`acmeat.bpmn`](../srcs/ACMEat/backend/src/main/resources/acmeat.bpmn)*
+> *The original BPMN file is available here: [`acmeat.bpmn`](../srcs/ACMEat/backend/src/main/resources/acmeat.bpmn)*
 
 ---
 
-## 4. Diagramma SOA
-Il seguente diagramma SOA, modellato secondo lo stile TinySOA, rappresenta le capability offerte dal sistema ACMEat e le relative interfacce esposte, oltre alle dipendenze verso i servizi esterni coinvolti nel processo (banca, ristoranti, compagnie di spedizione, GIS).
+## 4. SOA diagram
+The following SOA diagram, modelled in the TinySOA style, represents the capabilities provided by the ACMEat system and the corresponding exposed interfaces, as well as the dependencies on external services involved in the process (bank, restaurants, shipping companies, GIS).
 
 ![SOA Diagram](./img/tiny_soa-acmeat.png)
 
-> *Il progetto Papyrus originale è disponibile qui : [`TinySOA_ACMEat`](./TinySOA-ACMEat)*
+> *The original Papyrus project is available here: [`TinySOA_ACMEat`](./TinySOA-ACMEat)*
 
 ---
+
+````
